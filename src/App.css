@@ -1,13 +1,12 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  height: 5em;
+  padding: 1em;
   will-change: filter;
   transition: filter 300ms;
 }
@@ -33,10 +32,36 @@
   }
 }
 
-.card {
-  padding: 2em;
+h1.header {
+  margin-top: 0;
+  font-size: 1.5em;
+  line-height: 1.1;
 }
 
-.read-the-docs {
-  color: #888;
+.chess-board {
+  width: 40vw;
+  height: 70vh;
+  min-width: 480px;
+  min-height: 500px;
+}
+
+.chess-board-column {
+  width: 100%;
+  display: flex;
+}
+
+.chess-board-box {
+  border: 1px dotted white;
+  height: 100%;
+}
+
+.chess-board-box.colored {
+  background-color: rgba(255, 112, 56, 0.525);
+}
+
+.chess-board-box:not(.colored) {
+  background-color: rgba(252, 239, 234, 0.525);
+}
+
+@media (prefers-color-scheme: light) {
 }
