@@ -37,7 +37,11 @@ export function Piece({ box, size, colored, onClick }: Props) {
       className={`chess-board-box ${colored ? "colored" : ""}`}
     >
       {svgPath && (
-        <a className="piece-box-icon" onClick={onClick}>
+        <a
+          className="piece-box-icon"
+          title={box.piece?.value}
+          onClick={onClick}
+        >
           <img src={svgPath} />
         </a>
       )}
