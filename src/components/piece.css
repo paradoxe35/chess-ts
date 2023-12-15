@@ -1,0 +1,15 @@
+.chess-board-box {
+  border: 1px dotted white;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chess-board-box.colored {
+  background-color: rgba(255, 112, 56, 0.525);
+}
+
+.chess-board-box:not(.colored) {
+  background-color: rgba(252, 239, 234, 0.525);
+}

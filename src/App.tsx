@@ -1,5 +1,6 @@
 import chessLogo from "/chess.png";
 import { ChessGameContext } from "./state";
+import { Piece } from "./components";
 import "./App.css";
 
 function App() {
@@ -15,25 +16,24 @@ function App() {
 
       <div className="chess-board">
         {board.map((column, ci) => {
-          const size = `${100 / board.length}%`;
+          const size = 100 / board.length;
 
           return (
             <div
               key={ci}
-              style={{ height: size }}
+              style={{ height: `${size}%` }}
               className="chess-board-column"
             >
               {column.map((box, bi) => {
                 const colored = (ci + bi + 1) % 2 === 0;
 
                 return (
-                  <div
+                  <Piece
                     key={box.position}
-                    style={{
-                      width: size,
-                    }}
-                    className={`chess-board-box ${colored ? "colored" : ""}`}
-                  ></div>
+                    box={box}
+                    colored={colored}
+                    size={size}
+                  />
                 );
               })}
             </div>
