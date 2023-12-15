@@ -37,6 +37,14 @@ function App() {
                     box={box}
                     colored={colored}
                     size={size}
+                    onClick={() => {
+                      box.piece &&
+                        chessGame.send({
+                          type: "chess.playing.getMoves",
+                          piece: box.piece,
+                          position: box.position,
+                        });
+                    }}
                   />
                 );
               })}

@@ -4,6 +4,7 @@ import {
   BoardPiece,
   BoardType,
   PieceColor,
+  PieceMovesHistory,
   createBoard,
   getPieceMoves,
 } from "../chess";
@@ -15,6 +16,7 @@ type TChessMachine = {
     boardType: BoardType;
     player: PieceColor;
     moves: string[];
+    movesHistory: PieceMovesHistory;
   };
   events:
     | { type: "chess.settings"; boardType: BoardType }
@@ -34,6 +36,7 @@ function defaultContext() {
     boardType: "empty" as BoardType,
     player: "white" as PieceColor,
     moves: [],
+    movesHistory: {},
   };
 }
 
@@ -65,10 +68,16 @@ export const chessGameMachine = createMachine({
         getMoves: {
           on: {
             "chess.playing.getMoves": {
-              target: "move",
+              // target: "move",
               actions: assign({
-                moves: ({ event, context }) =>
-                  getPieceMoves(event.piece, event.position, context.board),
+                moves: ({ event, context }) => {
+                  return getPieceMoves({
+                    piece: event.piece,
+                    position: event.position,
+                    board: context.board,
+                    history: context.movesHistory,
+                  });
+                },
               }),
               guard: ({ context, event }) => {
                 return context.player === event.piece.type;
@@ -78,6 +87,8 @@ export const chessGameMachine = createMachine({
         },
 
         move: {},
+
+        verify: {},
       },
       history: "deep",
       always: {

@@ -1,11 +1,16 @@
-import type { Board, BoardPiece } from ".";
+import type { Board, BoardPiece, PieceMovesHistory } from ".";
 
-export function getPieceMoves(
-  piece: NonNullable<BoardPiece>,
-  position: string,
-  board: Board[]
-): string[] {
-  switch (piece.value) {
+type Params = {
+  piece: NonNullable<BoardPiece>;
+  position: string;
+  board: Board[];
+  history: PieceMovesHistory;
+};
+
+export function getPieceMoves(params: Params): string[] {
+  console.log(params);
+
+  switch (params.piece.value) {
     case "bishop":
       return [];
       break;
