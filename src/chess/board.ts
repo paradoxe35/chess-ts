@@ -9,17 +9,20 @@ const CHESS_POSITIONS = Array.from(new Array(8).keys())
     return acc;
   }, {} as BoardPositions);
 
-type BoardPiece = {
+export type BoardPiece = {
   value: PieceType;
   type: PieceColor;
+  id?: string;
 };
 
-type Board = {
+export type BoardPosition = {
   position: string;
   piece?: BoardPiece;
-}[];
+};
 
-type BoardType = "black->white" | "white->black";
+export type Board = BoardPosition[];
+
+export type BoardType = "black->white" | "white->black" | "empty";
 
 export const CHESS_ROOT_ORDER: PieceType[] = [
   "rook",
@@ -32,7 +35,14 @@ export const CHESS_ROOT_ORDER: PieceType[] = [
   "rook",
 ];
 
-export function createBoard(boardType: BoardType): Board[] {
+export function createBoard(
+  boardType: BoardType,
+  createUid?: () => string
+): Board[] {
+  if (!["black->white", "white->black", "empty"].includes(boardType)) {
+    throw new Error("Unexpected board type value!");
+  }
+
   return Object.keys(CHESS_POSITIONS)
     .map((key) => {
       const pNumber = +key;
@@ -51,11 +61,18 @@ export function createBoard(boardType: BoardType): Board[] {
       const board: Board = pValue.map((position, i) => {
         let piece: BoardPiece | undefined;
 
+        if (boardType === "empty") {
+          return {
+            position: position + pNumber,
+          };
+        }
+
         // Fullfil top root board piece
         if ([8, 1].includes(pNumber)) {
           piece = {
             value: CHESS_ROOT_ORDER[i],
             type: getPieceColor(),
+            id: createUid ? createUid() : undefined,
           };
         }
 
@@ -64,6 +81,7 @@ export function createBoard(boardType: BoardType): Board[] {
           piece = {
             value: "pawn",
             type: getPieceColor(),
+            id: createUid ? createUid() : undefined,
           };
         }
 

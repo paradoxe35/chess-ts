@@ -696,4 +696,217 @@ describe("Create board", () => {
       ],
     ]);
   });
+
+  it("Should create empty board type", () => {
+    expect(createBoard("empty")).toEqual([
+      [
+        {
+          position: "A8",
+        },
+        {
+          position: "B8",
+        },
+        {
+          position: "C8",
+        },
+        {
+          position: "D8",
+        },
+        {
+          position: "E8",
+        },
+        {
+          position: "F8",
+        },
+        {
+          position: "G8",
+        },
+        {
+          position: "H8",
+        },
+      ],
+      [
+        {
+          position: "A7",
+        },
+        {
+          position: "B7",
+        },
+        {
+          position: "C7",
+        },
+        {
+          position: "D7",
+        },
+        {
+          position: "E7",
+        },
+        {
+          position: "F7",
+        },
+        {
+          position: "G7",
+        },
+        {
+          position: "H7",
+        },
+      ],
+      [
+        {
+          position: "A6",
+        },
+        {
+          position: "B6",
+        },
+        {
+          position: "C6",
+        },
+        {
+          position: "D6",
+        },
+        {
+          position: "E6",
+        },
+        {
+          position: "F6",
+        },
+        {
+          position: "G6",
+        },
+        {
+          position: "H6",
+        },
+      ],
+      [
+        {
+          position: "A5",
+        },
+        {
+          position: "B5",
+        },
+        {
+          position: "C5",
+        },
+        {
+          position: "D5",
+        },
+        {
+          position: "E5",
+        },
+        {
+          position: "F5",
+        },
+        {
+          position: "G5",
+        },
+        {
+          position: "H5",
+        },
+      ],
+      [
+        {
+          position: "A4",
+        },
+        {
+          position: "B4",
+        },
+        {
+          position: "C4",
+        },
+        {
+          position: "D4",
+        },
+        {
+          position: "E4",
+        },
+        {
+          position: "F4",
+        },
+        {
+          position: "G4",
+        },
+        {
+          position: "H4",
+        },
+      ],
+      [
+        {
+          position: "A3",
+        },
+        {
+          position: "B3",
+        },
+        {
+          position: "C3",
+        },
+        {
+          position: "D3",
+        },
+        {
+          position: "E3",
+        },
+        {
+          position: "F3",
+        },
+        {
+          position: "G3",
+        },
+        {
+          position: "H3",
+        },
+      ],
+      [
+        {
+          position: "A2",
+        },
+        {
+          position: "B2",
+        },
+        {
+          position: "C2",
+        },
+        {
+          position: "D2",
+        },
+        {
+          position: "E2",
+        },
+        {
+          position: "F2",
+        },
+        {
+          position: "G2",
+        },
+        {
+          position: "H2",
+        },
+      ],
+      [
+        {
+          position: "A1",
+        },
+        {
+          position: "B1",
+        },
+        {
+          position: "C1",
+        },
+        {
+          position: "D1",
+        },
+        {
+          position: "E1",
+        },
+        {
+          position: "F1",
+        },
+        {
+          position: "G1",
+        },
+        {
+          position: "H1",
+        },
+      ],
+    ]);
+  });
 });
