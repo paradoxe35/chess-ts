@@ -24,6 +24,11 @@ export type Board = BoardPosition[];
 
 export type BoardType = "black->white" | "white->black" | "empty";
 
+export const BOARD_TYPES: Exclude<BoardType, "empty">[] = [
+  "black->white",
+  "white->black",
+];
+
 export const CHESS_ROOT_ORDER: PieceType[] = [
   "rook",
   "knight",

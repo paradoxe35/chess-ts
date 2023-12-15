@@ -1,3 +1,13 @@
+.piece-box-icon:hover {
+  background-color: rgba(240, 248, 255, 0.153);
+  border-radius: 8px;
+  transition: background-color 400ms ease-in-out;
+}
+
+.piece-box-icon {
+  cursor: pointer;
+}
+
 .chess-board-box {
   border: 1px dotted white;
   height: 100%;

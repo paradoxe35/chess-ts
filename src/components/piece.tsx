@@ -7,9 +7,10 @@ type Props = {
   box: BoardPosition;
   size: number;
   colored: boolean;
+  onClick?: () => void;
 };
 
-export function Piece({ box, size, colored }: Props) {
+export function Piece({ box, size, colored, onClick }: Props) {
   const [svgPath, setSvgPathSvg] = useState<string | undefined>();
 
   useEffect(() => {
@@ -36,10 +37,9 @@ export function Piece({ box, size, colored }: Props) {
       className={`chess-board-box ${colored ? "colored" : ""}`}
     >
       {svgPath && (
-        <img
-          style={{ cursor: svgPath ? "pointer" : undefined }}
-          src={svgPath}
-        />
+        <a className="piece-box-icon">
+          <img src={svgPath} />
+        </a>
       )}
     </div>
   );
