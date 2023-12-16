@@ -1,9 +1,13 @@
-import chessLogo from "/chess.png";
+import { useState } from "react";
 import { ChessGameContext } from "./state";
 import { Piece } from "./components";
 import { Modal } from "./components/modal";
 import { BOARD_TYPES } from "./chess";
-import { useState } from "react";
+
+// Images
+import chessLogo from "/chess.png";
+import knightBlack from "./assets/pieces/black/knight.svg";
+import knightWhite from "./assets/pieces/white/knight.svg";
 
 import "./App.css";
 
@@ -19,7 +23,11 @@ function App() {
       <div>
         <img src={chessLogo} className="logo" alt="Vite logo" />
       </div>
-      <h1 className="header">{"Chess TS"}</h1>
+
+      <div className="header">
+        <h1>{"Chess TS"}</h1>
+        <PlayerHint />
+      </div>
 
       <div className="chess-board">
         {board.map((column, ci) => {
@@ -75,6 +83,20 @@ function App() {
       {/* Setting */}
       {chessGame.getSnapshot().matches("start") && <Setting />}
     </>
+  );
+}
+
+function PlayerHint() {
+  const player = ChessGameContext.useSelector((state) => state.context.player);
+
+  return (
+    <div className="icon">
+      {player === "white" ? (
+        <img src={knightWhite} />
+      ) : (
+        <img src={knightBlack} />
+      )}
+    </div>
   );
 }
 

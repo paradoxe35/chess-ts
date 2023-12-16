@@ -32,8 +32,22 @@
   }
 }
 
-h1.header {
-  margin-top: 0;
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  gap: 10px;
+}
+
+.header .icon {
+  border-radius: 8px;
+  background-color: rgba(240, 248, 255, 0.253);
+}
+
+.header h1 {
+  margin: 0;
+  padding: 0;
   font-size: 1.5em;
   line-height: 1.1;
 }
