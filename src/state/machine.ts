@@ -18,6 +18,7 @@ type TChessMachine = {
     player: PieceColor;
     pieceMove: { piece: BoardPiece; moves: string[] } | null;
     movesHistory: PieceMovesHistory;
+    winner: PieceColor | undefined;
   };
   events:
     | { type: "chess.settings"; boardType: BoardType }
@@ -42,6 +43,7 @@ function defaultContext() {
     player: "white" as PieceColor,
     pieceMove: null,
     movesHistory: {},
+    winner: undefined,
   };
 }
 
@@ -156,6 +158,10 @@ export const chessGameMachine = createMachine({
               pieceMove: () => {
                 return null;
               },
+              winner: () => {
+                // Winner logic here
+                return undefined;
+              },
             }),
           },
         },
@@ -163,7 +169,7 @@ export const chessGameMachine = createMachine({
       history: "deep",
       always: {
         guard: ({ context }) => {
-          return context.boardType !== "empty";
+          return context.boardType !== "empty" && context.winner === undefined;
         },
       },
     },
