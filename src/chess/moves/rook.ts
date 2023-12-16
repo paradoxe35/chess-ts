@@ -76,8 +76,6 @@ export function getRookMoves(params: Params) {
 
       // Horizontal  check
       if (pRow === pieceRow) {
-        console.log(box);
-
         if (samePosition) {
           const leftMoves = horizontalMoves.reverse().reduce(
             (acc, v) => {
@@ -107,7 +105,7 @@ export function getRookMoves(params: Params) {
         }
 
         // Left moves checks
-        if (pColumn > pieceColumn) {
+        if (pieceColumn > pColumn) {
           if (canTake) {
             horizontalMoves.push({ p: box.position, stop: true });
           } else if (emptyBox) {
@@ -118,7 +116,7 @@ export function getRookMoves(params: Params) {
         }
 
         // Right moves checks
-        if (pColumn < pieceColumn && !horizontalMoves.includes(undefined)) {
+        if (pColumn > pieceColumn && !horizontalMoves.includes(undefined)) {
           if (emptyBox) {
             moves.push(box.position);
           } else if (canTake) {
