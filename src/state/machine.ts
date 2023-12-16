@@ -15,7 +15,7 @@ type TChessMachine = {
     board: Board[];
     boardType: BoardType;
     player: PieceColor;
-    moves: string[];
+    pieceMove: { piece: BoardPiece; moves: string[] } | null;
     movesHistory: PieceMovesHistory;
   };
   events:
@@ -27,7 +27,11 @@ type TChessMachine = {
       }
     | ({
         type: "reset";
-      } & TChessMachine["context"]);
+      } & TChessMachine["context"])
+    | {
+        type: "chess.playing.setMove";
+        movePosition: string;
+      };
 };
 
 function defaultContext() {
@@ -35,7 +39,7 @@ function defaultContext() {
     board: createBoard("empty", nanoid),
     boardType: "empty" as BoardType,
     player: "white" as PieceColor,
-    moves: [],
+    pieceMove: null,
     movesHistory: {},
   };
 }
@@ -70,13 +74,23 @@ export const chessGameMachine = createMachine({
             "chess.playing.getMoves": {
               // target: "move",
               actions: assign({
-                moves: ({ event, context }) => {
-                  return getPieceMoves({
+                pieceMove: ({ event, context }) => {
+                  const moves = getPieceMoves({
                     piece: event.piece,
                     position: event.position,
                     board: context.board,
                     history: context.movesHistory,
+                    boardType: context.boardType,
                   });
+
+                  if (moves.length === 0) {
+                    return null;
+                  }
+
+                  return {
+                    piece: event.piece,
+                    moves: moves,
+                  };
                 },
               }),
               guard: ({ context, event }) => {
@@ -86,7 +100,19 @@ export const chessGameMachine = createMachine({
           },
         },
 
-        move: {},
+        move: {
+          on: {
+            "chess.playing.setMove": {
+              guard: ({ context, event }) => {
+                const pieceMove = context.pieceMove;
+
+                return pieceMove
+                  ? pieceMove.moves.includes(event.movePosition)
+                  : false;
+              },
+            },
+          },
+        },
 
         verify: {},
       },

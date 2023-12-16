@@ -40,6 +40,13 @@ export const CHESS_ROOT_ORDER: PieceType[] = [
   "rook",
 ];
 
+/**
+ * Create Board
+ *
+ * @param boardType
+ * @param createUid
+ * @returns
+ */
 export function createBoard(
   boardType: BoardType,
   createUid?: () => string
@@ -100,3 +107,5 @@ export function createBoard(
     })
     .reverse();
 }
+
+export function movePiece(piece: BoardPiece, to: string, board: Board[]) {}

@@ -1,10 +1,11 @@
-import type { Board, BoardPiece, PieceMovesHistory } from ".";
+import type { Board, BoardPiece, BoardType, PieceMovesHistory } from ".";
 
 type Params = {
   piece: NonNullable<BoardPiece>;
   position: string;
   board: Board[];
   history: PieceMovesHistory;
+  boardType: BoardType;
 };
 
 export function getPieceMoves(params: Params): string[] {
