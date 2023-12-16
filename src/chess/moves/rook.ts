@@ -65,7 +65,7 @@ export function getRookMoves(params: Params) {
           if (emptyBox) {
             moves.push(box.position);
           } else if (canTake) {
-            // Can the piece but stop there
+            // Can take the piece but stop there
             moves.push(box.position);
             verticalMoves.push(undefined);
           } else {
