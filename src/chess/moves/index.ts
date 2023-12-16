@@ -1,16 +1,7 @@
-import type { Board, BoardPiece, BoardType, PieceMovesHistory } from ".";
-
-type Params = {
-  piece: NonNullable<BoardPiece>;
-  position: string;
-  board: Board[];
-  history: PieceMovesHistory;
-  boardType: BoardType;
-};
+import { getSpawnMoves } from "./spawn";
+import { Params } from "./type";
 
 export function getPieceMoves(params: Params): string[] {
-  console.log(params);
-
   switch (params.piece.value) {
     case "bishop":
       return [];
@@ -25,7 +16,7 @@ export function getPieceMoves(params: Params): string[] {
       break;
 
     case "pawn":
-      return [];
+      return getSpawnMoves(params);
       break;
 
     case "queen":

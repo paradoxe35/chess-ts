@@ -2,10 +2,12 @@ import { PieceColor, PieceType } from "./piece";
 
 type BoardPositions = { [x: number]: string[] };
 
+export const CHESS_COLUMNS = ["A", "B", "C", "D", "E", "F", "G", "H"];
+
 const CHESS_POSITIONS = Array.from(new Array(8).keys())
   .reverse()
   .reduce((acc, v) => {
-    acc[v + 1] = ["A", "B", "C", "D", "E", "F", "G", "H"];
+    acc[v + 1] = CHESS_COLUMNS.slice();
     return acc;
   }, {} as BoardPositions);
 
@@ -108,4 +110,11 @@ export function createBoard(
     .reverse();
 }
 
+/**
+ * Move piece
+ *
+ * @param piece
+ * @param to
+ * @param board
+ */
 export function movePiece(piece: BoardPiece, to: string, board: Board[]) {}
