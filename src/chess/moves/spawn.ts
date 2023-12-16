@@ -1,5 +1,5 @@
 import { CHESS_COLUMNS } from "..";
-import { Params } from "./type";
+import { type Params } from ".";
 
 export function getSpawnMoves(params: Params) {
   const piece = params.piece;

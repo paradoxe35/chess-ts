@@ -117,4 +117,31 @@ export function createBoard(
  * @param to
  * @param board
  */
-export function movePiece(piece: BoardPiece, to: string, board: Board[]) {}
+export function movePiece(
+  piece: BoardPiece,
+  to: string,
+  board: Board[]
+): Board[] {
+  const newBoard: Board[] = [];
+
+  board.forEach((column) => {
+    column.forEach((box, i) => {
+      if (box.piece?.id === piece.id) {
+        column[i] = {
+          position: box.position,
+        };
+      }
+
+      if (box.position === to) {
+        column[i] = {
+          piece,
+          position: box.position,
+        };
+      }
+    });
+
+    newBoard.push(column);
+  });
+
+  return newBoard;
+}

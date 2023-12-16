@@ -1,5 +1,13 @@
+import { Board, BoardPiece, BoardType, PieceMovesHistory } from "..";
 import { getSpawnMoves } from "./spawn";
-import { Params } from "./type";
+
+export type Params = {
+  piece: NonNullable<BoardPiece>;
+  position: string;
+  board: Board[];
+  history: PieceMovesHistory;
+  boardType: BoardType;
+};
 
 export function getPieceMoves(params: Params): string[] {
   switch (params.piece.value) {
