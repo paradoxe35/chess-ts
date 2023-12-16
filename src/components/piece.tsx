@@ -2,16 +2,21 @@ import { useEffect, useState } from "react";
 import pieces from "../assets/pieces";
 import { BoardPosition } from "../chess";
 import "./piece.css";
+import clsx from "clsx";
 
 type Props = {
   box: BoardPosition;
   size: number;
   colored: boolean;
+  moveSelection?: boolean;
+  moveActive?: boolean;
+  onMoveSelection?: () => void;
   onClick?: () => void;
 };
 
-export function Piece({ box, size, colored, onClick }: Props) {
+export function Piece(props: Props) {
   const [svgPath, setSvgPathSvg] = useState<string | undefined>();
+  const { box } = props;
 
   useEffect(() => {
     if (!box.piece) {
@@ -32,15 +37,20 @@ export function Piece({ box, size, colored, onClick }: Props) {
     <div
       data-position={box.position}
       style={{
-        width: `${size}%`,
+        width: `${props.size}%`,
       }}
-      className={`chess-board-box ${colored ? "colored" : ""}`}
+      className={clsx(
+        "chess-board-box",
+        props.colored && "colored",
+        props.moveSelection && "move-selection"
+      )}
+      onClick={props.moveSelection ? props.onMoveSelection : undefined}
     >
       {svgPath && (
         <a
-          className="piece-box-icon"
+          className={clsx("piece-box-icon", props.moveActive && "move-active")}
           title={box.piece?.value}
-          onClick={onClick}
+          onClick={props.onClick}
         >
           <img src={svgPath} />
         </a>

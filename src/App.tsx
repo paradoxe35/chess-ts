@@ -10,6 +10,9 @@ import "./App.css";
 function App() {
   const chessGame = ChessGameContext.useActorRef();
   const board = ChessGameContext.useSelector((state) => state.context.board);
+  const pieceMove = ChessGameContext.useSelector(
+    (state) => state.context.pieceMove
+  );
 
   return (
     <>
@@ -37,13 +40,29 @@ function App() {
                     box={box}
                     colored={colored}
                     size={size}
+                    // Move attr
+                    moveSelection={pieceMove?.moves.includes(box.position)}
+                    moveActive={box.piece?.id === pieceMove?.piece.id}
+                    onMoveSelection={() => {
+                      chessGame.send({
+                        type: "chess.playing.setMove",
+                        movePosition: box.position,
+                      });
+                    }}
+                    // onClick
                     onClick={() => {
-                      box.piece &&
+                      if (box.piece?.id === pieceMove?.piece.id) {
                         chessGame.send({
-                          type: "chess.playing.getMoves",
-                          piece: box.piece,
-                          position: box.position,
+                          type: "chess.playing.setMove.reset",
                         });
+                      } else {
+                        box.piece &&
+                          chessGame.send({
+                            type: "chess.playing.getMoves",
+                            piece: box.piece,
+                            position: box.position,
+                          });
+                      }
                     }}
                   />
                 );

@@ -33,6 +33,9 @@ type TChessMachine = {
     | {
         type: "chess.playing.setMove";
         movePosition: string;
+      }
+    | {
+        type: "chess.playing.setMove.reset";
       };
 };
 
@@ -144,6 +147,15 @@ export const chessGameMachine = createMachine({
                   ? pieceMove.moves.includes(event.movePosition)
                   : false;
               },
+            },
+
+            "chess.playing.setMove.reset": {
+              target: "getMoves",
+              actions: assign({
+                pieceMove: () => {
+                  return null;
+                },
+              }),
             },
           },
         },

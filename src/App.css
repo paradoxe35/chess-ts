@@ -43,6 +43,7 @@ h1.header {
   height: 70vh;
   min-width: 480px;
   min-height: 500px;
+  border: 0.5px dashed white;
 }
 
 .chess-board-column {
