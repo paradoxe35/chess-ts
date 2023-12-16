@@ -1,4 +1,5 @@
 import { Board, BoardPiece, BoardType, PieceMovesHistory } from "..";
+import { getRookMoves } from "./rook";
 import { getSpawnMoves } from "./spawn";
 
 export type Params = {
@@ -19,20 +20,20 @@ export function getPieceMoves(params: Params): string[] {
       return [];
       break;
 
-    case "knight":
-      return [];
-      break;
-
-    case "pawn":
-      return getSpawnMoves(params);
-      break;
-
     case "queen":
       return [];
       break;
 
-    case "rook":
+    case "knight":
       return [];
+      break;
+
+    case "rook":
+      return getRookMoves(params);
+      break;
+
+    case "pawn":
+      return getSpawnMoves(params);
       break;
 
     default:

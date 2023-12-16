@@ -1,66 +1,78 @@
-import { CHESS_COLUMNS } from "..";
 import { type Params } from ".";
+import { numberizePiecePosition } from "../helpers";
 
 export function getSpawnMoves(params: Params) {
   const piece = params.piece;
-  const [pieceColumn, pieceRow] = params.position.split("");
-  const pieceColumnIndex = CHESS_COLUMNS.indexOf(pieceColumn) + 1;
+  const [pieceColumn, pieceRow] = numberizePiecePosition(params.position);
   const canMoveTwo = !params.history[piece.id!]?.length;
 
-  const moves: string[] = [];
+  let moves: string[] = [];
 
-  let moveDirection: "incr" | "decr" = "incr";
+  let moveDirection: "bottom-top" | "top-bottom" = "bottom-top";
   if (params.boardType.startsWith(piece.type)) {
-    moveDirection = "decr";
+    moveDirection = "top-bottom";
   }
 
-  for (const column of params.board) {
-    // With the column +1
-    column.forEach((box) => {
-      const [pColumn, pRow] = box.position.split("");
-      const pColumnIndex = CHESS_COLUMNS.indexOf(pColumn) + 1;
+  let skipNextBox = false;
 
+  for (const column of params.board) {
+    for (const box of column) {
+      const [pColumn, pRow] = numberizePiecePosition(box.position);
       const emptyBox = !box.piece;
       const canTake = box.piece ? box.piece.type !== piece.type : false;
 
       const workingRow =
-        moveDirection === "incr"
-          ? +pRow - +pieceRow === 1
-          : +pieceRow - +pRow === 1;
+        moveDirection === "bottom-top"
+          ? pRow - pieceRow === 1
+          : pieceRow - pRow === 1;
+
+      const workingRow2 =
+        moveDirection === "bottom-top"
+          ? pRow - pieceRow === 2
+          : pieceRow - pRow === 2;
 
       const leftCheck =
-        moveDirection === "incr"
-          ? pieceColumnIndex - pColumnIndex === 1
-          : pColumnIndex - pieceColumnIndex === 1;
+        moveDirection === "bottom-top"
+          ? pieceColumn - pColumn === 1
+          : pColumn - pieceColumn === 1;
 
       const rightCheck =
-        moveDirection === "incr"
-          ? pColumnIndex - pieceColumnIndex === 1
-          : pieceColumnIndex - pColumnIndex === 1;
+        moveDirection === "bottom-top"
+          ? pColumn - pieceColumn === 1
+          : pieceColumn - pColumn === 1;
 
       // If pawn same column (+1)
       if (workingRow) {
-        if (pieceColumnIndex === pColumnIndex && emptyBox) {
+        if (pieceColumn === pColumn && emptyBox) {
           moves.push(box.position);
         } else if (leftCheck && canTake) {
           moves.push(box.position);
         } else if (rightCheck && canTake) {
           moves.push(box.position);
         }
+
+        // Up front Box condition
+        if (pieceColumn === pColumn && !emptyBox) {
+          skipNextBox = true;
+        }
+
+        if (
+          moveDirection === "bottom-top" &&
+          pieceColumn === pColumn &&
+          canMoveTwo &&
+          !emptyBox
+        ) {
+          moves = moves.slice(0, moves.length - 1);
+        }
       }
 
       // Can move +2
-      const workingRow2 =
-        moveDirection === "incr"
-          ? +pRow - +pieceRow === 2
-          : +pieceRow - +pRow === 2;
-
       if (canMoveTwo && workingRow2) {
-        if (pieceColumnIndex === pColumnIndex && emptyBox) {
+        if (pieceColumn === pColumn && emptyBox && !skipNextBox) {
           moves.push(box.position);
         }
       }
-    });
+    }
   }
 
   return moves;
