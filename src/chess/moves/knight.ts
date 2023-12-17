@@ -1,7 +1,7 @@
 import { Params } from ".";
 import { numberizePiecePosition } from "../helpers";
 
-const POSITIONS = [8, -12, 19, -8, 12, -19, 21, -21];
+const POSITIONS_SUB = [8, -8, 19, -19, 12, -12, 21, -21];
 
 export function getKnightMoves(params: Params): string[] {
   const piece = params.piece;
@@ -18,7 +18,7 @@ export function getKnightMoves(params: Params): string[] {
       const pPosSum = +`${pColumn}${pRow}`;
 
       const position = piecePosSum - pPosSum;
-      if (POSITIONS.includes(position) && (emptyBox || canTake)) {
+      if (POSITIONS_SUB.includes(position) && (emptyBox || canTake)) {
         moves.push(box.position);
       }
     }
