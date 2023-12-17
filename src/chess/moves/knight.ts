@@ -1,0 +1,28 @@
+import { Params } from ".";
+import { numberizePiecePosition } from "../helpers";
+
+const POSITIONS = [8, -12, 19, -8, 12, -19, 21, -21];
+
+export function getKnightMoves(params: Params): string[] {
+  const piece = params.piece;
+  const [pieceColumn, pieceRow] = numberizePiecePosition(params.position);
+  const piecePosSum = +`${pieceColumn}${pieceRow}`;
+
+  const moves: string[] = [];
+
+  for (const column of params.board) {
+    for (const box of column) {
+      const [pColumn, pRow] = numberizePiecePosition(box.position);
+      const emptyBox = !box.piece;
+      const canTake = box.piece ? box.piece.type !== piece.type : false;
+      const pPosSum = +`${pColumn}${pRow}`;
+
+      const position = piecePosSum - pPosSum;
+      if (POSITIONS.includes(position) && (emptyBox || canTake)) {
+        moves.push(box.position);
+      }
+    }
+  }
+
+  return moves;
+}
