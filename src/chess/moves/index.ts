@@ -1,6 +1,7 @@
 import { Board, BoardPiece, BoardType, PieceMovesHistory } from "..";
 import { getBishopMoves } from "./bishop";
 import { getKnightMoves } from "./knight";
+import { getQueenMoves } from "./queen";
 import { getRookMoves } from "./rook";
 import { getSpawnMoves } from "./spawn";
 
@@ -19,7 +20,7 @@ export function getPieceMoves(params: Params): string[] {
       break;
 
     case "queen":
-      return [];
+      return getQueenMoves(params);
       break;
 
     case "bishop":
