@@ -4,7 +4,7 @@ type BoardPositions = { [x: number]: string[] };
 
 export const CHESS_COLUMNS = ["A", "B", "C", "D", "E", "F", "G", "H"];
 
-const CHESS_POSITIONS = Array.from(new Array(8).keys())
+const CHESS_POSITIONS = Array.from(new Array(CHESS_COLUMNS.length).keys())
   .reverse()
   .reduce((acc, v) => {
     acc[v + 1] = CHESS_COLUMNS.slice();
