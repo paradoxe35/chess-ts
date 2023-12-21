@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { ChessGameContext } from "./state";
-import { Piece } from "./components";
-import { Modal } from "./components/modal";
-import { BOARD_TYPES } from "./chess";
+import { ChessGameContext } from "@/state";
+import { Piece } from "@/components";
+import { Modal } from "@/components/modal";
+import { BOARD_TYPES } from "@/chess";
 import { motion } from "framer-motion";
 
 // Images
-import chessLogo from "/chess.png";
-import knightBlack from "./assets/pieces/black/knight.svg";
-import knightWhite from "./assets/pieces/white/knight.svg";
-
-import "./App.css";
+import chessLogo from "../../public/chess.png";
+import knightBlack from "@/assets/pieces/black/knight.svg";
+import knightWhite from "@/assets/pieces/white/knight.svg";
 
 function App() {
   const chessGame = ChessGameContext.useActorRef();
@@ -22,7 +20,7 @@ function App() {
   return (
     <>
       <div>
-        <img src={chessLogo} className="logo" alt="Vite logo" />
+        <img src={chessLogo.src} className="logo" alt="Vite logo" />
       </div>
 
       <div className="header">
@@ -93,9 +91,9 @@ function PlayerHint() {
   return (
     <div className="icon">
       {player === "white" ? (
-        <img src={knightWhite} />
+        <img src={knightWhite.src} />
       ) : (
-        <img src={knightBlack} />
+        <img src={knightBlack.src} />
       )}
     </div>
   );
@@ -134,4 +132,10 @@ function Setting() {
   );
 }
 
-export default App;
+export default function Chess() {
+  return (
+    <ChessGameContext.Provider>
+      <App />
+    </ChessGameContext.Provider>
+  );
+}

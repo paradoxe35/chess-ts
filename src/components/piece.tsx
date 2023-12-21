@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import pieces from "../assets/pieces";
 import { BoardPosition } from "../chess";
 import { motion } from "framer-motion";
-import "./piece.css";
 import clsx from "clsx";
 
 type Props = {
@@ -16,23 +15,17 @@ type Props = {
 };
 
 export function Piece(props: Props) {
-  const [svgPath, setSvgPathSvg] = useState<string | undefined>();
   const { box } = props;
 
-  useEffect(() => {
+  const svgPath = useMemo(() => {
     if (!box.piece) {
-      return;
+      return undefined;
     }
-
     const svg_icons = pieces[box.piece.type];
-    const icon = svg_icons[pieces.resolve(box.piece.type, box.piece.value)];
+    const icon = svg_icons[box.piece.value];
 
-    if (icon) {
-      icon().then((v: any) => {
-        setSvgPathSvg(v.default);
-      });
-    }
-  }, []);
+    return icon.src as string;
+  }, [box.piece]);
 
   return (
     <div

@@ -1,6 +1,5 @@
 import { createPortal } from "react-dom";
 import { PropsWithChildren } from "react";
-import "./modal.css";
 
 export function Modal({ children }: PropsWithChildren) {
   if (typeof window === "undefined") {
