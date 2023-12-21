@@ -19,7 +19,7 @@ function App() {
 
   return (
     <>
-      <div>
+      <div className="logo-header">
         <img src={chessLogo.src} className="logo" alt="Vite logo" />
       </div>
 
