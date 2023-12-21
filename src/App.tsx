@@ -3,6 +3,7 @@ import { ChessGameContext } from "./state";
 import { Piece } from "./components";
 import { Modal } from "./components/modal";
 import { BOARD_TYPES } from "./chess";
+import { motion } from "framer-motion";
 
 // Images
 import chessLogo from "/chess.png";
@@ -34,7 +35,7 @@ function App() {
           const size = 100 / board.length;
 
           return (
-            <div
+            <motion.div
               key={ci}
               style={{ height: `${size}%` }}
               className="chess-board-column"
@@ -44,7 +45,7 @@ function App() {
 
                 return (
                   <Piece
-                    key={box.piece?.id + box.position}
+                    key={box.piece?.id || box.position}
                     box={box}
                     colored={colored}
                     size={size}
@@ -75,7 +76,7 @@ function App() {
                   />
                 );
               })}
-            </div>
+            </motion.div>
           );
         })}
       </div>

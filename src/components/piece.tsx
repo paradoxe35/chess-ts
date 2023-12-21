@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import pieces from "../assets/pieces";
 import { BoardPosition } from "../chess";
+import { motion } from "framer-motion";
 import "./piece.css";
 import clsx from "clsx";
 
@@ -46,14 +47,15 @@ export function Piece(props: Props) {
       )}
       onClick={props.moveSelection ? props.onMoveSelection : undefined}
     >
-      {svgPath && (
-        <a
+      {box.piece && (
+        <motion.a
+          key={box.piece.id}
           className={clsx("piece-box-icon", props.moveActive && "move-active")}
           title={box.piece?.value}
           onClick={props.onClick}
         >
           <img src={svgPath} />
-        </a>
+        </motion.a>
       )}
     </div>
   );

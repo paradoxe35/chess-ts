@@ -1,30 +1,54 @@
-# React + TypeScript + Vite
+# Chess TS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<center>
+<img src="public/chess.png" alt="Chess TS screenshot" width="100">
+</center>
 
-Currently, two official plugins are available:
+Chess TS is a web-based chess application for playing chess online against another player or computer AI.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Key Features
 
-## Expanding the ESLint configuration
+- Play chess online in real-time
+- Supports two human players
+- Single player mode against AI bot
+- 3 difficulty levels for AI opponent
+- AI suggests best next moves
+- WebRTC powers real-time multiplayer
+- Time controls and timeouts to keep games moving
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Rules and Gameplay
 
-- Configure the top-level `parserOptions` property like this:
+- Standard chess rules and gameplay
+- Board represents standard 8x8 chess board
+- Legal moves are enforced by the app
+- Check, checkmate, stalemate, and draw detection
+- Pawn promotion when reaching last rank
+- En passant captures
+- Castling under standard rules
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+## AI Opponent Details
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+- Play against built-in chess AI in single player mode
+- 3 selectable difficulty levels
+  - Easy - Makes random legal moves
+  - Normal - Looks 1-2 moves ahead
+  - Hard - Employs aggressive strategies and can see 3+ moves ahead
+- AI player evaluates positions and provides suggestions for optimal next moves
+
+## Technical Details
+
+- Built with TypeScript and React
+- React Hooks for state management
+- WebRTC used for real-time multiplayer
+- Socket.io enables real-time communication
+- SVG used for rendering chess board and pieces
+- Fully responsive design supporting mobile, tablet and desktop
+
+## Getting Started
+
+The app is not yet deployed online. To run it locally:
+
+1. Clone the repository
+2. Run `npm install`
+3. Run `npm start`
+4. Go to `http://localhost:3000`
