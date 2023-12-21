@@ -1,5 +1,6 @@
 import { Board, BoardPiece, BoardType, PieceMovesHistory } from "..";
 import { getBishopMoves } from "./bishop";
+import { getKingMoves } from "./king";
 import { getKnightMoves } from "./knight";
 import { getQueenMoves } from "./queen";
 import { getRookMoves } from "./rook";
@@ -16,7 +17,7 @@ export type Params = {
 export function getPieceMoves(params: Params): string[] {
   switch (params.piece.value) {
     case "king":
-      return [];
+      return getKingMoves(params);
       break;
 
     case "queen":
