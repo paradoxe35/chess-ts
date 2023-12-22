@@ -1,6 +1,6 @@
 import { useMemo } from "react";
-import pieces from "../assets/pieces";
-import { BoardPosition } from "../chess";
+import pieces from "../../assets/pieces";
+import { BoardPosition } from "../../chess";
 import { motion } from "framer-motion";
 import clsx from "clsx";
 

@@ -1,5 +1,5 @@
 {
-    "cloudcode.duetAI.inlineSuggestions.enableAuto": false,
+    "cloudcode.duetAI.inlineSuggestions.enableAuto": true,
     "cSpell.words": [
         "clsx"
     ]
