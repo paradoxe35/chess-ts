@@ -1,5 +1,5 @@
-import { NewSettings } from "./settings/new-settings";
+import { ChessActivities } from "./settings/activities";
 
 export function ChessSettings() {
-  return <NewSettings />;
+  return <ChessActivities />;
 }

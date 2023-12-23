@@ -6,13 +6,13 @@ export default function Chess() {
     <div
       className={cn(
         "flex flex-col md:flex-row w-full px-3 md:px-0 container mx-auto",
-        "justify-center items-center mt-10"
+        "justify-center items-stretch my-10"
       )}
     >
       <div className="chess-board w-full md:w-1/2">
         <ChessBoard />
       </div>
-      <div className="chess-settings w-full md:w-1/2 h-full flex flex-col">
+      <div className="chess-settings w-full md:w-1/2 flex flex-col">
         <ChessSettings />
       </div>
     </div>

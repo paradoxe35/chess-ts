@@ -2,9 +2,9 @@ import { cn } from "@/utils/cn";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
-function Title() {
+export function Title({ className }: { className?: string }) {
   return (
-    <div className="border-white/75 pb-2 my-10">
+    <div className={cn("border-white/75 pb-2 my-10", className)}>
       <h1 className="text-white text-2xl font-bold border-b-2 ">Chess TS</h1>
     </div>
   );
