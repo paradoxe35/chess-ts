@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChessGameContext } from "@/state";
 import { Piece } from "@/components";
-import { Modal } from "@/components/modal";
+import { Modal } from "@/components/legacy/modal";
 import { BOARD_TYPES } from "@/chess";
 import { motion } from "framer-motion";
 
