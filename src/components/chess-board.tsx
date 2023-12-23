@@ -53,7 +53,7 @@ function BoardHints() {
   const column = (
     <>
       {CHESS_COLUMNS.map((_, i) => {
-        return <div>{CHESS_COLUMNS.length - i}</div>;
+        return <div key={i}>{CHESS_COLUMNS.length - i}</div>;
       })}
     </>
   );
@@ -61,7 +61,7 @@ function BoardHints() {
   const row = (
     <>
       {CHESS_COLUMNS.map((v) => {
-        return <div>{v}</div>;
+        return <div key={v}>{v}</div>;
       })}
     </>
   );
