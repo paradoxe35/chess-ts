@@ -16,6 +16,7 @@
     "iconsax-react": "^0.0.8",
     "nanoid": "^5.0.4",
     "next": "14.0.4",
+    "peerjs": "^1.5.2",
     "react": "^18",
     "react-dom": "^18",
     "tailwind-merge": "^2.2.0",

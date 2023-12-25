@@ -1,53 +1,53 @@
+import React, { PropsWithChildren } from "react";
 import { CHESS_COLUMNS, createBoard } from "@/chess";
 import { cn } from "@/utils/cn";
-import React, { PropsWithChildren } from "react";
+import { motion } from "framer-motion";
 
-export function ChessBoard(props: PropsWithChildren) {
-  return (
-    <div className="relative w-full">
-      <Board />
+const board = createBoard("empty");
 
-      <div className="w-full">{props.children}</div>
-    </div>
-  );
-}
+export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
+  (props, ref) => {
+    return (
+      <div className={cn("board", "rounded-lg p-6 bg-slate-50/10 w-full")}>
+        <div className="board-wrapper relative">
+          <BoardHints />
 
-const Board = React.memo(() => {
-  const board = createBoard("empty");
+          <motion.div
+            className="board-container rounded-lg w-full overflow-hidden relative"
+            ref={ref}
+          >
+            {board.map((row, i) => {
+              return (
+                <div key={i} className="w-full flex">
+                  {row.map((cell, ci) => {
+                    const colored = (i + ci + 1) % 2 === 0;
 
-  return (
-    <div className={cn("board", "rounded-lg p-6 bg-slate-50/10 w-full")}>
-      <div className="board-wrapper relative">
-        <BoardHints />
+                    return (
+                      <div
+                        key={cell.position}
+                        data-cell={cell.position}
+                        className={cn(
+                          "w-[12.5%]",
+                          "pt-[12.5%]",
+                          !colored && "bg-slate-50/80",
+                          colored && "bg-slate-50/10"
+                        )}
+                      />
+                    );
+                  })}
+                </div>
+              );
+            })}
 
-        <div className="board-container rounded-lg w-full overflow-hidden relative">
-          {board.map((row, i) => {
-            return (
-              <div key={i} className="w-full flex">
-                {row.map((cell, ci) => {
-                  const colored = (i + ci + 1) % 2 === 0;
-
-                  return (
-                    <div
-                      key={cell.position}
-                      data-cell={cell.position}
-                      className={cn(
-                        "w-[12.5%]",
-                        "pt-[12.5%]",
-                        !colored && "bg-slate-50/80",
-                        colored && "bg-slate-50/10"
-                      )}
-                    />
-                  );
-                })}
-              </div>
-            );
-          })}
+            {props.children}
+          </motion.div>
         </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
+
+ChessBoard.displayName = "ChessBoard";
 
 function BoardHints() {
   const column = (
@@ -83,5 +83,3 @@ function BoardHints() {
     </>
   );
 }
-
-Board.displayName = "Board";

@@ -1,0 +1,65 @@
+import { Fragment, RefObject, useEffect } from "react";
+import { BoardPiece, BoardPosition, createBoard } from "@/chess";
+import pieces from "@/assets/pieces";
+import { cn } from "@/utils/cn";
+import { motion, useDragControls } from "framer-motion";
+
+const board = createBoard("black->white");
+
+function getPieceImage(piece: BoardPiece) {
+  const svg_icons = pieces[piece.type];
+  const icon = svg_icons[piece.value];
+
+  return icon.src as string;
+}
+
+type Props<T = {}> = { boardRef?: RefObject<HTMLDivElement> } & T;
+
+export function ChessPieces(props: Props) {
+  return board.map((column, yi) => {
+    return column.map((box, xi) => {
+      if (!box.piece) {
+        return <Fragment key={box.position}></Fragment>;
+      }
+
+      return (
+        <Piece
+          key={box.position}
+          boardRef={props.boardRef}
+          box={box}
+          yi={yi}
+          xi={xi}
+        />
+      );
+    });
+  });
+}
+
+function Piece({
+  box,
+  xi,
+  yi,
+}: Props<{ box: BoardPosition; xi: number; yi: number }>) {
+  const piece = box.piece!;
+
+  return (
+    <motion.div
+      key={box.position}
+      className={cn(
+        "absolute w-[12.5%] pt-[12.5%] z-10",
+        "top-0 left-0",
+        "bg-no-repeat bg-[50%]",
+        "flex justify-center"
+      )}
+      style={{
+        transform: `translate(${xi * 100}%, ${yi * 100}%)`,
+        backgroundImage: `url(${getPieceImage(piece)})`,
+      }}
+    >
+      <div
+        title={piece.value}
+        className="w-3/4 h-3/4 -mt-[85%] cursor-grab absolute"
+      />
+    </motion.div>
+  );
+}

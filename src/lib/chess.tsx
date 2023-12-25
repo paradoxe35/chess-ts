@@ -1,7 +1,17 @@
 import { cn } from "@/utils/cn";
-import { ChessBoard, ChessSettings } from "@/components";
+import { ChessBoard, ChessPieces, ChessSettings } from "@/components";
+import { useEffect, useRef, useState } from "react";
 
 export default function Chess() {
+  const [, setValue] = useState(0);
+  const boardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (boardRef.current) {
+      setValue((t) => t + 1);
+    }
+  }, []);
+
   return (
     <div
       className={cn(
@@ -10,7 +20,9 @@ export default function Chess() {
       )}
     >
       <div className="chess-board w-full md:w-1/2">
-        <ChessBoard />
+        <ChessBoard ref={boardRef}>
+          {boardRef.current && <ChessPieces boardRef={boardRef} />}
+        </ChessBoard>
       </div>
       <div className="chess-settings w-full md:w-1/2 flex flex-col">
         <ChessSettings />
