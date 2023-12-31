@@ -2,11 +2,14 @@ import React, { PropsWithChildren } from "react";
 import { CHESS_COLUMNS, createBoard } from "@/chess";
 import { cn } from "@/utils/cn";
 import { motion } from "framer-motion";
+import { ChessGameContext } from "@/state";
 
 const board = createBoard("empty");
 
 export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
   (props, ref) => {
+    const pieceMove = ChessGameContext.useSelector((s) => s.context.pieceMove);
+
     return (
       <div className={cn("board", "rounded-lg p-6 bg-slate-50/10 w-full")}>
         <div className="board-wrapper relative">
@@ -21,6 +24,9 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
                 <div key={i} className="w-full flex">
                   {row.map((cell, ci) => {
                     const colored = (i + ci + 1) % 2 === 0;
+                    const onMoveSelection = pieceMove?.moves.includes(
+                      cell.position
+                    );
 
                     return (
                       <div
@@ -30,7 +36,9 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
                           "w-[12.5%]",
                           "pt-[12.5%]",
                           !colored && "bg-slate-50/80",
-                          colored && "bg-slate-50/10"
+                          colored && "bg-slate-50/10",
+
+                          onMoveSelection && []
                         )}
                       />
                     );

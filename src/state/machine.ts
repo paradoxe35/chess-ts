@@ -11,17 +11,42 @@ import {
 } from "../chess";
 import { nanoid } from "nanoid";
 
+type PlayerType = "computer" | "online" | null;
+type PlayerDetail = {
+  name: string;
+  image?: string;
+  computer: boolean;
+  color: PieceColor;
+};
+type Players = {
+  [x in "A" | "B"]: PlayerDetail | null;
+};
+
 type TChessMachine = {
   context: {
     board: Board[];
     boardType: BoardType;
+
+    playId?: string;
+    players?: Players;
+    playerType: PlayerType;
     player: PieceColor;
+
     pieceMove: { piece: BoardPiece; moves: string[] } | null;
     movesHistory: PieceMovesHistory;
+    history: Board[][];
     winner: PieceColor | undefined;
   };
   events:
-    | { type: "chess.settings"; boardType: BoardType }
+    | {
+        type: "chess.settings";
+        boardType: BoardType;
+        playerType: PlayerType;
+        player: PlayerDetail;
+      }
+    | {
+        type: "chess.settings.join";
+      }
     | {
         type: "chess.playing.getMoves";
         position: string;
@@ -39,13 +64,15 @@ type TChessMachine = {
       };
 };
 
-function defaultContext() {
+function defaultContext(): TChessMachine["context"] {
   return {
     board: createBoard("empty", nanoid),
     boardType: "empty" as BoardType,
+    playerType: null,
     player: "white" as PieceColor,
     pieceMove: null,
     movesHistory: {},
+    history: [],
     winner: undefined,
   };
 }
@@ -67,13 +94,32 @@ export const chessGameMachine = createMachine({
           target: "playing",
           actions: assign({
             boardType: ({ event }) => event.boardType,
+
             board: ({ event }) => createBoard(event.boardType, nanoid),
+
+            playerType: ({ event }) => event.playerType,
+
+            playId: ({ event }) =>
+              event.playerType === "computer" ? "computer" : nanoid(),
+
+            players: ({ event }) => ({ A: event.player, B: null }),
           }),
+
+          guard: ({ context }) => {
+            return !context.players && !context.playerType && !context.playId;
+          },
         },
+
+        "chess.settings.join": {},
       },
     },
     playing: {
       initial: "getMoves",
+      entry: ({ context }) => {
+        if (context.playId) {
+          history.replaceState(null, "", "#/" + context.playId);
+        }
+      },
       states: {
         getMoves: {
           on: {

@@ -1,8 +1,9 @@
 import { cn } from "@/utils/cn";
 import { ChessBoard, ChessPieces, ChessSettings } from "@/components";
 import { useEffect, useRef, useState } from "react";
+import { ChessGameContext } from "@/state";
 
-export default function Chess() {
+function ChessApp() {
   const [, setValue] = useState(0);
   const boardRef = useRef<HTMLDivElement>(null);
 
@@ -28,5 +29,13 @@ export default function Chess() {
         <ChessSettings />
       </div>
     </div>
+  );
+}
+
+export default function Chess() {
+  return (
+    <ChessGameContext.Provider>
+      <ChessApp />
+    </ChessGameContext.Provider>
   );
 }

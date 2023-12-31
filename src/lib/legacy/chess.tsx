@@ -121,9 +121,9 @@ function Setting() {
       </div>
 
       <button
-        onClick={() =>
-          chessGame.send({ type: "chess.settings", boardType: type })
-        }
+        onClick={() => {
+          // chessGame.send({ type: "chess.settings", boardType: type })
+        }}
         className="button button-setting"
       >
         Start Game

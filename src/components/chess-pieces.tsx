@@ -2,9 +2,8 @@ import { Fragment, RefObject, useEffect } from "react";
 import { BoardPiece, BoardPosition, createBoard } from "@/chess";
 import pieces from "@/assets/pieces";
 import { cn } from "@/utils/cn";
-import { motion, useDragControls } from "framer-motion";
-
-const board = createBoard("black->white");
+import { motion } from "framer-motion";
+import { ChessGameContext } from "@/state";
 
 function getPieceImage(piece: BoardPiece) {
   const svg_icons = pieces[piece.type];
@@ -16,6 +15,8 @@ function getPieceImage(piece: BoardPiece) {
 type Props<T = {}> = { boardRef?: RefObject<HTMLDivElement> } & T;
 
 export function ChessPieces(props: Props) {
+  const board = ChessGameContext.useSelector((s) => s.context.board);
+
   return board.map((column, yi) => {
     return column.map((box, xi) => {
       if (!box.piece) {
@@ -44,7 +45,10 @@ function Piece({
 
   return (
     <motion.div
-      key={box.position}
+      key={piece.id}
+      animate={{
+        transform: `translate(${xi * 100}%, ${yi * 100}%)`,
+      }}
       className={cn(
         "absolute w-[12.5%] pt-[12.5%] z-10",
         "top-0 left-0",
@@ -52,13 +56,12 @@ function Piece({
         "flex justify-center"
       )}
       style={{
-        transform: `translate(${xi * 100}%, ${yi * 100}%)`,
         backgroundImage: `url(${getPieceImage(piece)})`,
       }}
     >
       <div
         title={piece.value}
-        className="w-3/4 h-3/4 -mt-[85%] cursor-grab absolute"
+        className="w-3/4 h-3/4 -mt-[85%] cursor-pointer absolute"
       />
     </motion.div>
   );
