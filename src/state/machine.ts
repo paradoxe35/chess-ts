@@ -29,6 +29,7 @@ type TChessMachine = {
 
     playId?: string;
     players?: Players;
+    activePlayer?: PlayerDetail;
     playerType: PlayerType;
     player: PieceColor;
 
@@ -42,7 +43,7 @@ type TChessMachine = {
         type: "chess.settings";
         boardType: BoardType;
         playerType: PlayerType;
-        player: PlayerDetail;
+        playerA: PlayerDetail;
       }
     | {
         type: "chess.settings.join";
@@ -63,6 +64,9 @@ type TChessMachine = {
         type: "chess.playing.setMove.reset";
       };
 };
+
+const getOppositeColor = (color: PieceColor): PieceColor =>
+  color === "black" ? "white" : "black";
 
 function defaultContext(): TChessMachine["context"] {
   return {
@@ -100,9 +104,24 @@ export const chessGameMachine = createMachine({
             playerType: ({ event }) => event.playerType,
 
             playId: ({ event }) =>
-              event.playerType === "computer" ? "computer" : nanoid(),
+              event.playerType === "computer" ? event.playerType : nanoid(),
 
-            players: ({ event }) => ({ A: event.player, B: null }),
+            players: ({ event }) => {
+              return {
+                A: event.playerA,
+                B:
+                  event.playerType === "computer"
+                    ? {
+                        name: event.playerType,
+                        color: getOppositeColor(event.playerA.color),
+                        computer: true,
+                        image: "https://freesvg.org/img/1538298822.png",
+                      }
+                    : null,
+              };
+            },
+
+            activePlayer: ({ event }) => event.playerA,
           }),
 
           guard: ({ context }) => {

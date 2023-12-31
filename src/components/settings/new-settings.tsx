@@ -28,7 +28,7 @@ export function NewSettings() {
     chessGame.send({
       type: "chess.settings",
       boardType: "black->white",
-      player: {
+      playerA: {
         name: name,
         image: `https://i.pravatar.cc/250?u=${name}`,
         color: color,

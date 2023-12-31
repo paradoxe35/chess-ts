@@ -3,7 +3,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 
 export default function App({ Component, pageProps }: AppProps) {
-  return (Ï
+  return (
     <div className="bg-gray-900 text-white min-h-96 h-screen w-screen relative">
       <Head>
         <title>Chess TS</title>

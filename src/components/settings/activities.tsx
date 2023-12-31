@@ -4,8 +4,11 @@ import { Activity, MessageText1, ArrowRotateLeft } from "iconsax-react";
 import { Title } from "./new-settings";
 import { Overview } from "./activities/overview";
 import { Chat } from "./activities/chat";
+import { ChessGameContext } from "@/state";
 
 export function ChessActivities() {
+  const playerType = ChessGameContext.useSelector((c) => c.context.playerType);
+
   return (
     <Tab.Group>
       <div
@@ -22,9 +25,11 @@ export function ChessActivities() {
             <Overview />
           </Tab.Panel>
 
-          <Tab.Panel>
-            <Chat />
-          </Tab.Panel>
+          {playerType === "online" && (
+            <Tab.Panel>
+              <Chat />
+            </Tab.Panel>
+          )}
         </Tab.Panels>
 
         {/* Menu */}
@@ -35,9 +40,14 @@ export function ChessActivities() {
           <button className="">
             <ArrowRotateLeft />
           </button>
-          <Tab className={cn("rounded-lg p-[10px] ui-selected:bg-slate-50/15")}>
-            <MessageText1 />
-          </Tab>
+
+          {playerType === "online" && (
+            <Tab
+              className={cn("rounded-lg p-[10px] ui-selected:bg-slate-50/15")}
+            >
+              <MessageText1 />
+            </Tab>
+          )}
         </Tab.List>
       </div>
     </Tab.Group>
