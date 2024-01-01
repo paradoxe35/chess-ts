@@ -25,6 +25,7 @@ function ChessApp() {
           {boardRef.current && <ChessPieces boardRef={boardRef} />}
         </ChessBoard>
       </div>
+
       <div className="chess-settings w-full md:w-1/2 flex flex-col">
         <ChessSettings />
       </div>

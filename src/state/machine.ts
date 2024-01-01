@@ -103,8 +103,7 @@ export const chessGameMachine = createMachine({
 
             playerType: ({ event }) => event.playerType,
 
-            playId: ({ event }) =>
-              event.playerType === "computer" ? event.playerType : nanoid(),
+            playId: () => nanoid(),
 
             players: ({ event }) => {
               return {

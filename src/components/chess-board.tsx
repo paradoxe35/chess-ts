@@ -8,7 +8,15 @@ const board = createBoard("empty");
 
 export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
   (props, ref) => {
+    const chessGame = ChessGameContext.useActorRef();
     const pieceMove = ChessGameContext.useSelector((s) => s.context.pieceMove);
+
+    const handleMove = (newPosition: string) => {
+      chessGame.send({
+        type: "chess.playing.setMove",
+        movePosition: newPosition,
+      });
+    };
 
     return (
       <div className={cn("board", "rounded-lg p-6 bg-slate-50/10 w-full")}>
@@ -24,7 +32,7 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
                 <div key={i} className="w-full flex">
                   {row.map((cell, ci) => {
                     const colored = (i + ci + 1) % 2 === 0;
-                    const onMoveSelection = pieceMove?.moves.includes(
+                    const hasMoveSelection = pieceMove?.moves.includes(
                       cell.position
                     );
 
@@ -32,13 +40,23 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
                       <div
                         key={cell.position}
                         data-cell={cell.position}
+                        onClick={
+                          hasMoveSelection
+                            ? () => handleMove(cell.position)
+                            : undefined
+                        }
                         className={cn(
-                          "w-[12.5%]",
-                          "pt-[12.5%]",
+                          "relative",
+                          "w-[12.5%] pt-[12.5%]",
+                          "flex justify-center items-center",
                           !colored && "bg-slate-50/80",
                           colored && "bg-slate-50/10",
 
-                          onMoveSelection && []
+                          hasMoveSelection && [
+                            'after:content-[""] after:absolute after:cursor-pointer',
+                            "after:outline after:outline-pink-400 after:outline-[2px]",
+                            "after:w-3/4 after:h-3/4 after:-mt-[100%] after:z-20",
+                          ]
                         )}
                       />
                     );
