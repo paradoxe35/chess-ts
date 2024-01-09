@@ -1,9 +1,10 @@
 import { cn } from "@/utils/cn";
 import { ChessBoard, ChessPieces, ChessSettings } from "@/components";
 import { useEffect, useRef, useState } from "react";
-import { ChessGameContext } from "@/state";
+import { CHESS_ACTOR_PERSIST_KEY, ChessGameContext } from "@/state";
 
 function ChessApp() {
+  const actor = ChessGameContext.useActorRef();
   const [, setValue] = useState(0);
   const boardRef = useRef<HTMLDivElement>(null);
 
@@ -11,6 +12,22 @@ function ChessApp() {
     if (boardRef.current) {
       setValue((t) => t + 1);
     }
+  }, []);
+
+  useEffect(() => {
+    const subscription = actor.subscribe((ref) => {
+      if (ref.context.playId) {
+        // Persist machine snapshot
+        localStorage.setItem(
+          CHESS_ACTOR_PERSIST_KEY(ref.context.playId),
+          JSON.stringify(actor.getPersistedSnapshot())
+        );
+      }
+    });
+
+    return () => {
+      subscription.unsubscribe();
+    };
   }, []);
 
   return (
