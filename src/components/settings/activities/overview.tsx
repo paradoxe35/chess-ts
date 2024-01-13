@@ -24,7 +24,8 @@ export function Overview() {
               alt={players.A.name}
             />
             <span className="capitalize inline-flex gap-1 items-center">
-              {players.A.name} <Circle size={15} color={players.A.color} />
+              {players.A.name}{" "}
+              <Circle knight size={30} color={players.A.color} />
             </span>
           </div>
         )}
@@ -40,7 +41,8 @@ export function Overview() {
               alt={players.B.name}
             />
             <span className="capitalize inline-flex gap-1 items-center">
-              {players.B.name} <Circle size={15} color={players.B.color} />
+              {players.B.name}{" "}
+              <Circle knight size={30} color={players.B.color} />
             </span>
           </div>
         )}

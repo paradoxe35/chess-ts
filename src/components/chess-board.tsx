@@ -10,6 +10,7 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
   (props, ref) => {
     const chessGame = ChessGameContext.useActorRef();
     const pieceMove = ChessGameContext.useSelector((s) => s.context.pieceMove);
+    const lastMoves = ChessGameContext.useSelector((s) => s.context.lastMoves);
 
     const handleMove = (newPosition: string) => {
       chessGame.send({
@@ -35,6 +36,9 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
                     const hasMoveSelection = pieceMove?.moves.includes(
                       cell.position
                     );
+                    const hasLastMove = lastMoves.includes(cell.position);
+                    const currentPiecePosition =
+                      pieceMove?.position === cell.position;
 
                     return (
                       <div
@@ -52,10 +56,28 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
                           !colored && "bg-slate-50/80",
                           colored && "bg-slate-50/10",
 
-                          hasMoveSelection && [
-                            'after:content-[""] after:absolute after:cursor-pointer',
+                          hasLastMove && [
+                            'before:content-[""] before:absolute',
+                            "before:w-3/4 before:h-3/4 before:-mt-[100%]",
+                          ],
+
+                          (hasMoveSelection || currentPiecePosition) && [
+                            'after:content-[""] after:absolute',
+                            "after:w-3/4 after:h-3/4 after:-mt-[100%]",
+                          ],
+
+                          (hasMoveSelection || currentPiecePosition) && [
+                            "after:cursor-pointer",
                             "after:outline after:outline-pink-400 after:outline-[2px]",
-                            "after:w-3/4 after:h-3/4 after:-mt-[100%] after:z-20",
+                            currentPiecePosition
+                              ? "after:z-10 after:rounded-full"
+                              : "after:z-20",
+                          ],
+
+                          hasLastMove && [
+                            "before:rounded-full",
+                            "before:bg-pink-300/45",
+                            "before:z-10",
                           ]
                         )}
                       />

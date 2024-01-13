@@ -33,10 +33,15 @@ type TChessMachine = {
     playerType: PlayerType;
     player: PieceColor;
 
-    pieceMove: { piece: BoardPiece; moves: string[] } | null;
+    pieceMove: {
+      piece: BoardPiece;
+      moves: string[];
+      position: string;
+    } | null;
     movesHistory: PieceMovesHistory;
     history: Board[][];
     winner: PieceColor | undefined;
+    lastMoves: string[];
   };
   events:
     | {
@@ -77,6 +82,7 @@ function defaultContext(): TChessMachine["context"] {
     pieceMove: null,
     movesHistory: {},
     history: [],
+    lastMoves: [],
     winner: undefined,
   };
 }
@@ -155,6 +161,7 @@ export const chessGameMachine = createMachine({
 
                   return {
                     piece: event.piece,
+                    position: event.position,
                     moves: moves,
                   };
                 },
@@ -178,6 +185,23 @@ export const chessGameMachine = createMachine({
         },
 
         move: {
+          entry: assign({
+            history: ({ context, event }) => {
+              console.log(context.board, event.type);
+
+              return [];
+            },
+          }),
+          exit: assign({
+            history: ({ context, event }) => {
+              console.log(context.board, event.type);
+
+              if (event.type === "chess.playing.setMove.reset") {
+              }
+              return [];
+            },
+          }),
+
           on: {
             "chess.playing.setMove": {
               target: "verify",
@@ -190,6 +214,10 @@ export const chessGameMachine = createMachine({
                     event.movePosition,
                     context.board
                   );
+                },
+                lastMoves: ({ event, context }) => {
+                  const pieceMove = context.pieceMove!;
+                  return [pieceMove.position, event.movePosition];
                 },
                 movesHistory: ({ event, context }) => {
                   const pieceMove = context.pieceMove!;

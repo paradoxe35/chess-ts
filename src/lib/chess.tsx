@@ -28,7 +28,7 @@ function ChessApp() {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [actor]);
 
   return (
     <div
