@@ -74,11 +74,12 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
                               : "after:z-20",
                           ],
 
-                          hasLastMove && [
-                            "before:rounded-full",
-                            "before:bg-pink-300/45",
-                            "before:z-10",
-                          ]
+                          hasLastMove &&
+                            !hasMoveSelection && [
+                              "before:rounded-full",
+                              "before:bg-pink-300/45",
+                              "before:z-10",
+                            ]
                         )}
                       />
                     );
