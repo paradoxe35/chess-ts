@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Circle } from "@/components/ui/circle";
 import { ChessGameContext, GHistory, TLastMoves } from "@/state";
 import { cn } from "@/utils/cn";
@@ -56,6 +56,7 @@ export function Overview() {
 }
 
 const ShowHistories = React.memo(() => {
+  const containerEl = useRef<HTMLDivElement>(null);
   const players = ChessGameContext.useSelector((c) => c.context.players);
   const lastMoves = ChessGameContext.useSelector((c) => c.context.lastMoves);
   const history = ChessGameContext.useSelector((c) => c.context.history);
@@ -65,12 +66,24 @@ const ShowHistories = React.memo(() => {
     black: history.filter((h) => h.piece.type === "black"),
   };
 
+  useEffect(() => {
+    if (containerEl.current) {
+      containerEl.current.scrollTo({
+        top: containerEl.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [history.length]);
+
   if (!players) {
     return <></>;
   }
 
   return (
-    <div className="w-full flex justify-between max-h-96 overflow-y-auto no-scrollbar">
+    <div
+      ref={containerEl}
+      className="w-full flex justify-between max-h-96 overflow-y-auto no-scrollbar"
+    >
       <div className="w-1/2 flex flex-col space-y-3">
         {players.A && (
           <HistoryItem

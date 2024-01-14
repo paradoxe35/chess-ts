@@ -13,6 +13,7 @@ export function Circle(props: {
       src={props.color === "black" ? bKnight.src : wKnight.src}
       width={props.size}
       height={props.size}
+      alt={props.color}
     />
   ) : (
     <div

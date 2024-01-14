@@ -8,5 +8,11 @@ export function PieceImg({
   piece: BoardPiece;
   className?: string;
 }) {
-  return <img src={getPieceImageSrc(piece)} className={className} />;
+  return (
+    <img
+      src={getPieceImageSrc(piece)}
+      className={className}
+      alt={piece.value}
+    />
+  );
 }
