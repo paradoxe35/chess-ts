@@ -1,10 +1,16 @@
 import { cn } from "@/utils/cn";
 import { Tab } from "@headlessui/react";
-import { Activity, MessageText1, ArrowRotateLeft } from "iconsax-react";
+import {
+  Activity,
+  MessageText1,
+  ArrowRotateLeft,
+  Diamonds,
+} from "iconsax-react";
 import { Title } from "./new-settings";
 import { Overview } from "./activities/overview";
 import { Chat } from "./activities/chat";
 import { ChessGameContext } from "@/state";
+import { Points } from "./activities/points";
 
 export function ChessActivities() {
   const playerType = ChessGameContext.useSelector((c) => c.context.playerType);
@@ -25,6 +31,10 @@ export function ChessActivities() {
             <Overview />
           </Tab.Panel>
 
+          <Tab.Panel>
+            <Points />
+          </Tab.Panel>
+
           {playerType === "online" && (
             <Tab.Panel>
               <Chat />
@@ -36,6 +46,10 @@ export function ChessActivities() {
         <Tab.List className="flex space-x-5">
           <Tab className={cn("rounded-lg p-[10px] ui-selected:bg-slate-50/15")}>
             <Activity />
+          </Tab>
+
+          <Tab className={cn("rounded-lg p-[10px] ui-selected:bg-slate-50/15")}>
+            <Diamonds />
           </Tab>
 
           <button>
