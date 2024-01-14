@@ -29,7 +29,7 @@ function ShowPoints() {
   return (
     <div
       ref={containerEl}
-      className="w-full flex justify-between max-h-96 overflow-y-auto no-scrollbar"
+      className="w-full py-2 flex justify-between max-h-96 overflow-y-auto no-scrollbar"
     ></div>
   );
 }
