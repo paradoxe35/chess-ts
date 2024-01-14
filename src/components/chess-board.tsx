@@ -33,10 +33,15 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
                 <div key={i} className="w-full flex">
                   {row.map((cell, ci) => {
                     const colored = (i + ci + 1) % 2 === 0;
+
                     const hasMoveSelection = pieceMove?.moves.includes(
                       cell.position
                     );
-                    const hasLastMove = lastMoves.includes(cell.position);
+
+                    const hasLastMove =
+                      lastMoves?.newPosition === cell.position ||
+                      lastMoves?.oldPosition === cell.position;
+
                     const currentPiecePosition =
                       pieceMove?.position === cell.position;
 

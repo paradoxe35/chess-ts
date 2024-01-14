@@ -1,16 +1,9 @@
-import { Fragment, RefObject, useEffect } from "react";
-import { BoardPiece, BoardPosition, createBoard } from "@/chess";
-import pieces from "@/assets/pieces";
+import { Fragment, RefObject } from "react";
+import { BoardPosition } from "@/chess";
 import { cn } from "@/utils/cn";
 import { motion } from "framer-motion";
 import { ChessGameContext } from "@/state";
-
-function getPieceImage(piece: BoardPiece) {
-  const svg_icons = pieces[piece.type];
-  const icon = svg_icons[piece.value];
-
-  return icon.src as string;
-}
+import { getPieceImageSrc } from "@/assets/pieces";
 
 type Props<T = {}> = { boardRef?: RefObject<HTMLDivElement> } & T;
 
@@ -77,7 +70,7 @@ function Piece({
         "flex justify-center"
       )}
       style={{
-        backgroundImage: `url(${getPieceImage(piece)})`,
+        backgroundImage: `url(${getPieceImageSrc(piece)})`,
         transform: `translate(${xi * 100}%, ${yi * 100}%)`,
       }}
     >

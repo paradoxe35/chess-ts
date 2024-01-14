@@ -37,7 +37,8 @@ export function ChessActivities() {
           <Tab className={cn("rounded-lg p-[10px] ui-selected:bg-slate-50/15")}>
             <Activity />
           </Tab>
-          <button className="">
+
+          <button>
             <ArrowRotateLeft />
           </button>
 

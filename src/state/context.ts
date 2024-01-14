@@ -11,9 +11,7 @@ try {
   persistedState = JSON.parse(
     localStorage.getItem(CHESS_ACTOR_PERSIST_KEY()) || ""
   );
-} catch (error) {
-  console.error(error);
-}
+} catch (_) {}
 
 export const ChessGameContext = createActorContext(chessGameMachine, {
   snapshot: persistedState,

@@ -22,6 +22,19 @@ type Players = {
   [x in "A" | "B"]: PlayerDetail | null;
 };
 
+export type GHistory = {
+  oldPosition: string;
+  newPosition: string;
+  piece: BoardPiece;
+  board: Board[];
+}[];
+
+export type TLastMoves = {
+  oldPosition: string;
+  newPosition: string;
+  piece: BoardPiece;
+};
+
 type TChessMachine = {
   context: {
     board: Board[];
@@ -39,9 +52,9 @@ type TChessMachine = {
       position: string;
     } | null;
     movesHistory: PieceMovesHistory;
-    history: Board[][];
+    history: GHistory;
     winner: PieceColor | undefined;
-    lastMoves: string[];
+    lastMoves: TLastMoves | undefined;
   };
   events:
     | {
@@ -82,7 +95,7 @@ function defaultContext(): TChessMachine["context"] {
     pieceMove: null,
     movesHistory: {},
     history: [],
-    lastMoves: [],
+    lastMoves: undefined,
     winner: undefined,
   };
 }
@@ -185,23 +198,6 @@ export const chessGameMachine = createMachine({
         },
 
         move: {
-          entry: assign({
-            history: ({ context, event }) => {
-              console.log(context.board, event.type);
-
-              return [];
-            },
-          }),
-          exit: assign({
-            history: ({ context, event }) => {
-              console.log(context.board, event.type);
-
-              if (event.type === "chess.playing.setMove.reset") {
-              }
-              return [];
-            },
-          }),
-
           on: {
             "chess.playing.setMove": {
               target: "verify",
@@ -215,9 +211,26 @@ export const chessGameMachine = createMachine({
                     context.board
                   );
                 },
+                history: ({ context, event }) => {
+                  const pieceMove = context.pieceMove!;
+
+                  return [
+                    ...context.history,
+                    {
+                      oldPosition: pieceMove.position,
+                      newPosition: event.movePosition,
+                      piece: pieceMove.piece,
+                      board: context.board,
+                    },
+                  ];
+                },
                 lastMoves: ({ event, context }) => {
                   const pieceMove = context.pieceMove!;
-                  return [pieceMove.position, event.movePosition];
+                  return {
+                    piece: pieceMove.piece,
+                    oldPosition: pieceMove.position,
+                    newPosition: event.movePosition,
+                  };
                 },
                 movesHistory: ({ event, context }) => {
                   const pieceMove = context.pieceMove!;
