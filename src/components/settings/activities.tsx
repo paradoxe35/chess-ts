@@ -12,6 +12,9 @@ import { Chat } from "./activities/chat";
 import { ChessGameContext } from "@/state";
 import { Points } from "./activities/points";
 
+const tabClassName =
+  "rounded-lg p-[10px] ui-selected:bg-slate-50/15 outline-none";
+
 export function ChessActivities() {
   const playerType = ChessGameContext.useSelector((c) => c.context.playerType);
 
@@ -44,11 +47,11 @@ export function ChessActivities() {
 
         {/* Menu */}
         <Tab.List className="flex space-x-5">
-          <Tab className={cn("rounded-lg p-[10px] ui-selected:bg-slate-50/15")}>
+          <Tab className={tabClassName}>
             <Activity />
           </Tab>
 
-          <Tab className={cn("rounded-lg p-[10px] ui-selected:bg-slate-50/15")}>
+          <Tab className={tabClassName}>
             <Diamonds />
           </Tab>
 
@@ -57,9 +60,7 @@ export function ChessActivities() {
           </button>
 
           {playerType === "online" && (
-            <Tab
-              className={cn("rounded-lg p-[10px] ui-selected:bg-slate-50/15")}
-            >
+            <Tab className={tabClassName}>
               <MessageText1 />
             </Tab>
           )}
