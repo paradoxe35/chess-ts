@@ -99,7 +99,7 @@ function HistoryItem({
             piece={history.piece}
             className={cn(
               "scale-50 origin-top absolute opacity-60",
-              emplacement === "left" ? "-left-2" : "right-4"
+              emplacement === "left" ? "-left-2" : "right-5"
             )}
           />
           <span className="pl-5">{history.newPosition}</span>
