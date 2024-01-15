@@ -119,10 +119,11 @@ export function createBoard(
  */
 export function movePiece(
   piece: BoardPiece,
-  to: string,
+  targetPosition: string,
   board: Board[]
-): Board[] {
+) {
   const newBoard: Board[] = [];
+  let replacedPiece: BoardPiece | undefined;
 
   board.forEach((column) => {
     column.forEach((box, i) => {
@@ -132,16 +133,23 @@ export function movePiece(
         };
       }
 
-      if (box.position === to) {
+      if (box.position === targetPosition) {
         column[i] = {
           piece,
           position: box.position,
         };
+
+        if (box.piece && piece.type !== box.piece.type) {
+          replacedPiece = box.piece;
+        }
       }
     });
 
     newBoard.push(column);
   });
 
-  return newBoard;
+  return {
+    replacedPiece,
+    newBoard,
+  };
 }

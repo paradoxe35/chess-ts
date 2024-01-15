@@ -8,7 +8,7 @@ export type PieceType =
   | "rook";
 
 type PiecePoint = {
-  +readonly [x in Exclude<PieceType, "king">]: number;
+  +readonly [X in PieceType]: number;
 };
 
 export type PieceMovesHistory = Record<string, undefined | string[]>;
@@ -19,4 +19,5 @@ export const PIECE_POINTS: PiecePoint = {
   bishop: 3,
   rook: 5,
   queen: 9,
+  king: 0,
 } as const;

@@ -7,7 +7,7 @@ import {
   movePiece,
 } from "../chess";
 import { nanoid } from "nanoid";
-import type { TChessMachine } from "./types";
+import type { PlayersPoints, TChessMachine } from "./types";
 
 const getOppositeColor = (color: PieceColor): PieceColor =>
   color === "black" ? "white" : "black";
@@ -130,15 +130,45 @@ export const chessGameMachine = createMachine({
               actions: assign({
                 board: ({ event, context }) => {
                   const pieceMove = context.pieceMove!;
-
-                  return movePiece(
+                  const { newBoard, replacedPiece } = movePiece(
                     pieceMove.piece,
                     event.movePosition,
                     context.board
                   );
+
+                  context.replacedPiece = replacedPiece;
+
+                  return newBoard;
                 },
                 history: ({ context, event }) => {
                   const pieceMove = context.pieceMove!;
+                  const lastItemHistory =
+                    context.history[context.history.length - 1];
+
+                  let newPointes: PlayersPoints | undefined =
+                    lastItemHistory.pointes;
+
+                  // Store players points per history
+                  if (lastItemHistory && context.replacedPiece) {
+                    let lPointes = lastItemHistory.pointes;
+
+                    if (!lPointes) {
+                      lPointes = {
+                        black: [],
+                        white: [],
+                      };
+                    }
+
+                    const piecePointes = lPointes[pieceMove.piece.type];
+
+                    newPointes = {
+                      ...lPointes,
+
+                      [pieceMove.piece.type]: piecePointes.concat(
+                        context.replacedPiece
+                      ),
+                    };
+                  }
 
                   return [
                     ...context.history,
@@ -147,6 +177,7 @@ export const chessGameMachine = createMachine({
                       newPosition: event.movePosition,
                       piece: pieceMove.piece,
                       board: context.board,
+                      pointes: newPointes,
                     },
                   ];
                 },

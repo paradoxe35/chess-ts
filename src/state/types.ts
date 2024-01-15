@@ -17,11 +17,16 @@ type Players = {
   [x in "A" | "B"]: PlayerDetail | null;
 };
 
+export type PlayersPoints = {
+  [X in PieceColor]: BoardPiece[];
+};
+
 export type GHistory = {
   oldPosition: string;
   newPosition: string;
   piece: BoardPiece;
   board: Board[];
+  pointes: PlayersPoints;
 }[];
 
 export type TLastMoves = {
@@ -46,10 +51,14 @@ export type TChessMachine = {
       moves: string[];
       position: string;
     } | null;
+
     movesHistory: PieceMovesHistory;
     history: GHistory;
+
     winner: PieceColor | undefined;
     lastMoves: TLastMoves | undefined;
+
+    replacedPiece?: BoardPiece | undefined;
   };
   events:
     | {
