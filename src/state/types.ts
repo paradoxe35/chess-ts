@@ -21,13 +21,17 @@ export type PlayersPoints = {
   [X in PieceColor]: BoardPiece[];
 };
 
-export type GHistory = {
+export type T_HistoryItem = {
   oldPosition: string;
   newPosition: string;
   piece: BoardPiece;
   board: Board[];
   pointes: PlayersPoints;
-}[];
+  pieceMoves: PieceMovesHistory;
+  player: PieceColor;
+};
+
+export type GHistory = T_HistoryItem[];
 
 export type TLastMoves = {
   oldPosition: string;
@@ -44,7 +48,6 @@ export type TChessMachine = {
     players?: Players;
     activePlayer?: PlayerDetail;
     playerType: PlayerType;
-    player: PieceColor;
 
     pieceMove: {
       piece: BoardPiece;
@@ -52,8 +55,9 @@ export type TChessMachine = {
       position: string;
     } | null;
 
-    movesHistory: PieceMovesHistory;
-    history: GHistory;
+    histories: GHistory;
+    selectedHistory?: T_HistoryItem;
+    rolledBackHistory: boolean;
 
     winner: PieceColor | undefined;
     lastMoves: TLastMoves | undefined;
@@ -74,6 +78,10 @@ export type TChessMachine = {
         type: "chess.playing.getMoves";
         position: string;
         piece: NonNullable<BoardPiece>;
+      }
+    | {
+        type: "chess.playing.getMoves.history-rollback";
+        historyItem: T_HistoryItem;
       }
     | ({
         type: "reset";

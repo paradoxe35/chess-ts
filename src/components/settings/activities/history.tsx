@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import { ChessGameContext, GHistory, TLastMoves } from "@/state";
+import { ChessGameContext, GHistory, TLastMoves, T_HistoryItem } from "@/state";
 import { cn } from "@/utils/cn";
 import { PieceImg } from "@/components/ui/piece";
 import { Players } from "./components/players";
@@ -19,11 +19,11 @@ function ShowHistories() {
   const containerEl = useRef<HTMLDivElement>(null);
   const players = ChessGameContext.useSelector((c) => c.context.players);
   const lastMoves = ChessGameContext.useSelector((c) => c.context.lastMoves);
-  const history = ChessGameContext.useSelector((c) => c.context.history);
+  const histories = ChessGameContext.useSelector((c) => c.context.histories);
 
   const historyType = {
-    white: history.filter((h) => h.piece.type === "white"),
-    black: history.filter((h) => h.piece.type === "black"),
+    white: histories.filter((h) => h.piece.type === "white"),
+    black: histories.filter((h) => h.piece.type === "black"),
   };
 
   useEffect(() => {
@@ -77,6 +77,18 @@ function HistoryItem({
   lastMoves: TLastMoves | undefined;
   emplacement: "left" | "right";
 }) {
+  const chessGame = ChessGameContext.useActorRef();
+  const hasGetMovesState = ChessGameContext.useSelector((c) =>
+    c.matches("playing.getMoves")
+  );
+
+  const rollbackBackOnHistory = (history: T_HistoryItem) => {
+    chessGame.send({
+      type: "chess.playing.getMoves.history-rollback",
+      historyItem: history,
+    });
+  };
+
   return histories.map((history, i) => {
     const active =
       history.newPosition === lastMoves?.newPosition &&
@@ -90,10 +102,13 @@ function HistoryItem({
       >
         <span
           className={cn(
+            "relative font-sans font-semibold p-1 px-2 rounded-md cursor-default",
             active && ["bg-slate-50/10"],
-            "font-sans font-semibold p-1 px-2 rounded-md",
-            "cursor-pointer relative"
+            !active && hasGetMovesState && "cursor-pointer"
           )}
+          onClick={() =>
+            !active && hasGetMovesState && rollbackBackOnHistory(history)
+          }
         >
           <PieceImg
             piece={history.piece}

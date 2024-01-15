@@ -3,8 +3,12 @@ import { ChessGameContext } from "@/state";
 import { cn } from "@/utils/cn";
 
 export function Players() {
-  const player = ChessGameContext.useSelector((c) => c.context.player);
+  const selectedHistory = ChessGameContext.useSelector(
+    (c) => c.context.selectedHistory
+  );
   const players = ChessGameContext.useSelector((c) => c.context.players);
+
+  const player = selectedHistory?.player || "white";
 
   if (!players) {
     return <></>;

@@ -20,10 +20,10 @@ function ShowPoints() {
   const containerEl = useRef<HTMLDivElement>(null);
 
   const players = ChessGameContext.useSelector((c) => c.context.players);
-  const history = ChessGameContext.useSelector((c) => c.context.history);
+  const histories = ChessGameContext.useSelector((c) => c.context.histories);
 
-  const lHistory = history[history.length - 1];
-  const pointes = lHistory?.pointes || {};
+  const history = histories[histories.length - 1];
+  const pointes = history?.pointes || {};
 
   useEffect(() => {
     if (containerEl.current) {
@@ -34,7 +34,7 @@ function ShowPoints() {
 
       mounted.current = true;
     }
-  }, [history.length]);
+  }, [histories.length]);
 
   return (
     <div
@@ -47,7 +47,7 @@ function ShowPoints() {
         )}
       </div>
 
-      <div className="w-1/2 h-full">
+      <div className="w-1/2 h-full  border-l border-l-slate-50/25">
         {players?.B && (
           <PointItems pieces={pointes[players?.B.color]} emplacement="left" />
         )}
