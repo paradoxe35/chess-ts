@@ -4,7 +4,7 @@ import { cn } from "@/utils/cn";
 import { PieceImg } from "@/components/ui/piece";
 import { Players } from "./components/players";
 
-export function Overview() {
+export function History() {
   return (
     <div className="w-full flex flex-col space-y-2">
       <Players />

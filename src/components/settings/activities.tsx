@@ -7,7 +7,7 @@ import {
   Diamonds,
 } from "iconsax-react";
 import { Title } from "./new-settings";
-import { Overview } from "./activities/overview";
+import { History } from "./activities/history";
 import { Chat } from "./activities/chat";
 import { ChessGameContext } from "@/state";
 import { Points } from "./activities/points";
@@ -31,7 +31,7 @@ export function ChessActivities() {
         {/* Content */}
         <Tab.Panels className="flex-1 w-full">
           <Tab.Panel>
-            <Overview />
+            <History />
           </Tab.Panel>
 
           <Tab.Panel>
