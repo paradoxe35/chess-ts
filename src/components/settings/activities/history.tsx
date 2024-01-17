@@ -35,7 +35,7 @@ function ShowHistories() {
 
       mounted.current = true;
     }
-  }, [history.length]);
+  }, [histories.length]);
 
   if (!players) {
     return <></>;
@@ -89,11 +89,11 @@ function HistoryItem({
     });
   };
 
-  return histories.map((history, i) => {
+  return histories.map((_history, i) => {
     const active =
-      history.newPosition === lastMoves?.newPosition &&
-      history.oldPosition === lastMoves?.oldPosition &&
-      history.piece.id === lastMoves?.piece.id;
+      _history.newPosition === lastMoves?.newPosition &&
+      _history.oldPosition === lastMoves?.oldPosition &&
+      _history.piece.id === lastMoves?.piece.id;
 
     return (
       <div
@@ -107,17 +107,17 @@ function HistoryItem({
             !active && hasGetMovesState && "cursor-pointer"
           )}
           onClick={() =>
-            !active && hasGetMovesState && rollbackBackOnHistory(history)
+            !active && hasGetMovesState && rollbackBackOnHistory(_history)
           }
         >
           <PieceImg
-            piece={history.piece}
+            piece={_history.piece}
             className={cn(
               "scale-50 origin-top absolute opacity-60",
               emplacement === "left" ? "-left-2" : "right-5"
             )}
           />
-          <span className="pl-5">{history.newPosition}</span>
+          <span className="pl-5">{_history.newPosition}</span>
         </span>
       </div>
     );

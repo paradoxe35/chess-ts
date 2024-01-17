@@ -79,7 +79,13 @@ function PointItems({
 
       <div className="flex justify-between flex-wrap w-full gap-4">
         {pieces.map((piece) => {
-          return <PieceImg key={piece.id} piece={piece} />;
+          return (
+            <PieceImg
+              key={piece.id}
+              title={`${PIECE_POINTS[piece.value]}`}
+              piece={piece}
+            />
+          );
         })}
       </div>
     </div>
