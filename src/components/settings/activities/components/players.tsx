@@ -1,5 +1,5 @@
 import { Circle } from "@/components/ui/circle";
-import { ChessGameContext } from "@/state";
+import { ChessGameContext, playerOrDefault } from "@/state";
 import { cn } from "@/utils/cn";
 
 export function Players() {
@@ -8,7 +8,7 @@ export function Players() {
   );
   const players = ChessGameContext.useSelector((c) => c.context.players);
 
-  const player = selectedHistory?.player || "white";
+  const player = playerOrDefault(selectedHistory?.player);
 
   if (!players) {
     return <></>;

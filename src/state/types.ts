@@ -17,6 +17,8 @@ type Players = {
   [x in "A" | "B"]: PlayerDetail | null;
 };
 
+export const playerOrDefault = (player?: PieceColor) => player || "white";
+
 export type PlayersPoints = {
   [X in PieceColor]: BoardPiece[];
 };

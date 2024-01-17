@@ -9,13 +9,29 @@ type Props<T = {}> = { boardRef?: RefObject<HTMLDivElement> } & T;
 
 export function ChessPieces(props: Props) {
   const chessGame = ChessGameContext.useActorRef();
+  const rolledBackHistory = ChessGameContext.useSelector(
+    (s) => s.context.rolledBackHistory
+  );
+
   const board = ChessGameContext.useSelector((s) => s.context.board);
   const pieceMove = ChessGameContext.useSelector((s) => s.context.pieceMove);
+  const histories = ChessGameContext.useSelector((s) => s.context.histories);
 
   const handlePieceClick = (box: BoardPosition) => {
     chessGame.send({
       type: "chess.playing.setMove.reset",
     });
+
+    if (rolledBackHistory) {
+      const lHistory = histories[histories.length - 1];
+
+      if (lHistory)
+        chessGame.send({
+          type: "chess.playing.getMoves.history-rollback",
+          historyItem: lHistory,
+        });
+      return;
+    }
 
     if (pieceMove?.piece.id !== box.piece?.id) {
       box.piece &&

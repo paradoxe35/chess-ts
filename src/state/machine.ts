@@ -7,7 +7,12 @@ import {
   movePiece,
 } from "../chess";
 import { nanoid } from "nanoid";
-import type { T_HistoryItem, PlayersPoints, TChessMachine } from "./types";
+import {
+  type T_HistoryItem,
+  type PlayersPoints,
+  type TChessMachine,
+  playerOrDefault,
+} from "./types";
 import cloneDeep from "lodash/cloneDeep";
 
 const getOppositeColor = (color: PieceColor): PieceColor =>
@@ -76,13 +81,16 @@ export const chessGameMachine = createMachine({
         "chess.settings.join": {},
       },
     },
+
     playing: {
       initial: "getMoves",
+
       entry: ({ context }) => {
         if (context.playId) {
           history.replaceState(null, "", "#/" + context.playId);
         }
       },
+
       states: {
         getMoves: {
           on: {
@@ -109,7 +117,7 @@ export const chessGameMachine = createMachine({
                 },
               }),
               guard: ({ context, event }) => {
-                const player = context.selectedHistory?.player || "white";
+                const player = playerOrDefault(context.selectedHistory?.player);
 
                 if (player !== event.piece.type) {
                   return false;
@@ -248,11 +256,16 @@ export const chessGameMachine = createMachine({
                 },
               }),
               guard: ({ context, event }) => {
-                const pieceMove = context.pieceMove;
+                const lHistory =
+                  context.histories[context.histories.length - 1];
 
-                return pieceMove
-                  ? pieceMove.moves.includes(event.movePosition)
-                  : false;
+                const pieceMove = context.pieceMove || false;
+
+                return (
+                  pieceMove &&
+                  pieceMove.moves.includes(event.movePosition) &&
+                  lHistory === context.selectedHistory
+                );
               },
             },
 

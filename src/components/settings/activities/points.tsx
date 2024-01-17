@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Players } from "./components/players";
-import { ChessGameContext, GHistory } from "@/state";
+import { ChessGameContext, GHistory, PlayersPoints } from "@/state";
 import { BoardPiece, PIECE_POINTS } from "@/chess";
 import { PieceImg } from "@/components/ui/piece";
 import { cn } from "@/utils/cn";
@@ -20,10 +20,11 @@ function ShowPoints() {
   const containerEl = useRef<HTMLDivElement>(null);
 
   const players = ChessGameContext.useSelector((c) => c.context.players);
-  const histories = ChessGameContext.useSelector((c) => c.context.histories);
+  const selectedHistory = ChessGameContext.useSelector(
+    (c) => c.context.selectedHistory
+  );
 
-  const history = histories[histories.length - 1];
-  const pointes = history?.pointes || {};
+  const pointes = (selectedHistory?.pointes || {}) as PlayersPoints;
 
   useEffect(() => {
     if (containerEl.current) {
@@ -34,7 +35,7 @@ function ShowPoints() {
 
       mounted.current = true;
     }
-  }, [histories.length]);
+  }, [selectedHistory]);
 
   return (
     <div
