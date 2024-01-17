@@ -123,8 +123,8 @@ export const chessGameMachine = createMachine({
                   return false;
                 }
 
-                const history = context.selectedHistory;
-                const movesHistory = history?.pieceMoves || {};
+                const _history = context.selectedHistory;
+                const movesHistory = _history?.pieceMoves || {};
 
                 const moves = getPieceMoves({
                   piece: event.piece,

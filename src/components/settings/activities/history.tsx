@@ -82,10 +82,10 @@ function HistoryItem({
     c.matches("playing.getMoves")
   );
 
-  const rollbackBackOnHistory = (history: T_HistoryItem) => {
+  const rollbackBackOnHistory = (_history: T_HistoryItem) => {
     chessGame.send({
       type: "chess.playing.getMoves.history-rollback",
-      historyItem: history,
+      historyItem: _history,
     });
   };
 
