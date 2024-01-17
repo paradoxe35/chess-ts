@@ -8,6 +8,7 @@ import {
 } from "../chess";
 import { nanoid } from "nanoid";
 import type { T_HistoryItem, PlayersPoints, TChessMachine } from "./types";
+import cloneDeep from "lodash/cloneDeep";
 
 const getOppositeColor = (color: PieceColor): PieceColor =>
   color === "black" ? "white" : "black";
@@ -131,7 +132,7 @@ export const chessGameMachine = createMachine({
             "chess.playing.getMoves.history-rollback": {
               actions: assign({
                 board: ({ event }) => {
-                  return event.historyItem.board;
+                  return cloneDeep(event.historyItem.board);
                 },
 
                 lastMoves: ({ event }) => {
@@ -162,20 +163,20 @@ export const chessGameMachine = createMachine({
             "chess.playing.setMove": {
               target: "verify",
               actions: assign({
-                board: ({ event, context }) => {
+                histories: ({ context, event }) => {
                   const pieceMove = context.pieceMove!;
+
+                  // ==================== Move Piece and update board ==============
                   const { newBoard, replacedPiece } = movePiece(
                     pieceMove.piece,
                     event.movePosition,
                     context.board
                   );
 
+                  context.board = cloneDeep(newBoard);
                   context.replacedPiece = replacedPiece;
 
-                  return newBoard;
-                },
-                histories: ({ context, event }) => {
-                  const pieceMove = context.pieceMove!;
+                  // ==================== Store History ==============
                   const lastItemHistory = context.histories[
                     context.histories.length - 1
                   ] as T_HistoryItem | undefined;
@@ -221,10 +222,10 @@ export const chessGameMachine = createMachine({
                   }
 
                   const historyItem: T_HistoryItem = {
+                    board: newBoard,
                     oldPosition: pieceMove.position,
                     newPosition: event.movePosition,
                     piece: pieceMove.piece,
-                    board: context.board,
                     pointes: newPointes || ({} as PlayersPoints),
                     pieceMoves,
                     player:
@@ -234,10 +235,11 @@ export const chessGameMachine = createMachine({
                   // set selected History
                   context.selectedHistory = historyItem;
 
-                  return [...context.histories, historyItem];
+                  return context.histories.concat(historyItem);
                 },
                 lastMoves: ({ event, context }) => {
                   const pieceMove = context.pieceMove!;
+
                   return {
                     piece: pieceMove.piece,
                     oldPosition: pieceMove.position,

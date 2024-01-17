@@ -39,15 +39,15 @@ function ShowPoints() {
   return (
     <div
       ref={containerEl}
-      className="w-full py-2 flex justify-between max-h-96 overflow-y-auto no-scrollbar"
+      className="w-full py-2 flex justify-stretch max-h-96 overflow-y-auto no-scrollbar"
     >
-      <div className="w-1/2 h-full border-r border-r-slate-50/25">
+      <div className="w-1/2 border-r border-r-slate-50/25">
         {players?.A && (
           <PointItems pieces={pointes[players?.A.color]} emplacement="right" />
         )}
       </div>
 
-      <div className="w-1/2 h-full  border-l border-l-slate-50/25">
+      <div className="w-1/2">
         {players?.B && (
           <PointItems pieces={pointes[players?.B.color]} emplacement="left" />
         )}
