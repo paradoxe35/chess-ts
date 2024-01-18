@@ -133,6 +133,7 @@ export const chessGameMachine = createMachine({
                   history: movesHistory,
                   boardType: context.boardType,
                 });
+
                 return moves.length > 0;
               },
             },
@@ -230,6 +231,7 @@ export const chessGameMachine = createMachine({
                   }
 
                   const historyItem: T_HistoryItem = {
+                    id: nanoid(),
                     board: newBoard,
                     oldPosition: pieceMove.position,
                     newPosition: event.movePosition,
@@ -245,6 +247,7 @@ export const chessGameMachine = createMachine({
 
                   return context.histories.concat(historyItem);
                 },
+
                 lastMoves: ({ event, context }) => {
                   const pieceMove = context.pieceMove!;
 
@@ -255,6 +258,7 @@ export const chessGameMachine = createMachine({
                   };
                 },
               }),
+
               guard: ({ context, event }) => {
                 const lHistory =
                   context.histories[context.histories.length - 1];
@@ -295,7 +299,9 @@ export const chessGameMachine = createMachine({
           },
         },
       },
+
       history: "deep",
+
       always: {
         guard: ({ context }) => {
           return context.boardType !== "empty" && context.winner === undefined;

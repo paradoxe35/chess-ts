@@ -24,6 +24,7 @@ export type PlayersPoints = {
 };
 
 export type T_HistoryItem = {
+  id: string;
   oldPosition: string;
   newPosition: string;
   piece: BoardPiece;

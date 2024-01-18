@@ -89,7 +89,7 @@ function HistoryItem({
     });
   };
 
-  return histories.map((_history, i) => {
+  return histories.map((_history) => {
     const active =
       _history.newPosition === lastMoves?.newPosition &&
       _history.oldPosition === lastMoves?.oldPosition &&
@@ -97,7 +97,7 @@ function HistoryItem({
 
     return (
       <div
-        key={i}
+        key={_history.id}
         className={cn(emplacement === "left" ? "text-left" : "text-right")}
       >
         <span
