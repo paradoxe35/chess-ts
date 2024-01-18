@@ -13,6 +13,10 @@ export function ChessPieces(props: Props) {
     (s) => s.context.rolledBackHistory
   );
 
+  const activePlayer = ChessGameContext.useSelector(
+    (s) => s.context.activePlayer
+  );
+
   const board = ChessGameContext.useSelector((s) => s.context.board);
   const pieceMove = ChessGameContext.useSelector((s) => s.context.pieceMove);
   const histories = ChessGameContext.useSelector((s) => s.context.histories);
@@ -33,13 +37,13 @@ export function ChessPieces(props: Props) {
       return;
     }
 
-    if (pieceMove?.piece.id !== box.piece?.id) {
-      box.piece &&
-        chessGame.send({
-          type: "chess.playing.getMoves",
-          piece: box.piece,
-          position: box.position,
-        });
+    if (box.piece && pieceMove?.piece.id !== box.piece?.id && activePlayer) {
+      chessGame.send({
+        type: "chess.playing.getMoves",
+        piece: box.piece,
+        position: box.position,
+        player: activePlayer,
+      });
     }
   };
 

@@ -69,16 +69,12 @@ function PointItems({
     return acc;
   }, 0);
 
-  if (!pieces) {
-    return <></>;
-  }
-
   return (
     <div className={cn("w-full", emplacement === "right" ? "pr-2" : "pl-2")}>
       <h3 className="text-center font-bold text-xl mb-5">{point || 0}</h3>
 
       <div className="flex justify-between flex-wrap w-full gap-4">
-        {pieces.map((piece) => {
+        {pieces?.map((piece) => {
           return (
             <PieceImg
               key={piece.id}

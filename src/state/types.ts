@@ -81,6 +81,7 @@ export type TChessMachine = {
         type: "chess.playing.getMoves";
         position: string;
         piece: NonNullable<BoardPiece>;
+        player: PlayerDetail;
       }
     | {
         type: "chess.playing.getMoves.history-rollback";
@@ -92,6 +93,7 @@ export type TChessMachine = {
     | {
         type: "chess.playing.setMove";
         movePosition: string;
+        player: PlayerDetail;
       }
     | {
         type: "chess.playing.setMove.reset";

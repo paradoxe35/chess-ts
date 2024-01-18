@@ -1,3 +1,5 @@
+import cloneDeep from "lodash/cloneDeep";
+import { nanoid } from "nanoid";
 import { createMachine, assign } from "xstate";
 import {
   BoardType,
@@ -6,14 +8,12 @@ import {
   getPieceMoves,
   movePiece,
 } from "../chess";
-import { nanoid } from "nanoid";
 import {
   type T_HistoryItem,
   type PlayersPoints,
   type TChessMachine,
   playerOrDefault,
 } from "./types";
-import cloneDeep from "lodash/cloneDeep";
 
 const getOppositeColor = (color: PieceColor): PieceColor =>
   color === "black" ? "white" : "black";
@@ -116,10 +116,14 @@ export const chessGameMachine = createMachine({
                   };
                 },
               }),
+
               guard: ({ context, event }) => {
                 const player = playerOrDefault(context.selectedHistory?.player);
 
-                if (player !== event.piece.type) {
+                if (
+                  player !== event.piece.type ||
+                  event.player.color !== player
+                ) {
                   return false;
                 }
 
