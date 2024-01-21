@@ -1,8 +1,12 @@
 import { Circle } from "@/components/ui/circle";
+import { Loader } from "@/components/ui/loader";
 import { ChessGameContext, playerOrDefault } from "@/state";
 import { cn } from "@/utils/cn";
 
 export function Players() {
+  const computerLoading = ChessGameContext.useSelector(
+    (c) => c.context.computerLoading
+  );
   const selectedHistory = ChessGameContext.useSelector(
     (c) => c.context.selectedHistory
   );
@@ -13,6 +17,7 @@ export function Players() {
   if (!players) {
     return <></>;
   }
+
   return (
     <div className="flex justify-between border-b-2 border-b-slate-200/20 pb-3">
       {players.A && (
@@ -32,15 +37,21 @@ export function Players() {
       )}
 
       {players.B && (
-        <div className="flex flex-col items-center justify-center">
+        <div className="flex flex-col items-center justify-center relative">
+          {computerLoading && <Loader />}
+
           <img
             className={cn(
-              "w-10 h-10 rounded-full p-1 ring-2",
-              players.B.color === player ? "ring-pink-500" : "ring-gray-500"
+              "w-10 h-10 rounded-full p-1",
+              !computerLoading && [
+                "ring-2",
+                players.B.color === player ? "ring-pink-500" : "ring-gray-500",
+              ]
             )}
             src={players.B.image}
             alt={players.B.name}
           />
+
           <span className="capitalize inline-flex gap-1 items-center">
             {players.B.name} <Circle knight size={30} color={players.B.color} />
           </span>

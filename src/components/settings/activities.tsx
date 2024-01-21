@@ -16,7 +16,7 @@ const tabClassName =
   "rounded-lg p-[10px] ui-selected:bg-slate-50/15 outline-none";
 
 export function ChessActivities() {
-  const playerType = ChessGameContext.useSelector((c) => c.context.playerType);
+  const gameType = ChessGameContext.useSelector((c) => c.context.gameType);
 
   return (
     <Tab.Group>
@@ -38,7 +38,7 @@ export function ChessActivities() {
             <Points />
           </Tab.Panel>
 
-          {playerType === "online" && (
+          {gameType === "online" && (
             <Tab.Panel>
               <Chat />
             </Tab.Panel>
@@ -59,7 +59,7 @@ export function ChessActivities() {
             <ArrowRotateLeft />
           </button>
 
-          {playerType === "online" && (
+          {gameType === "online" && (
             <Tab className={tabClassName}>
               <MessageText1 />
             </Tab>

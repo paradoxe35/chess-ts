@@ -1,6 +1,7 @@
 import cloneDeep from "lodash/cloneDeep";
 import { nanoid } from "nanoid";
 import { createMachine, assign } from "xstate";
+import { computerAIActor } from "./invokes";
 import {
   BoardType,
   PieceColor,
@@ -22,7 +23,7 @@ function defaultContext(): TChessMachine["context"] {
   return {
     board: createBoard("empty", nanoid),
     boardType: "empty" as BoardType,
-    playerType: null,
+    gameType: null,
     pieceMove: null,
     histories: [],
     rolledBackHistory: false,
@@ -51,7 +52,7 @@ export const chessGameMachine = createMachine({
 
             board: ({ event }) => createBoard(event.boardType, nanoid),
 
-            playerType: ({ event }) => event.playerType,
+            gameType: ({ event }) => event.gameType,
 
             playId: () => nanoid(),
 
@@ -59,9 +60,9 @@ export const chessGameMachine = createMachine({
               return {
                 A: event.playerA,
                 B:
-                  event.playerType === "computer"
+                  event.gameType === "computer"
                     ? {
-                        name: event.playerType,
+                        name: event.gameType,
                         color: getOppositeColor(event.playerA.color),
                         computer: true,
                         image: "https://freesvg.org/img/1538298822.png",
@@ -74,7 +75,7 @@ export const chessGameMachine = createMachine({
           }),
 
           guard: ({ context }) => {
-            return !context.players && !context.playerType && !context.playId;
+            return !context.players && !context.gameType && !context.playId;
           },
         },
 
@@ -93,6 +94,17 @@ export const chessGameMachine = createMachine({
 
       states: {
         getMoves: {
+          invoke: {
+            id: "computer-get-moves",
+            src: computerAIActor,
+            input: ({ context }) => ({
+              board: context.board,
+              players: context.players,
+              gameType: context.gameType,
+              selectedHistory: context.selectedHistory,
+            }),
+          },
+
           on: {
             "chess.playing.getMoves": {
               target: "move",
@@ -166,6 +178,12 @@ export const chessGameMachine = createMachine({
 
                   return event.historyItem !== lastItemHistory;
                 },
+              }),
+            },
+
+            "chess.playing.getMoves.computer-loading": {
+              actions: assign({
+                computerLoading: true,
               }),
             },
           },

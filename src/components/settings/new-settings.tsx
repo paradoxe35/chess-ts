@@ -34,7 +34,7 @@ export function NewSettings() {
         color: color,
         computer: false,
       },
-      playerType: type,
+      gameType: type,
     });
   };
 

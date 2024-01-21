@@ -6,13 +6,15 @@ import {
   PieceMovesHistory,
 } from "@/chess";
 
-export type PlayerType = "computer" | "online" | null;
+export type GameType = "computer" | "online" | null;
+
 export type PlayerDetail = {
   name: string;
   image?: string;
   computer: boolean;
   color: PieceColor;
 };
+
 type Players = {
   [x in "A" | "B"]: PlayerDetail | null;
 };
@@ -42,20 +44,29 @@ export type TLastMoves = {
   piece: BoardPiece;
 };
 
+export type ComputerMoveResponse = {
+  piece: string | BoardPiece;
+  currentPosition: string;
+  targetPosition: string;
+  rationale: string;
+};
+
 export type TChessMachine = {
   context: {
     board: Board[];
     boardType: BoardType;
+    computerLoading?: boolean;
 
     playId?: string;
     players?: Players;
     activePlayer?: PlayerDetail;
-    playerType: PlayerType;
+    gameType: GameType;
 
     pieceMove: {
       piece: BoardPiece;
       moves: string[];
       position: string;
+      autoMove?: boolean;
     } | null;
 
     histories: GHistory;
@@ -71,7 +82,7 @@ export type TChessMachine = {
     | {
         type: "chess.settings";
         boardType: BoardType;
-        playerType: PlayerType;
+        gameType: GameType;
         playerA: PlayerDetail;
       }
     | {
@@ -86,6 +97,9 @@ export type TChessMachine = {
     | {
         type: "chess.playing.getMoves.history-rollback";
         historyItem: T_HistoryItem;
+      }
+    | {
+        type: "chess.playing.getMoves.computer-loading";
       }
     | ({
         type: "reset";
