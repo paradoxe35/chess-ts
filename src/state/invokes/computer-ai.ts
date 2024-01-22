@@ -34,48 +34,52 @@ export const computerAIActor = fromCallback<any, Input>(
 
     sendBack({ type: "chess.playing.getMoves.computer-loading" });
 
-    fetch("/api/ai", {
-      method: "POST",
-      body: JSON.stringify({
-        board: input.board,
-        color: playerB.color,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-      .then((res) => res.json())
-      .then((res: ApiResponse) => {
-        const responseData = res.data;
-
-        const id =
-          typeof responseData?.piece === "string"
-            ? responseData.piece
-            : responseData?.piece.id;
-
-        if (!id || !responseData) {
-          return;
-        }
-
-        const pieceBox = getPieceBoxById(id, input.board);
-
-        if (!pieceBox?.piece) {
-          return;
-        }
-
-        const pieceMoves = input.selectedHistory?.pieceMoves || {};
-
-        const moves = getPieceMoves({
-          boardType: DEFAULT_BOARD_TYPE,
+    const request = () => {
+      return fetch("/api/ai", {
+        method: "POST",
+        body: JSON.stringify({
           board: input.board,
-          history: pieceMoves,
-          piece: pieceBox.piece,
-          position: pieceBox.position,
-        });
+          color: playerB.color,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res: ApiResponse) => {
+          const responseData = res.data;
 
-        const validMove = moves.includes(responseData.targetPosition);
+          const id =
+            typeof responseData?.piece === "string"
+              ? responseData.piece
+              : responseData?.piece.id;
 
-        if (validMove) {
+          if (!id || !responseData) {
+            return Promise.reject("Invalid request");
+          }
+
+          const pieceBox = getPieceBoxById(id, input.board);
+
+          if (!pieceBox?.piece) {
+            return Promise.reject("Invalid request");
+          }
+
+          const pieceMoves = input.selectedHistory?.pieceMoves || {};
+
+          const moves = getPieceMoves({
+            boardType: DEFAULT_BOARD_TYPE,
+            board: input.board,
+            history: pieceMoves,
+            piece: pieceBox.piece,
+            position: pieceBox.position,
+          });
+
+          const validMove = moves.includes(responseData.targetPosition);
+
+          if (!validMove) {
+            return Promise.reject("Invalid request");
+          }
+
           sendBack({
             type: "chess.playing.getMoves.computer-move",
             move: <PieceMove>{
@@ -85,7 +89,18 @@ export const computerAIActor = fromCallback<any, Input>(
               autoMove: true,
             },
           });
+        });
+    };
+
+    (async () => {
+      for (const _ of [1, 2, 3]) {
+        try {
+          // await request();
+          // break;
+        } catch (_) {
+          continue;
         }
-      });
+      }
+    })();
   }
 );

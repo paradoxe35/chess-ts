@@ -6,7 +6,7 @@ import {
   OPENAI_MODEL,
 } from "./constants";
 import type { Board, PieceColor } from "@/chess";
-import { SHORT_PROMPT } from "./prompts";
+import { PROMPT, SHORT_PROMPT } from "./prompts";
 import { ComputerMoveResponse } from "@/state";
 
 const MARKDOWN_EXTRACT_CONTENT_REGEX =
@@ -21,7 +21,7 @@ export const getChessMoveFromAI = async (color: PieceColor, board: Board[]) => {
     messages: [
       {
         role: "system",
-        content: SHORT_PROMPT(color),
+        content: PROMPT(color),
       },
       {
         role: "user",
