@@ -21,7 +21,7 @@ export const getChessMoveFromAI = async (color: PieceColor, board: Board[]) => {
     messages: [
       {
         role: "system",
-        content: PROMPT(color),
+        content: SHORT_PROMPT(color),
       },
       {
         role: "user",
