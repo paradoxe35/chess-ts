@@ -9,7 +9,8 @@ import type { Board, PieceColor } from "@/chess";
 import { SHORT_PROMPT } from "./prompts";
 import { ComputerMoveResponse } from "@/state";
 
-const regex = /`{3}(?:[a-zA-Z0-9-_])?.*?\n([\s\S]*?)\n`{3}/;
+const MARKDOWN_EXTRACT_CONTENT_REGEX =
+  /`{3}(?:[a-zA-Z0-9-_])?.*?\n([\s\S]*?)\n`{3}/;
 
 export const getChessMoveFromAI = async (color: PieceColor, board: Board[]) => {
   const response = await completion({
@@ -35,7 +36,7 @@ export const getChessMoveFromAI = async (color: PieceColor, board: Board[]) => {
     return null;
   }
 
-  let match = (content.match(regex) || [])[1];
+  let match = (content.match(MARKDOWN_EXTRACT_CONTENT_REGEX) || [])[1];
 
   if (!match) {
     return null;
