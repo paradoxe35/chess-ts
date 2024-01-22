@@ -1,7 +1,7 @@
 import cloneDeep from "lodash/cloneDeep";
 import { nanoid } from "nanoid";
 import { createMachine, assign } from "xstate";
-import { computerAIActor } from "./invokes";
+import { computerAIActor, computerAiSetMoveActor } from "./invokes";
 import {
   BoardType,
   PieceColor,
@@ -186,10 +186,34 @@ export const chessGameMachine = createMachine({
                 computerLoading: true,
               }),
             },
+
+            "chess.playing.getMoves.computer-move": {
+              target: "move",
+              actions: assign({
+                computerLoading: false,
+
+                pieceMove: ({ event }) => {
+                  return {
+                    autoMove: true,
+                    moves: event.move.moves,
+                    piece: event.move.piece,
+                    position: event.move.position,
+                  };
+                },
+              }),
+            },
           },
         },
 
         move: {
+          invoke: {
+            id: "computer-ai-set-move",
+            src: computerAiSetMoveActor,
+            input: ({ context }) => ({
+              pieceMove: context.pieceMove,
+              players: context.players,
+            }),
+          },
           on: {
             "chess.playing.setMove": {
               target: "verify",
@@ -260,8 +284,7 @@ export const chessGameMachine = createMachine({
                     piece: pieceMove.piece,
                     pointes: newPointes || ({} as PlayersPoints),
                     pieceMoves,
-                    player:
-                      pieceMove.piece.type === "black" ? "white" : "black",
+                    player: getOppositeColor(pieceMove.piece.type),
                   };
 
                   // set selected History

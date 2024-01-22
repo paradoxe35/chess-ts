@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { PieceColor } from "@/chess";
 import { ChessGameContext } from "@/state";
+import { DEFAULT_BOARD_TYPE } from "@/utils/constants";
 
 export function Title({ className }: { className?: string }) {
   return (
@@ -27,7 +28,7 @@ export function NewSettings() {
 
     chessGame.send({
       type: "chess.settings",
-      boardType: "black->white",
+      boardType: DEFAULT_BOARD_TYPE,
       playerA: {
         name: name,
         image: `https://i.pravatar.cc/250?u=${name}`,

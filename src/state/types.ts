@@ -51,6 +51,13 @@ export type ComputerMoveResponse = {
   rationale: string;
 };
 
+export type PieceMove = {
+  piece: BoardPiece;
+  moves: string[];
+  position: string;
+  autoMove?: boolean;
+};
+
 export type TChessMachine = {
   context: {
     board: Board[];
@@ -62,12 +69,7 @@ export type TChessMachine = {
     activePlayer?: PlayerDetail;
     gameType: GameType;
 
-    pieceMove: {
-      piece: BoardPiece;
-      moves: string[];
-      position: string;
-      autoMove?: boolean;
-    } | null;
+    pieceMove: PieceMove | null;
 
     histories: GHistory;
     selectedHistory?: T_HistoryItem;
@@ -100,6 +102,10 @@ export type TChessMachine = {
       }
     | {
         type: "chess.playing.getMoves.computer-loading";
+      }
+    | {
+        type: "chess.playing.getMoves.computer-move";
+        move: PieceMove;
       }
     | ({
         type: "reset";

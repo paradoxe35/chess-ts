@@ -24,6 +24,8 @@ export type BoardPosition = {
 
 export type Board = BoardPosition[];
 
+export type ChessBoard = Board[];
+
 export type BoardType = "black->white" | "white->black" | "empty";
 
 export const BOARD_TYPES: Exclude<BoardType, "empty">[] = [
@@ -152,4 +154,14 @@ export function movePiece(
     replacedPiece,
     newBoard,
   };
+}
+
+export function getPieceBoxById(id: string, board: ChessBoard) {
+  return board.reduce((acc, column) => {
+    if (!acc) {
+      acc = column.find((box) => box.piece?.id === id);
+    }
+
+    return acc;
+  }, undefined as undefined | BoardPosition);
 }
