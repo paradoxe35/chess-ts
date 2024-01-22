@@ -15,6 +15,7 @@ import {
   type PlayersPoints,
   type TChessMachine,
   playerOrDefault,
+  Chat,
 } from "./types";
 
 const getOppositeColor = (color: PieceColor): PieceColor =>
@@ -22,12 +23,13 @@ const getOppositeColor = (color: PieceColor): PieceColor =>
 
 function defaultContext(): TChessMachine["context"] {
   return {
+    chats: [],
+    histories: [],
+    rolledBackHistory: false,
     board: createBoard("empty", nanoid),
     boardType: "empty" as BoardType,
     gameType: null,
     pieceMove: null,
-    histories: [],
-    rolledBackHistory: false,
     lastMoves: undefined,
     winner: undefined,
   };
@@ -86,7 +88,16 @@ export const chessGameMachine = createMachine({
 
     playing: {
       initial: "getMoves",
-
+      on: {
+        "chess.playing.chat-message": {
+          actions: assign({
+            chats: ({ event, context }) => {
+              const chats = context.chats || [];
+              return chats.concat(event.chat);
+            },
+          }),
+        },
+      },
       entry: ({ context }) => {
         if (context.playId) {
           history.replaceState(null, "", "#/" + context.playId);
@@ -200,6 +211,20 @@ export const chessGameMachine = createMachine({
                     piece: event.move.piece,
                     position: event.move.position,
                   };
+                },
+
+                chats: ({ event, context }) => {
+                  const chats = context.chats || [];
+                  if (!event.move.rationale || !context.players?.B) {
+                    return chats;
+                  }
+
+                  const chat: Chat = {
+                    message: event.move.rationale,
+                    player: "B",
+                  };
+
+                  return chats.concat(chat);
                 },
               }),
             },

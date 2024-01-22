@@ -86,6 +86,7 @@ export const computerAIActor = fromCallback<any, Input>(
               position: responseData.currentPosition,
               moves: [responseData.targetPosition],
               piece: pieceBox.piece,
+              rationale: responseData.rationale,
               autoMove: true,
             },
           });

@@ -4,6 +4,7 @@ import { ChessGameContext, GHistory, PlayersPoints } from "@/state";
 import { BoardPiece, PIECE_POINTS } from "@/chess";
 import { PieceImg } from "@/components/ui/piece";
 import { cn } from "@/utils/cn";
+import { useScrollToBottom } from "@/utils/scroll-to-bottom";
 
 export function Points() {
   return (
@@ -16,26 +17,14 @@ export function Points() {
 }
 
 function ShowPoints() {
-  const mounted = useRef(false);
-  const containerEl = useRef<HTMLDivElement>(null);
-
   const players = ChessGameContext.useSelector((c) => c.context.players);
   const selectedHistory = ChessGameContext.useSelector(
     (c) => c.context.selectedHistory
   );
 
+  const { containerEl } = useScrollToBottom(selectedHistory);
+
   const pointes = (selectedHistory?.pointes || {}) as PlayersPoints;
-
-  useEffect(() => {
-    if (containerEl.current) {
-      containerEl.current.scrollTo({
-        top: containerEl.current.scrollHeight,
-        behavior: mounted.current ? "smooth" : "instant",
-      });
-
-      mounted.current = true;
-    }
-  }, [selectedHistory]);
 
   return (
     <div

@@ -3,6 +3,7 @@ import { ChessGameContext, GHistory, TLastMoves, T_HistoryItem } from "@/state";
 import { cn } from "@/utils/cn";
 import { PieceImg } from "@/components/ui/piece";
 import { Players } from "./components/players";
+import { useScrollToBottom } from "@/utils/scroll-to-bottom";
 
 export function History() {
   return (
@@ -15,27 +16,16 @@ export function History() {
 }
 
 function ShowHistories() {
-  const mounted = useRef(false);
-  const containerEl = useRef<HTMLDivElement>(null);
   const players = ChessGameContext.useSelector((c) => c.context.players);
   const lastMoves = ChessGameContext.useSelector((c) => c.context.lastMoves);
   const histories = ChessGameContext.useSelector((c) => c.context.histories);
+
+  const { containerEl } = useScrollToBottom(histories.length);
 
   const historyType = {
     white: histories.filter((h) => h.piece.type === "white"),
     black: histories.filter((h) => h.piece.type === "black"),
   };
-
-  useEffect(() => {
-    if (containerEl.current) {
-      containerEl.current.scrollTo({
-        top: containerEl.current.scrollHeight,
-        behavior: mounted.current ? "smooth" : "instant",
-      });
-
-      mounted.current = true;
-    }
-  }, [histories.length]);
 
   if (!players) {
     return <></>;

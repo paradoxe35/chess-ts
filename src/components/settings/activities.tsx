@@ -38,32 +38,28 @@ export function ChessActivities() {
             <Points />
           </Tab.Panel>
 
-          {gameType === "online" && (
-            <Tab.Panel>
-              <Chat />
-            </Tab.Panel>
-          )}
+          <Tab.Panel className="h-full max-h-full relative">
+            <Chat />
+          </Tab.Panel>
         </Tab.Panels>
 
         {/* Menu */}
         <Tab.List className="flex space-x-5">
-          <Tab className={tabClassName}>
+          <Tab className={tabClassName} title="Activities">
             <Activity />
           </Tab>
 
-          <Tab className={tabClassName}>
+          <Tab className={tabClassName} title="Points">
             <Diamonds />
           </Tab>
 
-          <button>
+          <Tab className={tabClassName} title="Chat">
+            <MessageText1 />
+          </Tab>
+
+          <button title="Restart">
             <ArrowRotateLeft />
           </button>
-
-          {gameType === "online" && (
-            <Tab className={tabClassName}>
-              <MessageText1 />
-            </Tab>
-          )}
         </Tab.List>
       </div>
     </Tab.Group>

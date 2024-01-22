@@ -15,7 +15,7 @@ export type PlayerDetail = {
   color: PieceColor;
 };
 
-type Players = {
+export type Players = {
   [x in "A" | "B"]: PlayerDetail | null;
 };
 
@@ -56,11 +56,18 @@ export type PieceMove = {
   moves: string[];
   position: string;
   autoMove?: boolean;
+  rationale?: string;
+};
+
+export type Chat = {
+  player: "A" | "B";
+  message: string;
 };
 
 export type TChessMachine = {
   context: {
     board: Board[];
+    chats: Chat[];
     boardType: BoardType;
     computerLoading?: boolean;
 
@@ -117,5 +124,9 @@ export type TChessMachine = {
       }
     | {
         type: "chess.playing.setMove.reset";
+      }
+    | {
+        type: "chess.playing.chat-message";
+        chat: Chat;
       };
 };
