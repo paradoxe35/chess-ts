@@ -1,4 +1,5 @@
 import cloneDeep from "lodash/cloneDeep";
+import isEqual from "lodash/isEqual";
 import { nanoid } from "nanoid";
 import { createMachine, assign } from "xstate";
 import { computerAIActor, computerAiSetMoveActor } from "./invokes";
@@ -212,6 +213,7 @@ export const chessGameMachine = createMachine({
             input: ({ context }) => ({
               pieceMove: context.pieceMove,
               players: context.players,
+              gameType: context.gameType,
             }),
           },
           on: {
@@ -313,7 +315,7 @@ export const chessGameMachine = createMachine({
                 return (
                   pieceMove &&
                   pieceMove.moves.includes(event.movePosition) &&
-                  lHistory === context.selectedHistory
+                  isEqual(lHistory, context.selectedHistory)
                 );
               },
             },

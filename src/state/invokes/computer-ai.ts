@@ -95,8 +95,8 @@ export const computerAIActor = fromCallback<any, Input>(
     (async () => {
       for (const _ of [1, 2, 3]) {
         try {
-          // await request();
-          // break;
+          await request();
+          break;
         } catch (_) {
           continue;
         }
