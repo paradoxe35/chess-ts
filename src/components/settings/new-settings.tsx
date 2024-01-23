@@ -5,6 +5,7 @@ import { useState } from "react";
 import { PieceColor } from "@/chess";
 import { ChessGameContext } from "@/state";
 import { DEFAULT_BOARD_TYPE } from "@/utils/constants";
+import { uniqueId } from "@/utils/unique-id";
 
 export function Title({ className }: { className?: string }) {
   return (
@@ -30,6 +31,7 @@ export function NewSettings() {
       type: "chess.settings",
       boardType: DEFAULT_BOARD_TYPE,
       playerA: {
+        id: uniqueId(),
         name: name,
         image: `https://i.pravatar.cc/250?u=${name}`,
         color: color,

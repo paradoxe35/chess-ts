@@ -1,7 +1,8 @@
 import { cn } from "@/utils/cn";
 import { ChessBoard, ChessPieces, ChessSettings } from "@/components";
 import { useEffect, useRef, useState } from "react";
-import { CHESS_ACTOR_PERSIST_KEY, ChessGameContext } from "@/state";
+import { ChessGameContext } from "@/state";
+import { CHESS_ACTOR_PERSIST_KEY } from "@/utils/persisted-state";
 
 function ChessApp() {
   const actor = ChessGameContext.useActorRef();

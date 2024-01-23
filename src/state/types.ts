@@ -9,6 +9,7 @@ import {
 export type GameType = "computer" | "online" | null;
 
 export type PlayerDetail = {
+  id: string;
   name: string;
   image?: string;
   computer: boolean;

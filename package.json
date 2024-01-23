@@ -21,7 +21,7 @@
     "peerjs": "^1.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "tailwind-merge": "^2.2.0",
+    "tailwind-merge": "^2.2.1",
     "vitest": "^1.2.1",
     "xstate": "^5.5.1"
   },

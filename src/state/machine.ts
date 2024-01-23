@@ -1,6 +1,5 @@
 import cloneDeep from "lodash/cloneDeep";
 import isEqual from "lodash/isEqual";
-import { nanoid } from "nanoid";
 import { createMachine, assign } from "xstate";
 import { computerAIActor, computerAiSetMoveActor } from "./invokes";
 import {
@@ -17,6 +16,7 @@ import {
   playerOrDefault,
   Chat,
 } from "./types";
+import { uniqueId } from "@/utils/unique-id";
 
 const getOppositeColor = (color: PieceColor): PieceColor =>
   color === "black" ? "white" : "black";
@@ -26,7 +26,7 @@ function defaultContext(): TChessMachine["context"] {
     chats: [],
     histories: [],
     rolledBackHistory: false,
-    board: createBoard("empty", nanoid),
+    board: createBoard("empty", uniqueId),
     boardType: "empty" as BoardType,
     gameType: null,
     pieceMove: null,
@@ -53,11 +53,11 @@ export const chessGameMachine = createMachine({
           actions: assign({
             boardType: ({ event }) => event.boardType,
 
-            board: ({ event }) => createBoard(event.boardType, nanoid),
+            board: ({ event }) => createBoard(event.boardType, uniqueId),
 
             gameType: ({ event }) => event.gameType,
 
-            playId: () => nanoid(),
+            playId: ({ event }) => event.playerA.id,
 
             players: ({ event }) => {
               return {
@@ -65,6 +65,7 @@ export const chessGameMachine = createMachine({
                 B:
                   event.gameType === "computer"
                     ? {
+                        id: uniqueId(),
                         name: event.gameType,
                         color: getOppositeColor(event.playerA.color),
                         computer: true,
@@ -304,7 +305,7 @@ export const chessGameMachine = createMachine({
                   }
 
                   const historyItem: T_HistoryItem = {
-                    id: nanoid(),
+                    id: uniqueId(),
                     board: newBoard,
                     oldPosition: pieceMove.position,
                     newPosition: event.movePosition,
