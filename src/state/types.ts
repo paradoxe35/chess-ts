@@ -85,8 +85,6 @@ export type TChessMachine = {
 
     winner: PieceColor | undefined;
     lastMoves: TLastMoves | undefined;
-
-    replacedPiece?: BoardPiece | undefined;
   };
   events:
     | {

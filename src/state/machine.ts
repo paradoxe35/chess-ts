@@ -257,7 +257,6 @@ export const chessGameMachine = createMachine({
                   );
 
                   context.board = cloneDeep(newBoard);
-                  context.replacedPiece = replacedPiece;
 
                   // ==================== Store History ==============
                   const lastItemHistory = context.histories[
@@ -268,7 +267,7 @@ export const chessGameMachine = createMachine({
                     lastItemHistory?.pointes;
 
                   // Store players points per history
-                  if (lastItemHistory && context.replacedPiece) {
+                  if (lastItemHistory && replacedPiece) {
                     let lPointes = lastItemHistory.pointes;
 
                     if (!lPointes) {
@@ -287,9 +286,8 @@ export const chessGameMachine = createMachine({
                     newPointes = {
                       ...lPointes,
 
-                      [pieceMove.piece.type]: piecePointes.concat(
-                        context.replacedPiece
-                      ),
+                      [pieceMove.piece.type]:
+                        piecePointes.concat(replacedPiece),
                     };
                   }
 
