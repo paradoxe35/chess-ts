@@ -68,7 +68,7 @@ export type Chat = {
 
 export type JoinRequest = {
   playerId: string;
-  request: "idle" | "open" | "closed";
+  request: "idle" | "open" | "failed";
 };
 
 export type TChessMachine = {
@@ -111,6 +111,8 @@ export type TChessMachine = {
       }
     | {
         type: "chess.settings.join";
+        playerB: PlayerDetail;
+        request: JoinRequest;
       }
     | {
         type: "chess.playing.getMoves";

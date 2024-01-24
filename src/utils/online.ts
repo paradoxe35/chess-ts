@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { uniqueId } from "./unique-id";
 import { useCallbackRef, useSyncRef } from "./hooks";
 
+const JOIN_REQUEST_TIMEOUT = 5 * 1000;
 type ExcludeContextKeys = keyof TChessMachine["context"];
 
 const EXCLUDE_CONTEXT_KEYS: ExcludeContextKeys[] = [
@@ -31,7 +32,7 @@ export function useOnlinePlayer() {
     EXCLUDE_CONTEXT_KEYS.forEach((key) => delete context[key]);
 
     return context;
-  }, []);
+  }, [actorRef]);
 
   const getContextRef = useCallbackRef(getContext);
 
@@ -99,7 +100,7 @@ export function useOnlinePlayer() {
         conn.once("close", subscription.unsubscribe);
       });
     });
-  }, [players, activePlayer, playId, gameType]);
+  }, [players, activePlayer, playId, gameType, actorRef, getContextRef]);
 
   /**
    * Player B function
@@ -115,13 +116,20 @@ export function useOnlinePlayer() {
     const playerB = context.players?.B;
     const playerBId = playerB?.id || uniqueId();
 
-    if (activePlayer?.id === hashId) {
+    if (activePlayer?.id === hashId || peer.current !== null) {
       return;
     }
 
-    if (peer.current !== null) {
-      return;
-    }
+    // Send join request idle
+    actorRef.current.send({
+      type: "chess.online.join-request",
+      request: {
+        playerId: playerBId,
+        request: "idle",
+      },
+    });
+
+    const connectionTimeout: { v?: NodeJS.Timeout } = {};
 
     /**
      * Player B Peer
@@ -136,9 +144,34 @@ export function useOnlinePlayer() {
       // Player A connection object
       const conn = peer.current!.connect(hashId);
 
+      // Join request Connection timeout
+      connectionTimeout.v = setTimeout(() => {
+        actorRef.current.send({
+          type: "chess.online.join-request",
+          request: {
+            playerId: playerBId,
+            request: "failed",
+          },
+        });
+      }, JOIN_REQUEST_TIMEOUT);
+
       // Receive messages
       conn.on("data", function (data) {
         console.log("[Player B] Data: ", data);
+
+        // Clear Join request connection timeout
+        if (connectionTimeout.v) {
+          clearTimeout(connectionTimeout.v);
+          actorRef.current.send({
+            type: "chess.online.join-request",
+            request: {
+              playerId: playerBId,
+              request: "open",
+            },
+          });
+
+          connectionTimeout.v = undefined;
+        }
 
         const dataContext = data as TChessMachine["context"];
         canUpdateData.current = false;
@@ -168,7 +201,7 @@ export function useOnlinePlayer() {
         conn.once("close", subscription.unsubscribe);
       });
     });
-  }, [players, playId, activePlayer, gameType]);
+  }, [players, playId, activePlayer, gameType, actorRef, getContextRef]);
 
   return {};
 }

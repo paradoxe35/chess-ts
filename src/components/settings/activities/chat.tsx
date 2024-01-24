@@ -43,6 +43,7 @@ function SendMessage() {
   let activePlayer = ChessGameContext.useSelector(
     (c) => c.context.activePlayer
   );
+
   let players = ChessGameContext.useSelector((c) => c.context.players);
 
   const handleSendMessage = (evt: React.KeyboardEvent<HTMLInputElement>) => {

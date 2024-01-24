@@ -2,13 +2,7 @@ import cloneDeep from "lodash/cloneDeep";
 import isEqual from "lodash/isEqual";
 import { createMachine, assign } from "xstate";
 import { computerAIActor, computerAiSetMoveActor } from "./invokes";
-import {
-  BoardType,
-  PieceColor,
-  createBoard,
-  getPieceMoves,
-  movePiece,
-} from "../chess";
+import { BoardType, createBoard, getPieceMoves, movePiece } from "../chess";
 import {
   type T_HistoryItem,
   type PlayersPoints,
@@ -17,9 +11,7 @@ import {
   Chat,
 } from "./types";
 import { uniqueId } from "@/utils/unique-id";
-
-const getOppositeColor = (color: PieceColor): PieceColor =>
-  color === "black" ? "white" : "black";
+import { getOppositeColor } from "@/utils/helpers";
 
 function defaultContext(): TChessMachine["context"] {
   return {
@@ -56,7 +48,14 @@ export const chessGameMachine = createMachine({
 
     "chess.online.join-request": {
       actions: assign({
-        joinRequest: ({ event }) => event.request,
+        joinRequest: ({ event }) => {
+          if (event.request.request === "failed") {
+            history.replaceState(null, "/", "");
+            return undefined;
+          }
+
+          return event.request;
+        },
       }),
     },
     reset: {
@@ -102,7 +101,29 @@ export const chessGameMachine = createMachine({
           },
         },
 
-        "chess.settings.join": {},
+        "chess.settings.join": {
+          target: "playing",
+          actions: assign({
+            players: ({ event, context }) => {
+              if (!context.players) {
+                return context.players;
+              }
+
+              return {
+                ...context.players,
+                B: {
+                  ...event.playerB,
+                  id: event.request.playerId,
+                },
+              };
+            },
+
+            activePlayer: ({ event }) => event.playerB,
+          }),
+          guard: ({ context }) => {
+            return !!context.players && !!context.gameType && !!context.playId;
+          },
+        },
       },
     },
 
@@ -119,7 +140,7 @@ export const chessGameMachine = createMachine({
         },
       },
       entry: ({ context }) => {
-        if (context.playId) {
+        if (context.playId && !context.joinRequest) {
           history.replaceState(null, "", "#/" + context.playId);
         }
       },

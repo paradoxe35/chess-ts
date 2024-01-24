@@ -4,8 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { ChessGameContext } from "@/state";
 import { CHESS_ACTOR_PERSIST_KEY } from "@/utils/persisted-state";
 import { useOnlinePlayer } from "@/utils/online";
+import { Loader } from "@/components/ui/loader";
 
 function ChessApp() {
+  const joinRequest = ChessGameContext.useSelector(
+    (c) => c.context.joinRequest
+  );
   const actor = ChessGameContext.useActorRef();
   const [, setValue] = useState(0);
   const boardRef = useRef<HTMLDivElement>(null);
@@ -35,6 +39,19 @@ function ChessApp() {
   return (
     <>
       <OnlineGame />
+
+      {joinRequest && joinRequest.request === "idle" && (
+        <div
+          className={cn(
+            "fixed z-50 inset-0 backdrop-blur-sm bg-slate-50/10",
+            "flex justify-center items-center"
+          )}
+        >
+          <div className="relative">
+            <Loader />
+          </div>
+        </div>
+      )}
 
       <div
         className={cn(
