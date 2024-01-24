@@ -16,6 +16,14 @@ Chess TS is a web-based chess application for playing chess online against anoth
 - WebRTC powers real-time multiplayer
 - Time controls and timeouts to keep games moving
 
+## Coming Features
+
+- Two ways data restoration (online player)
+- Chat notifications
+- Audio conference
+- Replay previous games histories from local storage
+- Working on piece move animation (Later)
+
 ## Rules and Gameplay
 
 - Standard chess rules and gameplay

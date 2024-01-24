@@ -1,0 +1,22 @@
+- implement last move (UI) ✅
+- Show game history ✅
+- Store player won pieces in store ✅
+- Show Players points and won pieces ✅
+- Rollback on history ✅
+
+  - Fix rollback history board ✅
+
+- Implement AI (computer) player type ✅
+- Implement chat messages ✅
+- Implement player turn (active player according to color turn) ✅
+- Implement online player ✅
+
+- Two ways data restoration (online player)
+
+- Chat notifications
+
+- Audio communication
+
+- Replay previous games histories from local storage
+
+- Working on piece move animation (Later)
