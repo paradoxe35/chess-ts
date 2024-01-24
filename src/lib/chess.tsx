@@ -3,6 +3,7 @@ import { ChessBoard, ChessPieces, ChessSettings } from "@/components";
 import { useEffect, useRef, useState } from "react";
 import { ChessGameContext } from "@/state";
 import { CHESS_ACTOR_PERSIST_KEY } from "@/utils/persisted-state";
+import { useOnlinePlayer } from "@/utils/online";
 
 function ChessApp() {
   const actor = ChessGameContext.useActorRef();
@@ -32,23 +33,33 @@ function ChessApp() {
   }, [actor]);
 
   return (
-    <div
-      className={cn(
-        "flex flex-col md:flex-row w-full px-3 md:px-0 container mx-auto",
-        "justify-center items-stretch my-10"
-      )}
-    >
-      <div className="chess-board w-full md:w-1/2">
-        <ChessBoard ref={boardRef}>
-          {boardRef.current && <ChessPieces boardRef={boardRef} />}
-        </ChessBoard>
-      </div>
+    <>
+      <OnlineGame />
 
-      <div className="chess-settings w-full md:w-1/2 flex flex-col">
-        <ChessSettings />
+      <div
+        className={cn(
+          "flex flex-col md:flex-row w-full px-3 md:px-0 container mx-auto",
+          "justify-center items-stretch my-10"
+        )}
+      >
+        <div className="chess-board w-full md:w-1/2">
+          <ChessBoard ref={boardRef}>
+            {boardRef.current && <ChessPieces boardRef={boardRef} />}
+          </ChessBoard>
+        </div>
+
+        <div className="chess-settings w-full md:w-1/2 flex flex-col">
+          <ChessSettings />
+        </div>
       </div>
-    </div>
+    </>
   );
+}
+
+function OnlineGame() {
+  useOnlinePlayer();
+
+  return <></>;
 }
 
 export default function Chess() {

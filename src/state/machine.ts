@@ -40,6 +40,25 @@ export const chessGameMachine = createMachine({
   initial: "start",
   types: {} as TChessMachine,
   on: {
+    "chess.online.merge-data": {
+      actions: assign({
+        players: ({ event, context }) => {
+          for (const key in event.context) {
+            const $key = key as keyof TChessMachine["context"];
+            // @ts-ignore
+            context[$key] = event.context[$key];
+          }
+
+          return event.context.players;
+        },
+      }),
+    },
+
+    "chess.online.join-request": {
+      actions: assign({
+        joinRequest: ({ event }) => event.request,
+      }),
+    },
     reset: {
       actions: assign({ ...defaultContext() }),
     },
@@ -48,7 +67,7 @@ export const chessGameMachine = createMachine({
   states: {
     start: {
       on: {
-        "chess.settings": {
+        "chess.settings.player-a": {
           target: "playing",
           actions: assign({
             boardType: ({ event }) => event.boardType,
@@ -66,9 +85,9 @@ export const chessGameMachine = createMachine({
                   event.gameType === "computer"
                     ? {
                         id: uniqueId(),
+                        computer: true,
                         name: event.gameType,
                         color: getOppositeColor(event.playerA.color),
-                        computer: true,
                         image: "https://freesvg.org/img/1538298822.png",
                       }
                     : null,

@@ -12,6 +12,7 @@ export type PlayerDetail = {
   id: string;
   name: string;
   image?: string;
+  online?: boolean;
   computer: boolean;
   color: PieceColor;
 };
@@ -65,12 +66,19 @@ export type Chat = {
   message: string;
 };
 
+export type JoinRequest = {
+  playerId: string;
+  request: "idle" | "open" | "closed";
+};
+
 export type TChessMachine = {
   context: {
     board: Board[];
     chats: Chat[];
     boardType: BoardType;
     computerLoading?: boolean;
+
+    joinRequest?: JoinRequest;
 
     playId?: string;
     players?: Players;
@@ -88,10 +96,18 @@ export type TChessMachine = {
   };
   events:
     | {
-        type: "chess.settings";
+        type: "chess.online.merge-data";
+        context: TChessMachine["context"];
+      }
+    | {
+        type: "chess.settings.player-a";
         boardType: BoardType;
         gameType: GameType;
         playerA: PlayerDetail;
+      }
+    | {
+        type: "chess.online.join-request";
+        request: JoinRequest;
       }
     | {
         type: "chess.settings.join";

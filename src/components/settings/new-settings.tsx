@@ -28,7 +28,7 @@ export function NewSettings() {
     }
 
     chessGame.send({
-      type: "chess.settings",
+      type: "chess.settings.player-a",
       boardType: DEFAULT_BOARD_TYPE,
       playerA: {
         id: uniqueId(),
