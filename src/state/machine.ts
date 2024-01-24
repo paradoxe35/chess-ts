@@ -50,7 +50,6 @@ export const chessGameMachine = createMachine({
       actions: assign({
         joinRequest: ({ event }) => {
           if (event.request.request === "failed") {
-            history.replaceState(null, "/", "");
             return undefined;
           }
 
