@@ -146,6 +146,11 @@ export function useOnlinePlayer() {
 
       // Join request Connection timeout
       connectionTimeout.v = setTimeout(() => {
+        try {
+          peer.current?.disconnect();
+          conn.close();
+        } catch (_) {}
+
         actorRef.current.send({
           type: "chess.online.join-request",
           request: {
