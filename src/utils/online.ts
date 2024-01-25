@@ -5,7 +5,7 @@ import { uniqueId } from "./unique-id";
 import { useCallbackRef, useSyncRef } from "./hooks";
 import { PEER_HOST, PEER_PORT } from "./constants";
 
-const JOIN_REQUEST_TIMEOUT = 10 * 1000;
+const JOIN_REQUEST_TIMEOUT = 5 * 1000;
 type ExcludeContextKeys = keyof TChessMachine["context"];
 
 const EXCLUDE_CONTEXT_KEYS: ExcludeContextKeys[] = [
@@ -64,16 +64,16 @@ export function useOnlinePlayer() {
       debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
-      config: {
-        iceServers: [
-          { url: "stun:freestun.net:5350" },
-          {
-            url: "turns:freestun.tel:5350",
-            username: "free",
-            credential: "free",
-          },
-        ],
-      },
+      // config: {
+      //   iceServers: [
+      //     { url: "stun:freestun.net:5350" },
+      //     {
+      //       url: "turns:freestun.tel:5350",
+      //       username: "free",
+      //       credential: "free",
+      //     },
+      //   ],
+      // },
     });
 
     peer.current.on("open", (id) => {
@@ -81,6 +81,8 @@ export function useOnlinePlayer() {
     });
 
     peer.current.on("connection", (conn) => {
+      console.log("Connection Player A", conn);
+
       // Player B connection object
       conn.on("data", (data) => {
         // console.log("[Player A] Data: ", data);
@@ -153,16 +155,16 @@ export function useOnlinePlayer() {
       debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
-      config: {
-        iceServers: [
-          { url: "stun:freestun.net:5350" },
-          {
-            url: "turns:freestun.tel:5350",
-            username: "free",
-            credential: "free",
-          },
-        ],
-      },
+      // config: {
+      //   iceServers: [
+      //     { url: "stun:freestun.net:5350" },
+      //     {
+      //       url: "turns:freestun.tel:5350",
+      //       username: "free",
+      //       credential: "free",
+      //     },
+      //   ],
+      // },
     });
 
     peer.current.on("open", (id) => {
