@@ -64,16 +64,16 @@ export function useOnlinePlayer() {
       debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
-      config: {
-        iceServers: [
-          { url: "stun:freestun.net:5350" },
-          {
-            url: "turns:freestun.tel:5350",
-            username: "free",
-            credential: "free",
-          },
-        ],
-      },
+      // config: {
+      //   iceServers: [
+      //     { url: "stun:freestun.net:5350" },
+      //     {
+      //       url: "turns:freestun.tel:5350",
+      //       username: "free",
+      //       credential: "free",
+      //     },
+      //   ],
+      // },
     });
 
     peer.current.on("open", (id) => {
@@ -99,19 +99,18 @@ export function useOnlinePlayer() {
         }, 100);
       });
 
-      conn.on("open", () => {
+      // Send data directly
+      conn.send(getContextRef.current());
+
+      const subscription = actorRef.current.subscribe(() => {
+        if (!canUpdateData.current) {
+          return;
+        }
+
         conn.send(getContextRef.current());
-
-        const subscription = actorRef.current.subscribe(() => {
-          if (!canUpdateData.current) {
-            return;
-          }
-
-          conn.send(getContextRef.current());
-        });
-
-        conn.once("close", subscription.unsubscribe);
       });
+
+      conn.once("close", subscription.unsubscribe);
     });
   }, [players, activePlayer, playId, gameType, actorRef, getContextRef]);
 
@@ -151,16 +150,16 @@ export function useOnlinePlayer() {
       debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
-      config: {
-        iceServers: [
-          { url: "stun:freestun.net:5350" },
-          {
-            url: "turns:freestun.tel:5350",
-            username: "free",
-            credential: "free",
-          },
-        ],
-      },
+      // config: {
+      //   iceServers: [
+      //     { url: "stun:freestun.net:5350" },
+      //     {
+      //       url: "turns:freestun.tel:5350",
+      //       username: "free",
+      //       credential: "free",
+      //     },
+      //   ],
+      // },
     });
 
     peer.current.on("open", (id) => {
