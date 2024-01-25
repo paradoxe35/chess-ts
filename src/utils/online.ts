@@ -168,6 +168,20 @@ export function useOnlinePlayer() {
       // Player A connection object
       const conn = peer.current!.connect(hashId);
 
+      conn.on("open", () => {
+        const subscription = actorRef.current.subscribe(() => {
+          const playerB = getContextRef.current().players?.B;
+
+          if (!canUpdateData.current || !playerB) {
+            return;
+          }
+
+          conn.send(getContextRef.current());
+        });
+
+        conn.once("close", subscription.unsubscribe);
+      });
+
       // Join request Connection timeout
       connectionTimeout.v = setTimeout(() => {
         try {
@@ -215,20 +229,6 @@ export function useOnlinePlayer() {
         setTimeout(() => {
           canUpdateData.current = true;
         }, 100);
-      });
-
-      conn.on("open", () => {
-        const subscription = actorRef.current.subscribe(() => {
-          const playerB = getContextRef.current().players?.B;
-
-          if (!canUpdateData.current || !playerB) {
-            return;
-          }
-
-          conn.send(getContextRef.current());
-        });
-
-        conn.once("close", subscription.unsubscribe);
       });
     });
   }, [players, playId, activePlayer, gameType, actorRef, getContextRef]);
