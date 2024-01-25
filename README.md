@@ -47,8 +47,7 @@ Chess TS is a web-based chess application for playing chess online against anoth
 
 - Built with TypeScript and React
 - React Hooks for state management
-- WebRTC used for real-time multiplayer
-- Socket.io enables real-time communication
+- WebRTC used for real-time multiplayer (peer.js)
 - SVG used for rendering chess board and pieces
 - Fully responsive design supporting mobile, tablet and desktop
 
