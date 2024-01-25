@@ -66,9 +66,9 @@ export function useOnlinePlayer() {
       port: PEER_PORT,
       config: {
         iceServers: [
-          { urls: "stun:freestun.net:5350" },
+          { url: "stun:freestun.net:5350" },
           {
-            urls: "turns:freestun.tel:5350",
+            url: "turns:freestun.tel:5350",
             username: "free",
             credential: "free",
           },
@@ -153,9 +153,9 @@ export function useOnlinePlayer() {
       port: PEER_PORT,
       config: {
         iceServers: [
-          { urls: "stun:freestun.net:5350" },
+          { url: "stun:freestun.net:5350" },
           {
-            urls: "turns:freestun.tel:5350",
+            url: "turns:freestun.tel:5350",
             username: "free",
             credential: "free",
           },
