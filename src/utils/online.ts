@@ -5,7 +5,7 @@ import { uniqueId } from "./unique-id";
 import { useCallbackRef, useSyncRef } from "./hooks";
 import { PEER_HOST, PEER_PORT } from "./constants";
 
-const JOIN_REQUEST_TIMEOUT = 5 * 1000;
+const JOIN_REQUEST_TIMEOUT = 10 * 1000;
 type ExcludeContextKeys = keyof TChessMachine["context"];
 
 const EXCLUDE_CONTEXT_KEYS: ExcludeContextKeys[] = [
