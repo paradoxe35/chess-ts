@@ -65,7 +65,14 @@ export function useOnlinePlayer() {
       host: PEER_HOST,
       port: PEER_PORT,
       config: {
-        iceServers: [{ url: "stun:stun.l.google.com:19302" }],
+        iceServers: [
+          { urls: "stun:freestun.net:5350" },
+          {
+            urls: "turns:freestun.tel:5350",
+            username: "free",
+            credential: "free",
+          },
+        ],
       },
     });
 
@@ -145,7 +152,14 @@ export function useOnlinePlayer() {
       host: PEER_HOST,
       port: PEER_PORT,
       config: {
-        iceServers: [{ url: "stun:stun.l.google.com:19302" }],
+        iceServers: [
+          { urls: "stun:freestun.net:5350" },
+          {
+            urls: "turns:freestun.tel:5350",
+            username: "free",
+            credential: "free",
+          },
+        ],
       },
     });
 
