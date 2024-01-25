@@ -64,16 +64,16 @@ export function useOnlinePlayer() {
       debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
-      // config: {
-      //   iceServers: [
-      //     { url: "stun:freestun.net:5350" },
-      //     {
-      //       url: "turns:freestun.tel:5350",
-      //       username: "free",
-      //       credential: "free",
-      //     },
-      //   ],
-      // },
+      config: {
+        iceServers: [
+          { url: "stun:freestun.net:5350" },
+          {
+            url: "turns:freestun.tel:5350",
+            username: "free",
+            credential: "free",
+          },
+        ],
+      },
     });
 
     peer.current.on("open", (id) => {
@@ -99,18 +99,21 @@ export function useOnlinePlayer() {
         }, 100);
       });
 
-      // Send data directly
-      conn.send(getContextRef.current());
-
-      const subscription = actorRef.current.subscribe(() => {
-        if (!canUpdateData.current) {
-          return;
-        }
+      conn.on("open", () => {
+        console.log("[Player B Connection]: ", conn);
 
         conn.send(getContextRef.current());
-      });
 
-      conn.once("close", subscription.unsubscribe);
+        const subscription = actorRef.current.subscribe(() => {
+          if (!canUpdateData.current) {
+            return;
+          }
+
+          conn.send(getContextRef.current());
+        });
+
+        conn.once("close", subscription.unsubscribe);
+      });
     });
   }, [players, activePlayer, playId, gameType, actorRef, getContextRef]);
 
@@ -150,16 +153,16 @@ export function useOnlinePlayer() {
       debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
-      // config: {
-      //   iceServers: [
-      //     { url: "stun:freestun.net:5350" },
-      //     {
-      //       url: "turns:freestun.tel:5350",
-      //       username: "free",
-      //       credential: "free",
-      //     },
-      //   ],
-      // },
+      config: {
+        iceServers: [
+          { url: "stun:freestun.net:5350" },
+          {
+            url: "turns:freestun.tel:5350",
+            username: "free",
+            credential: "free",
+          },
+        ],
+      },
     });
 
     peer.current.on("open", (id) => {
@@ -167,20 +170,6 @@ export function useOnlinePlayer() {
 
       // Player A connection object
       const conn = peer.current!.connect(hashId);
-
-      conn.on("open", () => {
-        const subscription = actorRef.current.subscribe(() => {
-          const playerB = getContextRef.current().players?.B;
-
-          if (!canUpdateData.current || !playerB) {
-            return;
-          }
-
-          conn.send(getContextRef.current());
-        });
-
-        conn.once("close", subscription.unsubscribe);
-      });
 
       // Join request Connection timeout
       connectionTimeout.v = setTimeout(() => {
@@ -229,6 +218,22 @@ export function useOnlinePlayer() {
         setTimeout(() => {
           canUpdateData.current = true;
         }, 100);
+      });
+
+      conn.on("open", () => {
+        console.log("[Player B Connection]: ", conn);
+
+        const subscription = actorRef.current.subscribe(() => {
+          const playerB = getContextRef.current().players?.B;
+
+          if (!canUpdateData.current || !playerB) {
+            return;
+          }
+
+          conn.send(getContextRef.current());
+        });
+
+        conn.once("close", subscription.unsubscribe);
       });
     });
   }, [players, playId, activePlayer, gameType, actorRef, getContextRef]);
