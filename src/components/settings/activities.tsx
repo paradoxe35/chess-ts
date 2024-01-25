@@ -1,5 +1,5 @@
 import { cn } from "@/utils/cn";
-import { Tab } from "@headlessui/react";
+import { Popover, Tab } from "@headlessui/react";
 import {
   Activity,
   MessageText1,
@@ -57,11 +57,46 @@ export function ChessActivities() {
             <MessageText1 />
           </Tab>
 
-          <button title="Restart">
-            <ArrowRotateLeft />
-          </button>
+          <RestartGame />
         </Tab.List>
       </div>
     </Tab.Group>
+  );
+}
+
+function RestartGame() {
+  const actor = ChessGameContext.useActorRef();
+
+  const restartGame = () => {
+    actor.send({ type: "chess.reset" });
+    history.replaceState(null, "", "/");
+
+    location.reload();
+  };
+
+  return (
+    <Popover className="relative">
+      {({ open }) => (
+        <>
+          <Popover.Button
+            title="Restart"
+            className={cn("outline-none w-full h-full", open && "opacity-0")}
+          >
+            <ArrowRotateLeft />
+          </Popover.Button>
+
+          <Popover.Panel className="absolute z-10">
+            <div role="tooltip" className="absolute z-10 inline-block -top-12">
+              <button
+                className="font-semibold bg-slate-50/10 p-2 rounded-md text-sm"
+                onClick={restartGame}
+              >
+                New Game
+              </button>
+            </div>
+          </Popover.Panel>
+        </>
+      )}
+    </Popover>
   );
 }

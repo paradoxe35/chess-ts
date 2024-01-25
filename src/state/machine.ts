@@ -24,6 +24,7 @@ function defaultContext(): TChessMachine["context"] {
     pieceMove: null,
     lastMoves: undefined,
     winner: undefined,
+    playId: undefined,
   };
 }
 
@@ -57,7 +58,7 @@ export const chessGameMachine = createMachine({
         },
       }),
     },
-    reset: {
+    "chess.reset": {
       actions: assign({ ...defaultContext() }),
     },
   },

@@ -145,5 +145,8 @@ export type TChessMachine = {
     | {
         type: "chess.playing.chat-message";
         chat: Chat;
+      }
+    | {
+        type: "chess.reset";
       };
 };
