@@ -61,9 +61,12 @@ export function useOnlinePlayer() {
      * Player A Peer
      */
     peer.current = new Peer(playId, {
-      debug: 2,
+      debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
+      config: {
+        iceServers: [{ url: "stun:stun.l.google.com:19302" }],
+      },
     });
 
     peer.current.on("open", (id) => {
@@ -73,7 +76,7 @@ export function useOnlinePlayer() {
     peer.current.on("connection", (conn) => {
       // Player B connection object
       conn.on("data", (data) => {
-        console.log("[Player A] Data: ", data);
+        // console.log("[Player A] Data: ", data);
 
         const dataContext = data as TChessMachine["context"];
         canUpdateData.current = false;
@@ -138,9 +141,12 @@ export function useOnlinePlayer() {
      * Player B Peer
      */
     peer.current = new Peer(playerBId, {
-      debug: 2,
+      debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
+      config: {
+        iceServers: [{ url: "stun:stun.l.google.com:19302" }],
+      },
     });
 
     peer.current.on("open", (id) => {
@@ -168,7 +174,7 @@ export function useOnlinePlayer() {
 
       // Receive messages
       conn.on("data", function (data) {
-        console.log("[Player B] Data: ", data);
+        // console.log("[Player B] Data: ", data);
 
         // Clear Join request connection timeout
         if (connectionTimeout.v) {
