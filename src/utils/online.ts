@@ -149,6 +149,7 @@ export function useOnlinePlayer() {
         try {
           peer.current?.disconnect();
           conn.close();
+          peer.current = null;
         } catch (_) {}
 
         actorRef.current.send({
