@@ -42,7 +42,7 @@ export function NewSettings() {
 
   const handleStart = (type: "computer" | "online") => {
     const $name = name.trim();
-    if ($name.length <= 3) {
+    if ($name.length < 2) {
       return;
     }
 
@@ -62,13 +62,19 @@ export function NewSettings() {
     if (type === "online") {
       toast.info("Share current URL to invite another player", {
         position: "top-right",
+        duration: 10 * 1000,
       });
     }
   };
 
   const handleJoin = () => {
     const $name = name.trim();
-    if ($name.length <= 3 || $name === players?.A?.name) {
+    if ($name.length < 2) {
+      return;
+    }
+
+    if ($name === players?.A?.name) {
+      toast.error("Name is already taken");
       return;
     }
 

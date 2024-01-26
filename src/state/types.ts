@@ -61,7 +61,7 @@ export type PieceMove = {
   rationale?: string;
 };
 
-export type Chat = {
+export type TChat = {
   player: "A" | "B";
   message: string;
 };
@@ -74,7 +74,7 @@ export type JoinRequest = {
 export type TChessMachine = {
   context: {
     board: Board[];
-    chats: Chat[];
+    chats: TChat[];
     boardType: BoardType;
     computerLoading?: boolean;
 
@@ -144,7 +144,7 @@ export type TChessMachine = {
       }
     | {
         type: "chess.playing.chat-message";
-        chat: Chat;
+        chat: TChat;
       }
     | {
         type: "chess.reset";

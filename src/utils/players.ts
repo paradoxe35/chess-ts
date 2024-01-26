@@ -1,7 +1,7 @@
 import { PieceColor } from "@/chess";
 import { PlayerDetail, Players } from "@/state";
 
-export function getPlayerPosition(
+export function getPlayerLetter(
   player: PlayerDetail,
   players: Players
 ): "A" | "B" | null {

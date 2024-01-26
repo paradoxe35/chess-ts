@@ -9,15 +9,15 @@ import {
 import { Title } from "./new-settings";
 import { History } from "./activities/history";
 import { Chat } from "./activities/chat";
-import { ChessGameContext } from "@/state";
+import { ChessGameContext, TChat } from "@/state";
 import { Points } from "./activities/points";
+import { PropsWithChildren, useEffect, useState } from "react";
+import { getPlayerLetter } from "@/utils/players";
 
 const tabClassName =
   "rounded-lg p-[10px] ui-selected:bg-slate-50/15 outline-none";
 
 export function ChessActivities() {
-  const gameType = ChessGameContext.useSelector((c) => c.context.gameType);
-
   return (
     <Tab.Group>
       <div
@@ -54,13 +54,55 @@ export function ChessActivities() {
           </Tab>
 
           <Tab className={tabClassName} title="Chat">
-            <MessageText1 />
+            {({ selected }) => (
+              <ChatNotifications selected={selected}>
+                <MessageText1 />
+              </ChatNotifications>
+            )}
           </Tab>
 
           <RestartGame />
         </Tab.List>
       </div>
     </Tab.Group>
+  );
+}
+
+function ChatNotifications(props: PropsWithChildren<{ selected: boolean }>) {
+  const [notification, setNotification] = useState(false);
+
+  const activePlayer = ChessGameContext.useSelector(
+    (c) => c.context.activePlayer
+  );
+  const gameType = ChessGameContext.useSelector((c) => c.context.gameType);
+  const players = ChessGameContext.useSelector((c) => c.context.players);
+  const playerLetter =
+    activePlayer && players && getPlayerLetter(activePlayer, players);
+
+  const chats = ChessGameContext.useSelector((c) => c.context.chats);
+
+  useEffect(() => {
+    if (props.selected || !playerLetter || gameType !== "online") {
+      return;
+    }
+
+    const lastChat = chats[chats.length - 1] as TChat | undefined;
+    if (lastChat?.player && lastChat?.player !== playerLetter) {
+      setNotification(true);
+    }
+  }, [props.selected, chats.length, playerLetter, gameType]);
+
+  return (
+    <div
+      className="w-full h-full relative"
+      onClick={() => setNotification(false)}
+    >
+      {notification && (
+        <span className="-top-1 start-4 absolute w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
+      )}
+
+      {props.children}
+    </div>
   );
 }
 

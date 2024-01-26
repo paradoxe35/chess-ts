@@ -1,8 +1,8 @@
-import { Chat, PlayerDetail } from "@/state";
+import { TChat, PlayerDetail } from "@/state";
 import { cn } from "@/utils/cn";
 
 type Props = {
-  chat: Chat;
+  chat: TChat;
   player: PlayerDetail;
 };
 

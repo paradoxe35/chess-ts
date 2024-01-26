@@ -2,7 +2,7 @@ import { ChatBubble } from "@/components/ui/chat";
 import { Input } from "@/components/ui/input";
 import { ChessGameContext } from "@/state";
 import { cn } from "@/utils/cn";
-import { getPlayerPosition } from "@/utils/players";
+import { getPlayerLetter } from "@/utils/players";
 import { useScrollToBottom } from "@/utils/scroll-to-bottom";
 import { useState } from "react";
 
@@ -51,7 +51,7 @@ function SendMessage() {
       return;
     }
 
-    const playerPosition = getPlayerPosition(activePlayer, players);
+    const playerPosition = getPlayerLetter(activePlayer, players);
 
     if (playerPosition) {
       gameChess.send({

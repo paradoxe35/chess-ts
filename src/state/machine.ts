@@ -8,7 +8,7 @@ import {
   type PlayersPoints,
   type TChessMachine,
   playerOrDefault,
-  Chat,
+  TChat,
 } from "./types";
 import { uniqueId } from "@/utils/unique-id";
 import { getOppositeColor } from "@/utils/helpers";
@@ -260,7 +260,7 @@ export const chessGameMachine = createMachine({
                     return chats;
                   }
 
-                  const chat: Chat = {
+                  const chat: TChat = {
                     message: event.move.rationale,
                     player: "B",
                   };
