@@ -8,6 +8,7 @@ import { DEFAULT_BOARD_TYPE } from "@/utils/constants";
 import { uniqueId } from "@/utils/unique-id";
 import { getOppositeColor } from "@/utils/helpers";
 import { Circle } from "../ui/circle";
+import { toast } from "sonner";
 
 export function Title({ className }: { className?: string }) {
   const activePlayer = ChessGameContext.useSelector(
@@ -57,6 +58,12 @@ export function NewSettings() {
       },
       gameType: type,
     });
+
+    if (type === "online") {
+      toast.info("Share current URL to invite another player", {
+        position: "top-right",
+      });
+    }
   };
 
   const handleJoin = () => {

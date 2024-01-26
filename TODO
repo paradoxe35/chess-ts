@@ -10,6 +10,7 @@
 - Implement chat messages ✅
 - Implement player turn (active player according to color turn) ✅
 - Implement online player ✅
+- Working on piece move animation ✅
 
 - Two ways data restoration (online player)
 
@@ -18,5 +19,3 @@
 - Audio communication
 
 - Replay previous games histories from local storage
-
-- Working on piece move animation (Later)

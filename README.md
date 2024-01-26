@@ -22,7 +22,6 @@ Chess TS is a web-based chess application for playing chess online against anoth
 - Chat notifications
 - Audio conference
 - Replay previous games histories from local storage
-- Working on piece move animation (Later)
 
 ## Rules and Gameplay
 

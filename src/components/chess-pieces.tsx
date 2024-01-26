@@ -55,7 +55,7 @@ export function ChessPieces(props: Props) {
 
       return (
         <Piece
-          key={box.position}
+          key={box.piece.id}
           boardRef={props.boardRef}
           onClick={handlePieceClick}
           box={box}
@@ -80,19 +80,23 @@ function Piece({
 }>) {
   const piece = box.piece!;
 
+  const style = {
+    top: yi * 12.5 + "%",
+    left: xi * 12.5 + "%",
+  };
   return (
     <motion.div
       key={piece.id}
+      layoutId={piece.id}
       className={cn(
         "absolute w-[12.5%] pt-[12.5%] z-10",
-        "top-0 left-0",
         "bg-no-repeat bg-[50%]",
         "flex justify-center"
       )}
-      style={{
-        backgroundImage: `url(${getPieceImageSrc(piece)})`,
-        transform: `translate(${xi * 100}%, ${yi * 100}%)`,
-      }}
+      initial={style}
+      animate={style}
+      transition={{ type: "just" }}
+      style={{ backgroundImage: `url(${getPieceImageSrc(piece)})` }}
     >
       <div
         title={piece.value}
