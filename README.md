@@ -18,10 +18,12 @@ Chess TS is a web-based chess application for playing chess online against anoth
 
 ## Coming Features
 
-- Two ways data restoration (online player)
-- Chat notifications
-- Audio conference
-- Replay previous games histories from local storage
+- Castling - Allow the king and rook to make a special joint move
+- Chess timer - Track each player's time during the game
+- Protect the king - Prevent kings from being captured
+- Checkmate - A player wins if their opponent's king is under attack and has no legal move
+- Voice chat - Enable audio communication for online multiplayer
+- Game replay - Save and replay previous games from local storage
 
 ## Rules and Gameplay
 
