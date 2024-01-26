@@ -264,6 +264,14 @@ export function useOnlinePlayer() {
        * Reconnect when conn
        */
       connectionInterval.v = setInterval(() => {
+        const playerB = getContextRef.current().players?.B;
+
+        // Attempt reconnection only if the [player b] has storage reference
+        if (!playerB) {
+          clearInterval(connectionInterval.v);
+          return;
+        }
+
         const failedStateConnection =
           !conn.peerConnection ||
           ["disconnected", "failed", "new"].includes(
