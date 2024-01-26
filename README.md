@@ -60,8 +60,10 @@ The app is not yet deployed online. To run it locally:
 3. Run `npm start`
 4. Go to `http://localhost:3000`
 
-## Free TURN/STUN
+## TURN/STUN
 
 - https://freeturn.net
 - https://freestun.net
 - https://www.metered.ca
+- https://github.com/coturn/coturn
+- https://eturnal.net

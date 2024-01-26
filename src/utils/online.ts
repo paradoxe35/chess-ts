@@ -8,6 +8,11 @@ import { PEER_HOST, PEER_PORT, PEER_SECURE } from "./constants";
 const JOIN_REQUEST_TIMEOUT = 10 * 1000;
 type ExcludeContextKeys = keyof TChessMachine["context"];
 
+const TURN_SERVERS = [
+  { urls: "stun:freestun.net:5350" },
+  { urls: "turns:freestun.tel:5350", username: "free", credential: "free" },
+];
+
 const EXCLUDE_CONTEXT_KEYS: ExcludeContextKeys[] = [
   "activePlayer",
   "pieceMove",
@@ -62,15 +67,11 @@ export function useOnlinePlayer() {
      */
     peer.current = new Peer(playId, {
       debug: 3,
+      host: PEER_HOST,
+      port: PEER_PORT,
+      secure: PEER_SECURE,
       config: {
-        iceServers: [
-          { urls: "stun:freeturn.net:5349" },
-          {
-            urls: "turns:freeturn.tel:5349",
-            username: "free",
-            credential: "free",
-          },
-        ],
+        iceServers: TURN_SERVERS,
       },
     });
 
@@ -151,15 +152,11 @@ export function useOnlinePlayer() {
      */
     peer.current = new Peer(playerBId, {
       debug: 3,
+      host: PEER_HOST,
+      port: PEER_PORT,
+      secure: PEER_SECURE,
       config: {
-        iceServers: [
-          { urls: "stun:freeturn.net:5349" },
-          {
-            urls: "turns:freeturn.tel:5349",
-            username: "free",
-            credential: "free",
-          },
-        ],
+        iceServers: TURN_SERVERS,
       },
     });
 
