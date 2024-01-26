@@ -62,9 +62,16 @@ export function useOnlinePlayer() {
      */
     peer.current = new Peer(playId, {
       debug: 3,
-      host: PEER_HOST,
-      port: PEER_PORT,
-      secure: PEER_SECURE,
+      config: {
+        iceServers: [
+          { url: "stun:freestun.net:5350" },
+          {
+            url: "turns:freestun.tel:5350",
+            username: "free",
+            credential: "free",
+          },
+        ],
+      },
     });
 
     peer.current.on("open", (id) => {
@@ -144,9 +151,16 @@ export function useOnlinePlayer() {
      */
     peer.current = new Peer(playerBId, {
       debug: 3,
-      host: PEER_HOST,
-      port: PEER_PORT,
-      secure: PEER_SECURE,
+      config: {
+        iceServers: [
+          { url: "stun:freestun.net:5350" },
+          {
+            url: "turns:freestun.tel:5350",
+            username: "free",
+            credential: "free",
+          },
+        ],
+      },
     });
 
     peer.current.on("open", (id) => {

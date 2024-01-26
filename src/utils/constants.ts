@@ -6,7 +6,7 @@ export const OLLAMA_SERVER_URL = process.env.OLLAMA_SERVER_URL;
 
 export const DEFAULT_BOARD_TYPE = "black->white";
 
-export const PEER_HOST = process.env.NEXT_PUBLIC_PEER_HOST;
+export const PEER_HOST = process.env.NEXT_PUBLIC_PEER_HOST || undefined;
 export const PEER_PORT = process.env.NEXT_PUBLIC_PEER_PORT
   ? +process.env.NEXT_PUBLIC_PEER_PORT
   : undefined;
