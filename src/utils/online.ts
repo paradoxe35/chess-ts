@@ -72,8 +72,6 @@ export function useOnlinePlayer() {
     });
 
     peer.current.on("connection", (conn) => {
-      console.log("Connection Player A", conn);
-
       // Player B connection object
       conn.on("data", (data) => {
         // console.log("[Player A] Data: ", data);
@@ -93,8 +91,6 @@ export function useOnlinePlayer() {
       });
 
       conn.on("open", () => {
-        console.log("[Player A] Connection to B: ", conn);
-
         conn.send(getContextRef.current());
 
         const subscription = actorRef.current.subscribe(() => {
@@ -209,8 +205,6 @@ export function useOnlinePlayer() {
       });
 
       conn.on("open", () => {
-        console.log("[Player B] Connection to A: ", conn);
-
         const subscription = actorRef.current.subscribe(() => {
           const playerB = getContextRef.current().players?.B;
 
