@@ -9,8 +9,29 @@ const JOIN_REQUEST_TIMEOUT = 10 * 1000;
 type ExcludeContextKeys = keyof TChessMachine["context"];
 
 const TURN_SERVERS = [
-  { urls: "stun:freestun.net:5350" },
-  { urls: "turns:freestun.tel:5350", username: "free", credential: "free" },
+  {
+    urls: "stun:stun.relay.metered.ca:80",
+  },
+  {
+    urls: "turn:standard.relay.metered.ca:80",
+    username: "9b7749116be56538539f6796",
+    credential: "mH20lJenKz+GjjZi",
+  },
+  {
+    urls: "turn:standard.relay.metered.ca:80?transport=tcp",
+    username: "9b7749116be56538539f6796",
+    credential: "mH20lJenKz+GjjZi",
+  },
+  {
+    urls: "turn:standard.relay.metered.ca:443",
+    username: "9b7749116be56538539f6796",
+    credential: "mH20lJenKz+GjjZi",
+  },
+  {
+    urls: "turns:standard.relay.metered.ca:443?transport=tcp",
+    username: "9b7749116be56538539f6796",
+    credential: "mH20lJenKz+GjjZi",
+  },
 ];
 
 const EXCLUDE_CONTEXT_KEYS: ExcludeContextKeys[] = [
