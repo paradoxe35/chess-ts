@@ -5,7 +5,7 @@ import { uniqueId } from "./unique-id";
 import { useCallbackRef, useSyncRef } from "./hooks";
 import { PEER_HOST, PEER_PORT, PEER_SECURE } from "./constants";
 
-const JOIN_REQUEST_TIMEOUT = 5 * 1000;
+const JOIN_REQUEST_TIMEOUT = 10 * 1000;
 type ExcludeContextKeys = keyof TChessMachine["context"];
 
 const EXCLUDE_CONTEXT_KEYS: ExcludeContextKeys[] = [
@@ -64,28 +64,11 @@ export function useOnlinePlayer() {
       debug: 3,
       config: {
         iceServers: [
+          { urls: "stun:freeturn.net:5349" },
           {
-            urls: "stun:stun.relay.metered.ca:80",
-          },
-          {
-            urls: "turn:standard.relay.metered.ca:80",
-            username: "9b7749116be56538539f6796",
-            credential: "mH20lJenKz+GjjZi",
-          },
-          {
-            urls: "turn:standard.relay.metered.ca:80?transport=tcp",
-            username: "9b7749116be56538539f6796",
-            credential: "mH20lJenKz+GjjZi",
-          },
-          {
-            urls: "turn:standard.relay.metered.ca:443",
-            username: "9b7749116be56538539f6796",
-            credential: "mH20lJenKz+GjjZi",
-          },
-          {
-            urls: "turns:standard.relay.metered.ca:443?transport=tcp",
-            username: "9b7749116be56538539f6796",
-            credential: "mH20lJenKz+GjjZi",
+            urls: "turns:freeturn.tel:5349",
+            username: "free",
+            credential: "free",
           },
         ],
       },
@@ -170,28 +153,11 @@ export function useOnlinePlayer() {
       debug: 3,
       config: {
         iceServers: [
+          { urls: "stun:freeturn.net:5349" },
           {
-            urls: "stun:stun.relay.metered.ca:80",
-          },
-          {
-            urls: "turn:standard.relay.metered.ca:80",
-            username: "9b7749116be56538539f6796",
-            credential: "mH20lJenKz+GjjZi",
-          },
-          {
-            urls: "turn:standard.relay.metered.ca:80?transport=tcp",
-            username: "9b7749116be56538539f6796",
-            credential: "mH20lJenKz+GjjZi",
-          },
-          {
-            urls: "turn:standard.relay.metered.ca:443",
-            username: "9b7749116be56538539f6796",
-            credential: "mH20lJenKz+GjjZi",
-          },
-          {
-            urls: "turns:standard.relay.metered.ca:443?transport=tcp",
-            username: "9b7749116be56538539f6796",
-            credential: "mH20lJenKz+GjjZi",
+            urls: "turns:freeturn.tel:5349",
+            username: "free",
+            credential: "free",
           },
         ],
       },
