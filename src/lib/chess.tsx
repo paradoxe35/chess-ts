@@ -5,6 +5,7 @@ import { ChessGameContext } from "@/state";
 import { CHESS_ACTOR_PERSIST_KEY } from "@/utils/persisted-state";
 import { useOnlinePlayer } from "@/utils/online";
 import { Loader } from "@/components/ui/loader";
+import { Toaster, toast } from "sonner";
 
 function ChessApp() {
   const joinRequest = ChessGameContext.useSelector(
@@ -38,7 +39,11 @@ function ChessApp() {
 
   return (
     <>
+      <Toaster />
+
       <OnlineGame />
+
+      <Notifications />
 
       {joinRequest && joinRequest.request === "idle" && (
         <div
@@ -73,9 +78,32 @@ function ChessApp() {
   );
 }
 
+function Notifications() {
+  const activePlayer = ChessGameContext.useSelector(
+    (c) => c.context.activePlayer
+  );
+  const selectedHistory = ChessGameContext.useSelector(
+    (c) => c.context.selectedHistory
+  );
+
+  const turnPlayerColor = selectedHistory?.player;
+  const activePlayerColor = activePlayer?.color;
+
+  useEffect(() => {
+    if (
+      turnPlayerColor &&
+      activePlayerColor &&
+      activePlayerColor === turnPlayerColor
+    ) {
+      toast.info("Move your piece");
+    }
+  }, [turnPlayerColor, activePlayerColor]);
+
+  return <></>;
+}
+
 function OnlineGame() {
   useOnlinePlayer();
-
   return <></>;
 }
 

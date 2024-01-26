@@ -7,11 +7,20 @@ import { ChessGameContext } from "@/state";
 import { DEFAULT_BOARD_TYPE } from "@/utils/constants";
 import { uniqueId } from "@/utils/unique-id";
 import { getOppositeColor } from "@/utils/helpers";
+import { Circle } from "../ui/circle";
 
 export function Title({ className }: { className?: string }) {
+  const activePlayer = ChessGameContext.useSelector(
+    (c) => c.context.activePlayer
+  );
+
   return (
     <div className={cn("border-white/75 pb-2 my-10", className)}>
-      <h1 className="text-white text-2xl font-bold border-b-2 ">Chess TS</h1>
+      <h1 className="text-white text-2xl font-bold border-b-2 inline-flex gap-1 items-center">
+        <span>Chess TS</span>
+
+        {activePlayer && <Circle knight size={30} color={activePlayer.color} />}
+      </h1>
     </div>
   );
 }
