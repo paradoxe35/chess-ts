@@ -12,9 +12,17 @@
 - Implement online player ✅
 - Working on piece move animation ✅
 
-- Two ways data restoration (online player)
+- Chat notifications ✅
 
-- Chat notifications
+- Online player reconnect mechanism ✅
+
+- King and rook permit move
+
+- Cannot eat king (prevent to eat king)
+
+- Winner by checking all adverse player pieces that point
+
+- Two ways data restoration (online player)
 
 - Audio communication
 
