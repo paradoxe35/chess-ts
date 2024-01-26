@@ -98,7 +98,7 @@ function ChatNotifications(props: PropsWithChildren<{ selected: boolean }>) {
       onClick={() => setNotification(false)}
     >
       {notification && (
-        <span className="-top-1 start-4 absolute w-3 h-3 bg-green-500 border-2 border-white dark:border-gray-800 rounded-full"></span>
+        <span className="-top-1 start-4 absolute w-3 h-3 bg-green-500 border-2 border-white rounded-full"></span>
       )}
 
       {props.children}
