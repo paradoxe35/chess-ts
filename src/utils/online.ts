@@ -3,7 +3,7 @@ import { Peer } from "peerjs";
 import { useCallback, useEffect, useRef } from "react";
 import { uniqueId } from "./unique-id";
 import { useCallbackRef, useSyncRef } from "./hooks";
-import { PEER_HOST, PEER_PORT } from "./constants";
+import { PEER_HOST, PEER_PORT, PEER_SECURE } from "./constants";
 
 const JOIN_REQUEST_TIMEOUT = 5 * 1000;
 type ExcludeContextKeys = keyof TChessMachine["context"];
@@ -64,6 +64,7 @@ export function useOnlinePlayer() {
       debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
+      secure: PEER_SECURE,
     });
 
     peer.current.on("open", (id) => {
@@ -149,6 +150,7 @@ export function useOnlinePlayer() {
       debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
+      secure: PEER_SECURE,
     });
 
     peer.current.on("open", (id) => {

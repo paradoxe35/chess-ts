@@ -10,3 +10,6 @@ export const PEER_HOST = process.env.NEXT_PUBLIC_PEER_HOST;
 export const PEER_PORT = process.env.NEXT_PUBLIC_PEER_PORT
   ? +process.env.NEXT_PUBLIC_PEER_PORT
   : undefined;
+
+export const PEER_SECURE =
+  process.env.NEXT_PUBLIC_PEER_SECURE === "true" ? true : undefined;
