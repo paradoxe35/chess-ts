@@ -64,16 +64,6 @@ export function useOnlinePlayer() {
       debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
-      // config: {
-      //   iceServers: [
-      //     { url: "stun:freestun.net:5350" },
-      //     {
-      //       url: "turns:freestun.tel:5350",
-      //       username: "free",
-      //       credential: "free",
-      //     },
-      //   ],
-      // },
     });
 
     peer.current.on("open", (id) => {
@@ -117,8 +107,8 @@ export function useOnlinePlayer() {
         conn.once("close", subscription.unsubscribe);
       });
 
-      conn.on("error", (err) => {
-        console.log("[Player A] Connection to B error: ", err);
+      conn.on("iceStateChanged", (st) => {
+        console.log("[Player B] iceStateChanged: ", st);
       });
     });
   }, [players, activePlayer, playId, gameType, actorRef, getContextRef]);
@@ -159,16 +149,6 @@ export function useOnlinePlayer() {
       debug: 3,
       host: PEER_HOST,
       port: PEER_PORT,
-      // config: {
-      //   iceServers: [
-      //     { url: "stun:freestun.net:5350" },
-      //     {
-      //       url: "turns:freestun.tel:5350",
-      //       username: "free",
-      //       credential: "free",
-      //     },
-      //   ],
-      // },
     });
 
     peer.current.on("open", (id) => {
@@ -242,8 +222,8 @@ export function useOnlinePlayer() {
         conn.once("close", subscription.unsubscribe);
       });
 
-      conn.on("error", (err) => {
-        console.log("[Player B] Connection to A error: ", err);
+      conn.on("iceStateChanged", (st) => {
+        console.log("[Player B] iceStateChanged: ", st);
       });
     });
   }, [players, playId, activePlayer, gameType, actorRef, getContextRef]);
