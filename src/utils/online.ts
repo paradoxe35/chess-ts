@@ -102,7 +102,7 @@ export function useOnlinePlayer() {
       });
 
       conn.on("open", () => {
-        console.log("[Player B Connection]: ", conn);
+        console.log("[Player A] Connection to B: ", conn);
 
         conn.send(getContextRef.current());
 
@@ -115,6 +115,10 @@ export function useOnlinePlayer() {
         });
 
         conn.once("close", subscription.unsubscribe);
+      });
+
+      conn.on("error", (err) => {
+        console.log("[Player A] Connection to B error: ", err);
       });
     });
   }, [players, activePlayer, playId, gameType, actorRef, getContextRef]);
@@ -223,7 +227,7 @@ export function useOnlinePlayer() {
       });
 
       conn.on("open", () => {
-        console.log("[Player B Connection]: ", conn);
+        console.log("[Player B] Connection to A: ", conn);
 
         const subscription = actorRef.current.subscribe(() => {
           const playerB = getContextRef.current().players?.B;
@@ -236,6 +240,10 @@ export function useOnlinePlayer() {
         });
 
         conn.once("close", subscription.unsubscribe);
+      });
+
+      conn.on("error", (err) => {
+        console.log("[Player B] Connection to A error: ", err);
       });
     });
   }, [players, playId, activePlayer, gameType, actorRef, getContextRef]);
