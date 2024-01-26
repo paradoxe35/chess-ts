@@ -64,11 +64,28 @@ export function useOnlinePlayer() {
       debug: 3,
       config: {
         iceServers: [
-          { url: "stun:freestun.net:5350" },
           {
-            url: "turns:freestun.tel:5350",
-            username: "free",
-            credential: "free",
+            urls: "stun:stun.relay.metered.ca:80",
+          },
+          {
+            urls: "turn:standard.relay.metered.ca:80",
+            username: "9b7749116be56538539f6796",
+            credential: "mH20lJenKz+GjjZi",
+          },
+          {
+            urls: "turn:standard.relay.metered.ca:80?transport=tcp",
+            username: "9b7749116be56538539f6796",
+            credential: "mH20lJenKz+GjjZi",
+          },
+          {
+            urls: "turn:standard.relay.metered.ca:443",
+            username: "9b7749116be56538539f6796",
+            credential: "mH20lJenKz+GjjZi",
+          },
+          {
+            urls: "turns:standard.relay.metered.ca:443?transport=tcp",
+            username: "9b7749116be56538539f6796",
+            credential: "mH20lJenKz+GjjZi",
           },
         ],
       },
@@ -153,11 +170,28 @@ export function useOnlinePlayer() {
       debug: 3,
       config: {
         iceServers: [
-          { url: "stun:freestun.net:5350" },
           {
-            url: "turns:freestun.tel:5350",
-            username: "free",
-            credential: "free",
+            urls: "stun:stun.relay.metered.ca:80",
+          },
+          {
+            urls: "turn:standard.relay.metered.ca:80",
+            username: "9b7749116be56538539f6796",
+            credential: "mH20lJenKz+GjjZi",
+          },
+          {
+            urls: "turn:standard.relay.metered.ca:80?transport=tcp",
+            username: "9b7749116be56538539f6796",
+            credential: "mH20lJenKz+GjjZi",
+          },
+          {
+            urls: "turn:standard.relay.metered.ca:443",
+            username: "9b7749116be56538539f6796",
+            credential: "mH20lJenKz+GjjZi",
+          },
+          {
+            urls: "turns:standard.relay.metered.ca:443?transport=tcp",
+            username: "9b7749116be56538539f6796",
+            credential: "mH20lJenKz+GjjZi",
           },
         ],
       },
