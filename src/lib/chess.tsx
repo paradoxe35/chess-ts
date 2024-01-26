@@ -86,6 +86,10 @@ function Notifications() {
     (c) => c.context.selectedHistory
   );
 
+  const rolledBackHistory = ChessGameContext.useSelector(
+    (c) => c.context.rolledBackHistory
+  );
+
   const turnPlayerColor = playerOrDefault(selectedHistory?.player);
   const activePlayerColor = activePlayer?.color;
 
@@ -93,11 +97,12 @@ function Notifications() {
     if (
       turnPlayerColor &&
       activePlayerColor &&
-      activePlayerColor === turnPlayerColor
+      activePlayerColor === turnPlayerColor &&
+      !rolledBackHistory
     ) {
       toast.info("Move your piece");
     }
-  }, [turnPlayerColor, activePlayerColor]);
+  }, [turnPlayerColor, activePlayerColor, rolledBackHistory]);
 
   return <></>;
 }
