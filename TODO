@@ -14,14 +14,14 @@
 - Chat notifications ✅
 - Online player reconnect mechanism ✅
 
-- King and rook permit move
+- Castling - Allow the king and rook to make a special joint move
 
-- Chess timer
+- Chess timer - Track each player's time during the game
 
-- Cannot eat king (prevent to eat king)
+- Protect the king - Prevent kings from being captured
 
-- Winner by checking all adverse player pieces that point
+- Checkmate - A player wins if their opponent's king is under attack and has no legal move
 
-- Audio communication
+- Voice chat - Enable audio communication for online multiplayer
 
-- Replay previous games histories from local storage
+- Game replay - Save and replay previous games from local storage
