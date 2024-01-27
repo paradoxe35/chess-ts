@@ -17,8 +17,10 @@ export type PlayerDetail = {
   color: PieceColor;
 };
 
+export type PlayerType = "A" | "B";
+
 export type Players = {
-  [x in "A" | "B"]: PlayerDetail | null;
+  [x in PlayerType]: PlayerDetail | null;
 };
 
 export const playerOrDefault = (player?: PieceColor) => player || "white";
@@ -62,7 +64,7 @@ export type PieceMove = {
 };
 
 export type TChat = {
-  player: "A" | "B";
+  player: PlayerType;
   message: string;
 };
 
@@ -148,5 +150,10 @@ export type TChessMachine = {
       }
     | {
         type: "chess.reset";
+      }
+    | {
+        type: "chess.players.online";
+        player: PlayerType;
+        online: boolean;
       };
 };

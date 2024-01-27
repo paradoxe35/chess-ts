@@ -3,40 +3,20 @@ import { DataConnection, Peer } from "peerjs";
 import { useCallback, useEffect, useRef } from "react";
 import { uniqueId } from "@/utils/unique-id";
 import { useCallbackRef, useSyncRef } from "@/utils/hooks";
-import { PEER_HOST, PEER_PORT, PEER_SECURE } from "@/utils/constants";
+import {
+  PEER_HOST,
+  PEER_PORT,
+  PEER_SECURE,
+  TURN_SERVERS,
+} from "@/utils/constants";
 import { Subscription } from "xstate";
+import { getOppositePlayerLetter } from "@/utils/players";
 
 const JOIN_REQUEST_TIMEOUT = 10 * 1000;
 const RECONNECT_INTERVAL = 15 * 1000;
 const MAX_CONNECT_ATTEMPT = 10;
 
 type ExcludeContextKeys = keyof TChessMachine["context"];
-
-const TURN_SERVERS = [
-  {
-    urls: "stun:stun.relay.metered.ca:80",
-  },
-  {
-    urls: "turn:standard.relay.metered.ca:80",
-    username: "9b7749116be56538539f6796",
-    credential: "mH20lJenKz+GjjZi",
-  },
-  {
-    urls: "turn:standard.relay.metered.ca:80?transport=tcp",
-    username: "9b7749116be56538539f6796",
-    credential: "mH20lJenKz+GjjZi",
-  },
-  {
-    urls: "turn:standard.relay.metered.ca:443",
-    username: "9b7749116be56538539f6796",
-    credential: "mH20lJenKz+GjjZi",
-  },
-  {
-    urls: "turns:standard.relay.metered.ca:443?transport=tcp",
-    username: "9b7749116be56538539f6796",
-    credential: "mH20lJenKz+GjjZi",
-  },
-];
 
 const EXCLUDE_CONTEXT_KEYS: ExcludeContextKeys[] = [
   "activePlayer",
@@ -112,15 +92,33 @@ export function useOnlinePlayer() {
         });
       });
 
-      // Clean UP
-      conn.once("iceStateChanged", (state) => {
-        console.log("iceStateChanged from: state:", playerType, state);
+      const onIceStateChange = (state: RTCIceConnectionState) => {
+        const oPlayerLetter = getOppositePlayerLetter(playerType);
 
-        if (state === "disconnected") {
-          conn.off("data", onData);
-          subscription.v?.unsubscribe();
+        if (state === "connected") {
+          actorRef.current.send({
+            type: "chess.players.online",
+            player: oPlayerLetter,
+            online: true,
+          });
         }
-      });
+
+        if (["disconnected", "closed"].includes(state)) {
+          conn.off("data", onData);
+          conn.off("iceStateChanged", onIceStateChange);
+          subscription.v?.unsubscribe();
+
+          // Offline player
+          actorRef.current.send({
+            type: "chess.players.online",
+            player: oPlayerLetter,
+            online: false,
+          });
+        }
+      };
+
+      // Clean UP
+      conn.on("iceStateChanged", onIceStateChange);
 
       return () => {
         conn.off("data", onData);
@@ -165,6 +163,14 @@ export function useOnlinePlayer() {
 
     peer.current.on("open", (id) => {
       console.log("[Player A] Peer ID is: " + id);
+
+      // Since Player is the one providing the initial context data
+      // Then when his connection open the set himself online
+      actorRef.current.send({
+        type: "chess.players.online",
+        player: "A",
+        online: true,
+      });
     });
 
     peer.current.on("connection", (conn) => {

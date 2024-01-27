@@ -13,3 +13,7 @@ export const PEER_PORT = process.env.NEXT_PUBLIC_PEER_PORT
 
 export const PEER_SECURE =
   process.env.NEXT_PUBLIC_PEER_SECURE === "true" ? true : undefined;
+
+export const TURN_SERVERS = JSON.parse(
+  process.env.NEXT_PUBLIC_TURN_SERVERS || "[]"
+);

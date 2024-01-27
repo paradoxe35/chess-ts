@@ -79,16 +79,12 @@ function ChessApp() {
 }
 
 function Notifications() {
-  const activePlayer = ChessGameContext.useSelector(
-    (c) => c.context.activePlayer
-  );
-  const selectedHistory = ChessGameContext.useSelector(
-    (c) => c.context.selectedHistory
-  );
-
-  const rolledBackHistory = ChessGameContext.useSelector(
-    (c) => c.context.rolledBackHistory
-  );
+  const [activePlayer, selectedHistory, rolledBackHistory] =
+    ChessGameContext.useSelector((c) => [
+      c.context.activePlayer,
+      c.context.selectedHistory,
+      c.context.rolledBackHistory,
+    ]);
 
   const turnPlayerColor = playerOrDefault(selectedHistory?.player);
   const activePlayerColor = activePlayer?.color;

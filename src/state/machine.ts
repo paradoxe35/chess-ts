@@ -61,6 +61,19 @@ export const chessGameMachine = createMachine({
     "chess.reset": {
       actions: assign({ ...defaultContext() }),
     },
+
+    "chess.players.online": {
+      actions: assign({
+        players: ({ event, context }) => {
+          if (context.players && context.players[event.player]) {
+            //@ts-ignore
+            context.players[event.player].online = event.online;
+          }
+
+          return context.players;
+        },
+      }),
+    },
   },
   context: defaultContext,
   states: {

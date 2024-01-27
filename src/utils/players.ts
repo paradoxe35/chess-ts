@@ -1,10 +1,10 @@
 import { PieceColor } from "@/chess";
-import { PlayerDetail, Players } from "@/state";
+import { PlayerDetail, PlayerType, Players } from "@/state";
 
 export function getPlayerLetter(
   player: PlayerDetail,
   players: Players
-): "A" | "B" | null {
+): PlayerType | null {
   switch (player.color) {
     case players.A?.color:
       return "A";
@@ -15,6 +15,10 @@ export function getPlayerLetter(
     default:
       return null;
   }
+}
+
+export function getOppositePlayerLetter(letter: PlayerType): PlayerType {
+  return letter === "A" ? "B" : "A";
 }
 
 export function getPlayerFromPieceColor(
