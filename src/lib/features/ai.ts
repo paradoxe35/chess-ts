@@ -4,9 +4,9 @@ import {
   OLLAMA_SERVER_URL,
   OPENAI_API_KEY,
   OPENAI_MODEL,
-} from "./constants";
+} from "@/utils/constants";
 import type { Board, PieceColor } from "@/chess";
-import { PROMPT, SHORT_PROMPT } from "./prompts";
+import { PROMPT, SHORT_PROMPT } from "@/utils/prompts";
 import { ComputerMoveResponse } from "@/state";
 
 const MARKDOWN_EXTRACT_CONTENT_REGEX =

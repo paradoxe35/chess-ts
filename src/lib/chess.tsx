@@ -3,7 +3,7 @@ import { ChessBoard, ChessPieces, ChessSettings } from "@/components";
 import { useEffect, useRef, useState } from "react";
 import { ChessGameContext, playerOrDefault } from "@/state";
 import { CHESS_ACTOR_PERSIST_KEY } from "@/utils/persisted-state";
-import { useOnlinePlayer } from "@/utils/online";
+import { useOnlinePlayer } from "./features/online";
 import { Loader } from "@/components/ui/loader";
 import { Toaster, toast } from "sonner";
 

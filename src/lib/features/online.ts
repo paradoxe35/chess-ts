@@ -1,9 +1,9 @@
 import { ChessGameContext, TChessMachine } from "@/state";
 import { DataConnection, Peer } from "peerjs";
 import { useCallback, useEffect, useRef } from "react";
-import { uniqueId } from "./unique-id";
-import { useCallbackRef, useSyncRef } from "./hooks";
-import { PEER_HOST, PEER_PORT, PEER_SECURE } from "./constants";
+import { uniqueId } from "@/utils/unique-id";
+import { useCallbackRef, useSyncRef } from "@/utils/hooks";
+import { PEER_HOST, PEER_PORT, PEER_SECURE } from "@/utils/constants";
 import { Subscription } from "xstate";
 
 const JOIN_REQUEST_TIMEOUT = 10 * 1000;
@@ -52,12 +52,13 @@ export function useOnlinePlayer() {
   const actor = ChessGameContext.useActorRef();
   const actorRef = useSyncRef(actor);
 
-  const activePlayer = ChessGameContext.useSelector(
-    (c) => c.context.activePlayer
-  );
-  const gameType = ChessGameContext.useSelector((c) => c.context.gameType);
-  const playId = ChessGameContext.useSelector((c) => c.context.playId);
-  const players = ChessGameContext.useSelector((c) => c.context.players);
+  const [activePlayer, gameType, playId, players] =
+    ChessGameContext.useSelector((c) => [
+      c.context.activePlayer,
+      c.context.gameType,
+      c.context.playId,
+      c.context.players,
+    ]);
 
   const getContext = useCallback(() => {
     const context = { ...actorRef.current.getSnapshot().context };
@@ -113,6 +114,8 @@ export function useOnlinePlayer() {
 
       // Clean UP
       conn.once("iceStateChanged", (state) => {
+        console.log("iceStateChanged from: state:", playerType, state);
+
         if (state === "disconnected") {
           conn.off("data", onData);
           subscription.v?.unsubscribe();

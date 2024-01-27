@@ -3,7 +3,7 @@ import type { Board, PieceColor } from "@/chess";
 import type { ComputerMoveResponse } from "@/state";
 import type { NextApiRequest, NextApiResponse } from "next";
 
-import { getChessMoveFromAI } from "@/utils/ai";
+import { getChessMoveFromAI } from "@/lib/features/ai";
 
 type Data = {
   data: ComputerMoveResponse | null;
