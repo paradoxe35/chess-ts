@@ -125,7 +125,7 @@ export function useOnlinePlayer() {
         subscription.v?.unsubscribe();
       };
     },
-    []
+    [actorRef, getContextRef]
   );
 
   /**
@@ -164,19 +164,28 @@ export function useOnlinePlayer() {
     peer.current.on("open", (id) => {
       console.log("[Player A] Peer ID is: " + id);
 
-      // Since Player is the one providing the initial context data
-      // Then when his connection open the set himself online
-      actorRef.current.send({
-        type: "chess.players.online",
-        player: "A",
-        online: true,
+      // When player peer open set online player default
+      (["A", "B"] as const).forEach((l) => {
+        actorRef.current.send({
+          type: "chess.players.online",
+          player: l,
+          online: l === "A",
+        });
       });
     });
 
     peer.current.on("connection", (conn) => {
       handleDataConnection(conn, "A");
     });
-  }, [players, activePlayer, playId, gameType, actorRef, getContextRef]);
+  }, [
+    players,
+    activePlayer,
+    playId,
+    gameType,
+    actorRef,
+    getContextRef,
+    handleDataConnection,
+  ]);
 
   /**
    * Player B function
@@ -224,6 +233,15 @@ export function useOnlinePlayer() {
 
     peer.current.on("open", (id) => {
       console.log("[Player B] Peer ID is: " + id);
+
+      // When player peer open set online player default
+      (["A", "B"] as const).forEach((l) => {
+        actorRef.current.send({
+          type: "chess.players.online",
+          player: l,
+          online: l === "B",
+        });
+      });
 
       // Clean up before connection attempt
       const clean = () => {
@@ -311,7 +329,15 @@ export function useOnlinePlayer() {
       // Clean Up if the actual peer disconnected
       peer.current?.once("disconnected", clean);
     });
-  }, [players, playId, activePlayer, gameType, actorRef, getContextRef]);
+  }, [
+    players,
+    playId,
+    activePlayer,
+    gameType,
+    actorRef,
+    getContextRef,
+    handleDataConnection,
+  ]);
 
   return {};
 }
