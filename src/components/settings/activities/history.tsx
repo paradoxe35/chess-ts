@@ -39,8 +39,9 @@ function ShowHistories() {
       <div className="w-1/2 flex flex-col space-y-3">
         {players.A && (
           <HistoryItem
-            histories={historyType[players.A.color]}
+            playerHistories={historyType[players.A.color]}
             lastMoves={lastMoves}
+            histories={histories}
             emplacement="left"
           />
         )}
@@ -48,8 +49,9 @@ function ShowHistories() {
       <div className="w-1/2 flex flex-col space-y-3">
         {players.B && (
           <HistoryItem
-            histories={historyType[players.B.color]}
+            playerHistories={historyType[players.B.color]}
             lastMoves={lastMoves}
+            histories={histories}
             emplacement="right"
           />
         )}
@@ -59,10 +61,12 @@ function ShowHistories() {
 }
 
 function HistoryItem({
-  histories,
+  playerHistories,
   lastMoves,
   emplacement,
+  histories,
 }: {
+  playerHistories: GHistory;
   histories: GHistory;
   lastMoves: TLastMoves | undefined;
   emplacement: "left" | "right";
@@ -72,6 +76,8 @@ function HistoryItem({
     c.matches("playing.getMoves")
   );
 
+  const lHistory = histories[histories.length - 1] as T_HistoryItem | undefined;
+
   const rollbackBackOnHistory = (_history: T_HistoryItem) => {
     chessGame.send({
       type: "chess.playing.getMoves.history-rollback",
@@ -79,7 +85,7 @@ function HistoryItem({
     });
   };
 
-  return histories.map((_history) => {
+  return playerHistories.map((_history) => {
     const active =
       _history.newPosition === lastMoves?.newPosition &&
       _history.oldPosition === lastMoves?.oldPosition &&
@@ -94,7 +100,10 @@ function HistoryItem({
           className={cn(
             "relative font-sans font-semibold p-1 px-2 rounded-md cursor-default",
             active && ["bg-slate-50/10"],
-            !active && hasGetMovesState && "cursor-pointer"
+            !active && hasGetMovesState && "cursor-pointer",
+
+            !active &&
+              lHistory?.id === _history.id && ["border border-slate-50/20"]
           )}
           onClick={() =>
             !active && hasGetMovesState && rollbackBackOnHistory(_history)

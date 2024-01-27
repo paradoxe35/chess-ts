@@ -13,6 +13,11 @@
 - Working on piece move animation ✅
 - Chat notifications ✅
 - Online player reconnect mechanism ✅
+- Online player indicator ✅
+
+- Show last move indication on piece moves activities ✅
+
+- Display error message when try click on piece that is belong to you or when it is your turn
 
 - Castling - Allow the king and rook to make a special joint move
 
