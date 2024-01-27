@@ -72,15 +72,17 @@ export function ChessActivities() {
 function ChatNotifications(props: PropsWithChildren<{ selected: boolean }>) {
   const [notification, setNotification] = useState(false);
 
-  const activePlayer = ChessGameContext.useSelector(
-    (c) => c.context.activePlayer
+  const [activePlayer, gameType, players, chats] = ChessGameContext.useSelector(
+    (c) => [
+      c.context.activePlayer,
+      c.context.gameType,
+      c.context.players,
+      c.context.chats,
+    ]
   );
-  const gameType = ChessGameContext.useSelector((c) => c.context.gameType);
-  const players = ChessGameContext.useSelector((c) => c.context.players);
+
   const playerLetter =
     activePlayer && players && getPlayerLetter(activePlayer, players);
-
-  const chats = ChessGameContext.useSelector((c) => c.context.chats);
 
   useEffect(() => {
     if (props.selected || !playerLetter || gameType !== "online") {
