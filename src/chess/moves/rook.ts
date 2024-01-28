@@ -18,7 +18,7 @@ export function setRookMoves(
 
     const emptyBox = !box.piece;
     const samePosition = box.position === position;
-    const canTake = box.piece ? box.piece.type !== piece.type : false;
+    const canTake = box.piece ? box.piece.color !== piece.color : false;
 
     // Vertical check
     if (pColumn === pieceColumn) {

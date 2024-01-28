@@ -6,6 +6,7 @@ import { CHESS_ACTOR_PERSIST_KEY } from "@/utils/persisted-state";
 import { useOnlinePlayer } from "./features/online";
 import { Loader } from "@/components/ui/loader";
 import { Toaster, toast } from "sonner";
+import { Workers } from "@/workers/workers";
 
 function ChessApp() {
   const joinRequest = ChessGameContext.useSelector(
@@ -40,10 +41,6 @@ function ChessApp() {
   return (
     <>
       <Toaster />
-
-      <OnlineGame />
-
-      <Notifications />
 
       {joinRequest && joinRequest.request === "idle" && (
         <div
@@ -112,6 +109,12 @@ export default function Chess() {
   return (
     <ChessGameContext.Provider>
       <ChessApp />
+
+      <OnlineGame />
+
+      <Notifications />
+
+      <Workers />
     </ChessGameContext.Provider>
   );
 }

@@ -6,8 +6,8 @@ const icons = {
 };
 
 export function getPieceImageSrc(piece: BoardPiece) {
-  const svg_icons = icons[piece.type];
-  const icon = svg_icons[piece.value];
+  const svg_icons = icons[piece.color];
+  const icon = svg_icons[piece.type];
 
   return icon.src as string;
 }

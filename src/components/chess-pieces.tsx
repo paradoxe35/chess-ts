@@ -99,7 +99,7 @@ function Piece({
       style={{ backgroundImage: `url(${getPieceImageSrc(piece)})` }}
     >
       <div
-        title={piece.value}
+        title={piece.type}
         onClick={() => onClick && onClick(box)}
         className="w-3/4 h-3/4 -mt-[85%] cursor-pointer absolute"
       />

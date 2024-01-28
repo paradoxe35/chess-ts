@@ -15,7 +15,7 @@ export function PieceImg({
       title={title}
       src={getPieceImageSrc(piece)}
       className={className}
-      alt={piece.value}
+      alt={piece.type}
     />
   );
 }

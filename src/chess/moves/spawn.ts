@@ -9,7 +9,7 @@ export function getSpawnMoves(params: Params) {
   let moves: string[] = [];
 
   let moveDirection: "bottom-top" | "top-bottom" = "bottom-top";
-  if (params.boardType.startsWith(piece.type)) {
+  if (params.boardType.startsWith(piece.color)) {
     moveDirection = "top-bottom";
   }
 
@@ -19,7 +19,7 @@ export function getSpawnMoves(params: Params) {
     for (const box of column) {
       const [pColumn, pRow] = numberizePiecePosition(box.position);
       const emptyBox = !box.piece;
-      const canTake = box.piece ? box.piece.type !== piece.type : false;
+      const canTake = box.piece ? box.piece.color !== piece.color : false;
 
       const workingRow =
         moveDirection === "bottom-top"

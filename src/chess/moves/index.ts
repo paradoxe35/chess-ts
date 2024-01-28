@@ -15,7 +15,7 @@ export type Params = {
 };
 
 export function getPieceMoves(params: Params): string[] {
-  switch (params.piece.value) {
+  switch (params.piece.type) {
     case "king":
       return getKingMoves(params);
       break;

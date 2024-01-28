@@ -9,11 +9,10 @@ const board = createBoard("empty");
 export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
   (props, ref) => {
     const chessGame = ChessGameContext.useActorRef();
-    const activePlayer = ChessGameContext.useSelector(
-      (s) => s.context.activePlayer
+
+    const [pieceMove, lastMoves, activePlayer] = ChessGameContext.useSelector(
+      (s) => [s.context.pieceMove, s.context.lastMoves, s.context.activePlayer]
     );
-    const pieceMove = ChessGameContext.useSelector((s) => s.context.pieceMove);
-    const lastMoves = ChessGameContext.useSelector((s) => s.context.lastMoves);
 
     const handleMove = (newPosition: string) => {
       activePlayer &&

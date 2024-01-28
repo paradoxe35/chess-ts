@@ -78,7 +78,7 @@ export function getBishopMoves(params: Params): string[] {
   for (const column of params.board) {
     for (const box of column) {
       const emptyBox = !box.piece;
-      const canTake = box.piece ? box.piece.type !== piece.type : false;
+      const canTake = box.piece ? box.piece.color !== piece.color : false;
       const [pColumn, pRow] = numberizePiecePosition(box.position);
       const pPosition = positions.find(
         (t) => t.position === `${pColumn}${pRow}`

@@ -22,7 +22,7 @@ export function getKingMoves(params: Params): string[] {
     for (const box of column) {
       const [pColumn, pRow] = numberizePiecePosition(box.position);
       const emptyBox = !box.piece;
-      const canTake = box.piece ? box.piece.type !== piece.type : false;
+      const canTake = box.piece ? box.piece.color !== piece.color : false;
 
       if (positions.includes(`${pColumn}${pRow}`) && (emptyBox || canTake)) {
         moves.push(box.position);

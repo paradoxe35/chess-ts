@@ -23,8 +23,8 @@ function ShowHistories() {
   const { containerEl } = useScrollToBottom(histories.length);
 
   const historyType = {
-    white: histories.filter((h) => h.piece.type === "white"),
-    black: histories.filter((h) => h.piece.type === "black"),
+    white: histories.filter((h) => h.piece.color === "white"),
+    black: histories.filter((h) => h.piece.color === "black"),
   };
 
   if (!players) {

@@ -199,7 +199,7 @@ export const chessGameMachine = createMachine({
                 const player = playerOrDefault(context.selectedHistory?.player);
 
                 if (
-                  player !== event.piece.type ||
+                  player !== event.piece.color ||
                   event.player.color !== player
                 ) {
                   return false;
@@ -330,7 +330,7 @@ export const chessGameMachine = createMachine({
                       };
                     }
 
-                    let piecePointes = lPointes[pieceMove.piece.type];
+                    let piecePointes = lPointes[pieceMove.piece.color];
 
                     if (!piecePointes) {
                       piecePointes = [];
@@ -339,7 +339,7 @@ export const chessGameMachine = createMachine({
                     newPointes = {
                       ...lPointes,
 
-                      [pieceMove.piece.type]:
+                      [pieceMove.piece.color]:
                         piecePointes.concat(replacedPiece),
                     };
                   }
@@ -363,7 +363,7 @@ export const chessGameMachine = createMachine({
                     piece: pieceMove.piece,
                     pointes: newPointes || ({} as PlayersPoints),
                     pieceMoves,
-                    player: getOppositeColor(pieceMove.piece.type),
+                    player: getOppositeColor(pieceMove.piece.color),
                   };
 
                   // set selected History

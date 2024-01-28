@@ -54,7 +54,7 @@ function PointItems({
   emplacement: "left" | "right";
 }) {
   const point = pieces?.reduce((acc, piece) => {
-    acc += PIECE_POINTS[piece.value];
+    acc += PIECE_POINTS[piece.type];
     return acc;
   }, 0);
 
@@ -67,7 +67,7 @@ function PointItems({
           return (
             <PieceImg
               key={piece.id}
-              title={`${PIECE_POINTS[piece.value]}`}
+              title={`${PIECE_POINTS[piece.type]}`}
               piece={piece}
             />
           );

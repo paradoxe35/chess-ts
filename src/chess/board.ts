@@ -12,9 +12,9 @@ const CHESS_POSITIONS = Array.from(new Array(CHESS_COLUMNS.length).keys())
   }, {} as BoardPositions);
 
 export type BoardPiece = {
-  value: PieceType;
-  type: PieceColor;
-  id?: string;
+  type: PieceType;
+  color: PieceColor;
+  id: string;
 };
 
 export type BoardPosition = {
@@ -84,20 +84,20 @@ export function createBoard(
         }
 
         // Fullfil top root board piece
-        if ([8, 1].includes(pNumber)) {
+        if ([8, 1].includes(pNumber) && createUid) {
           piece = {
-            value: CHESS_ROOT_ORDER[i],
-            type: getPieceColor(),
-            id: createUid ? createUid() : undefined,
+            type: CHESS_ROOT_ORDER[i],
+            color: getPieceColor(),
+            id: createUid(),
           };
         }
 
         // Fullfil bottom root board piece
-        if ([7, 2].includes(pNumber)) {
+        if ([7, 2].includes(pNumber) && createUid) {
           piece = {
-            value: "pawn",
-            type: getPieceColor(),
-            id: createUid ? createUid() : undefined,
+            type: "pawn",
+            color: getPieceColor(),
+            id: createUid(),
           };
         }
 
@@ -141,7 +141,7 @@ export function movePiece(
           position: box.position,
         };
 
-        if (box.piece && piece.type !== box.piece.type) {
+        if (box.piece && piece.color !== box.piece.color) {
           replacedPiece = box.piece;
         }
       }
