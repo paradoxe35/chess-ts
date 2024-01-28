@@ -14,16 +14,19 @@
 - Chat notifications ✅
 - Online player reconnect mechanism ✅
 - Online player indicator ✅
-
 - Show last move indication on piece moves activities ✅
+
+- Protect the king - Prevent kings from being captured ✅
+
+  - First: check all adverser pieces don't checkmate the king (Only on player player): e.g if back turn the check only white piece ✅
+  - Invalidate piece move if it can expose king to checkmate
+  - Show winner
+
+- Chess timer - Track each player's time during the game
 
 - Display error message when try click on piece that is belong to you or when it is your turn
 
 - Castling - Allow the king and rook to make a special joint move
-
-- Chess timer - Track each player's time during the game
-
-- Protect the king - Prevent kings from being captured
 
 - Checkmate - A player wins if their opponent's king is under attack and has no legal move
 
