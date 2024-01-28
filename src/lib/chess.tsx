@@ -1,12 +1,13 @@
 import { cn } from "@/utils/cn";
 import { ChessBoard, ChessPieces, ChessSettings } from "@/components";
 import { useEffect, useRef, useState } from "react";
-import { ChessGameContext, withPlayerColor } from "@/state";
+import { ChessGameContext } from "@/state";
 import { CHESS_ACTOR_PERSIST_KEY } from "@/utils/persisted-state";
 import { useOnlinePlayer } from "./features/online";
 import { Loader } from "@/components/ui/loader";
-import { Toaster, toast } from "sonner";
+import { Toaster } from "sonner";
 import { Workers } from "@/workers/workers";
+import { Alerts } from "@/components/alerts";
 
 function ChessApp() {
   const joinRequest = ChessGameContext.useSelector(
@@ -75,31 +76,6 @@ function ChessApp() {
   );
 }
 
-function Notifications() {
-  const [activePlayer, selectedHistory, rolledBackHistory] =
-    ChessGameContext.useSelector((c) => [
-      c.context.activePlayer,
-      c.context.selectedHistory,
-      c.context.rolledBackHistory,
-    ]);
-
-  const turnPlayerColor = withPlayerColor(selectedHistory?.player);
-  const activePlayerColor = activePlayer?.color;
-
-  useEffect(() => {
-    if (
-      turnPlayerColor &&
-      activePlayerColor &&
-      activePlayerColor === turnPlayerColor &&
-      !rolledBackHistory
-    ) {
-      toast.info("Move your piece");
-    }
-  }, [turnPlayerColor, activePlayerColor, rolledBackHistory]);
-
-  return <></>;
-}
-
 function OnlineGame() {
   useOnlinePlayer();
   return <></>;
@@ -112,7 +88,7 @@ export default function Chess() {
 
       <OnlineGame />
 
-      <Notifications />
+      <Alerts />
 
       <Workers />
     </ChessGameContext.Provider>

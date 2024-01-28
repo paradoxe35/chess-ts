@@ -4,32 +4,24 @@ import { cn } from "@/utils/cn";
 import { motion } from "framer-motion";
 import { ChessGameContext } from "@/state";
 import { getPieceImageSrc } from "@/assets/pieces";
+import { invalidPieceMovesOnCheckmate } from "@/chess/helpers";
+import { toast } from "sonner";
 
 type Props<T = {}> = { boardRef?: RefObject<HTMLDivElement> } & T;
 
 export function ChessPieces(props: Props) {
   const chessGame = ChessGameContext.useActorRef();
-  const rolledBackHistory = ChessGameContext.useSelector(
-    (s) => s.context.rolledBackHistory
-  );
-
-  const activePlayer = ChessGameContext.useSelector(
-    (s) => s.context.activePlayer
-  );
-
-  const board = ChessGameContext.useSelector((s) => s.context.board);
-  const pieceMove = ChessGameContext.useSelector((s) => s.context.pieceMove);
-  const histories = ChessGameContext.useSelector((s) => s.context.histories);
+  const context = ChessGameContext.useSelector((s) => s.context);
 
   const handlePieceClick = (box: BoardPosition) => {
     chessGame.send({
       type: "chess.playing.setMove.reset",
     });
 
-    if (rolledBackHistory) {
-      const lHistory = histories[histories.length - 1];
+    if (context.rolledBackHistory) {
+      const lHistory = context.histories[context.histories.length - 1];
 
-      if (lHistory)
+      lHistory &&
         chessGame.send({
           type: "chess.playing.getMoves.history-rollback",
           historyItem: lHistory,
@@ -37,28 +29,44 @@ export function ChessPieces(props: Props) {
       return;
     }
 
-    if (box.piece && pieceMove?.piece.id !== box.piece?.id && activePlayer) {
+    // Checkmate Notification
+    if (
+      invalidPieceMovesOnCheckmate(
+        context.activePlayer,
+        context.checkmate,
+        box.piece
+      )
+    ) {
+      toast.warning("Move your King, you're checkmated");
+      return false;
+    }
+
+    if (
+      box.piece &&
+      context.pieceMove?.piece.id !== box.piece?.id &&
+      context.activePlayer
+    ) {
       chessGame.send({
         type: "chess.playing.getMoves",
         piece: box.piece,
         position: box.position,
-        player: activePlayer,
+        player: context.activePlayer,
       });
     }
   };
 
-  return board.map((column, yi) => {
-    return column.map((box, xi) => {
-      if (!box.piece) {
-        return <Fragment key={box.position}></Fragment>;
+  return context.board.map((row, yi) => {
+    return row.map((cell, xi) => {
+      if (!cell.piece) {
+        return <Fragment key={cell.position}></Fragment>;
       }
 
       return (
         <Piece
-          key={box.piece.id}
+          key={cell.piece.id}
           boardRef={props.boardRef}
           onClick={handlePieceClick}
-          box={box}
+          cell={cell}
           yi={yi}
           xi={xi}
         />
@@ -68,17 +76,17 @@ export function ChessPieces(props: Props) {
 }
 
 function Piece({
-  box,
+  cell,
   xi,
   yi,
   onClick,
 }: Props<{
-  box: BoardPosition;
+  cell: BoardPosition;
   xi: number;
   yi: number;
-  onClick?: (box: BoardPosition) => void;
+  onClick?: (cell: BoardPosition) => void;
 }>) {
-  const piece = box.piece!;
+  const piece = cell.piece!;
 
   const style = {
     top: yi * 12.5 + "%",
@@ -100,7 +108,7 @@ function Piece({
     >
       <div
         title={piece.type}
-        onClick={() => onClick && onClick(box)}
+        onClick={() => onClick && onClick(cell)}
         className="w-3/4 h-3/4 -mt-[85%] cursor-pointer absolute"
       />
     </motion.div>

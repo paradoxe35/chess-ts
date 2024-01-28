@@ -18,7 +18,7 @@ export type TCheckmateParams = {
 };
 
 export type TCheckmate = {
-  checkmate: boolean;
+  checked: boolean;
   on: PieceColor;
   playerKingPosition: BoardPosition;
   excludedMoves: string[];
@@ -55,7 +55,7 @@ export function hasCheckmate(params: TCheckmateParams): TCheckmate {
   }
 
   return {
-    checkmate: adverseMoves.includes(playerKingPosition?.position as string),
+    checked: adverseMoves.includes(playerKingPosition?.position as string),
     playerKingPosition: playerKingPosition!,
     on: params.checkOn,
     excludedMoves,

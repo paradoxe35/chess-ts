@@ -3,24 +3,42 @@ import { CHESS_COLUMNS, createBoard } from "@/chess";
 import { cn } from "@/utils/cn";
 import { motion } from "framer-motion";
 import { ChessGameContext } from "@/state";
+import { invalidTargetMoveOnCheckmate } from "@/chess/helpers";
+import { toast } from "sonner";
 
 const board = createBoard("empty");
 
 export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
   (props, ref) => {
     const chessGame = ChessGameContext.useActorRef();
+    const context = ChessGameContext.useSelector((s) => s.context);
+    const checkmate = context.checkmate;
+    const pieceMove = context.pieceMove;
 
-    const [pieceMove, lastMoves, activePlayer] = ChessGameContext.useSelector(
-      (s) => [s.context.pieceMove, s.context.lastMoves, s.context.activePlayer]
-    );
+    const handleMove = (
+      newPosition: string,
+      hasMoveSelection: boolean | undefined
+    ) => {
+      // Invalid target move position on checkmate
+      if (
+        invalidTargetMoveOnCheckmate(
+          context.checkmate,
+          context.pieceMove,
+          newPosition
+        )
+      ) {
+        toast.warning("Invalid piece move !");
+        return false;
+      }
 
-    const handleMove = (newPosition: string) => {
-      activePlayer &&
-        chessGame.send({
-          type: "chess.playing.setMove",
-          movePosition: newPosition,
-          player: activePlayer,
-        });
+      if (hasMoveSelection) {
+        context.activePlayer &&
+          chessGame.send({
+            type: "chess.playing.setMove",
+            movePosition: newPosition,
+            player: context.activePlayer,
+          });
+      }
     };
 
     return (
@@ -36,15 +54,26 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
               return (
                 <div key={i} className="w-full flex">
                   {row.map((cell, ci) => {
-                    const colored = (i + ci + 1) % 2 === 0;
-
                     const hasMoveSelection = pieceMove?.moves.includes(
                       cell.position
                     );
 
-                    const hasLastMove =
-                      lastMoves?.newPosition === cell.position ||
-                      lastMoves?.oldPosition === cell.position;
+                    const invalidKingMove =
+                      checkmate &&
+                      pieceMove &&
+                      hasMoveSelection &&
+                      checkmate.excludedMoves.includes(cell.position);
+
+                    const hasKingCheckmate =
+                      checkmate &&
+                      !pieceMove &&
+                      checkmate.playerKingPosition.position === cell.position;
+
+                    const colored = (i + ci + 1) % 2 === 0;
+
+                    const hasPieceLastMoves =
+                      context.lastMoves?.newPosition === cell.position ||
+                      context.lastMoves?.oldPosition === cell.position;
 
                     const currentPiecePosition =
                       pieceMove?.position === cell.position;
@@ -53,10 +82,8 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
                       <div
                         key={cell.position}
                         data-cell={cell.position}
-                        onClick={
-                          hasMoveSelection
-                            ? () => handleMove(cell.position)
-                            : undefined
+                        onClick={() =>
+                          handleMove(cell.position, hasMoveSelection)
                         }
                         className={cn(
                           "relative",
@@ -65,12 +92,14 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
                           !colored && "bg-slate-50/80",
                           colored && "bg-slate-50/10",
 
-                          hasLastMove && [
+                          hasPieceLastMoves && [
                             'before:content-[""] before:absolute',
                             "before:w-3/4 before:h-3/4 before:-mt-[100%]",
                           ],
 
-                          (hasMoveSelection || currentPiecePosition) && [
+                          (hasMoveSelection ||
+                            currentPiecePosition ||
+                            hasKingCheckmate) && [
                             'after:content-[""] after:absolute',
                             "after:w-3/4 after:h-3/4 after:-mt-[100%]",
                           ],
@@ -83,12 +112,17 @@ export const ChessBoard = React.forwardRef<HTMLDivElement, PropsWithChildren>(
                               : "after:z-20",
                           ],
 
-                          hasLastMove &&
+                          hasPieceLastMoves &&
                             !hasMoveSelection && [
                               "before:rounded-full",
                               "before:bg-pink-300/45",
                               "before:z-10",
-                            ]
+                            ],
+
+                          (invalidKingMove || hasKingCheckmate) && [
+                            "after:rounded-none",
+                            "after:outline-red-500",
+                          ]
                         )}
                       />
                     );

@@ -13,6 +13,10 @@ import {
 import { uniqueId } from "@/utils/unique-id";
 import { getOppositeColor } from "@/utils/helpers";
 import { requestForCheckmate } from "@/workers/checkmate";
+import {
+  invalidPieceMovesOnCheckmate,
+  invalidTargetMoveOnCheckmate,
+} from "@/chess/helpers";
 
 function defaultContext(): TChessMachine["context"] {
   return {
@@ -179,26 +183,30 @@ export const chessGameMachine = createMachine({
             }),
           },
 
-          entry: ({ context, self }) => {
+          entry: async ({ context, self }) => {
             const checkmate = context.checkmate;
             const selectedHistory = context.selectedHistory;
 
             if (
-              selectedHistory &&
-              (!checkmate || checkmate.on !== selectedHistory.player)
+              !selectedHistory ||
+              (checkmate && checkmate.on === selectedHistory.player)
             ) {
-              requestForCheckmate({
-                board: context.board,
-                boardType: context.boardType,
-                checkOn: selectedHistory.player,
-                pieceMovesHistory: selectedHistory.pieceMovesHistory,
-              }).then((value) => {
-                self.send({
-                  type: "chess.playing.checkmate",
-                  checkmate: value,
-                });
-              });
+              return;
             }
+
+            // Request for checkmate from worker
+            const checkmateValue = await requestForCheckmate({
+              board: context.board,
+              boardType: context.boardType,
+              checkOn: selectedHistory.player,
+              pieceMovesHistory: selectedHistory.pieceMovesHistory,
+            });
+
+            // Store checkmate
+            self.send({
+              type: "chess.playing.checkmate",
+              checkmate: checkmateValue,
+            });
           },
 
           on: {
@@ -226,11 +234,26 @@ export const chessGameMachine = createMachine({
               }),
 
               guard: ({ context, event }) => {
-                const player = withPlayerColor(context.selectedHistory?.player);
+                const playerColor = withPlayerColor(
+                  context.selectedHistory?.player
+                );
 
+                // Only on pieces color that correspond to current player turn
                 if (
-                  player !== event.piece.color ||
-                  event.player.color !== player
+                  playerColor !== event.piece.color ||
+                  event.player.color !== playerColor
+                ) {
+                  return false;
+                }
+
+                // If checkmate cannot player any other piece expect move king
+                const checkmate = context.checkmate;
+                if (
+                  invalidPieceMovesOnCheckmate(
+                    context.activePlayer,
+                    checkmate,
+                    event.piece
+                  )
                 ) {
                   return false;
                 }
@@ -425,8 +448,19 @@ export const chessGameMachine = createMachine({
               guard: ({ context, event }) => {
                 const lHistory =
                   context.histories[context.histories.length - 1];
-
                 const pieceMove = context.pieceMove || false;
+
+                // Prevent move if checkmate and the target move is excluded
+                const checkmate = context.checkmate;
+                if (
+                  invalidTargetMoveOnCheckmate(
+                    checkmate,
+                    context.pieceMove,
+                    event.movePosition
+                  )
+                ) {
+                  return false;
+                }
 
                 return (
                   pieceMove &&

@@ -64,12 +64,13 @@ export const computerAIActor = fromCallback<any, Input>(
             return Promise.reject("Invalid request");
           }
 
-          const pieceMoves = input.selectedHistory?.pieceMoves || {};
+          const pieceMovesHistory =
+            input.selectedHistory?.pieceMovesHistory || {};
 
           const moves = getPieceMoves({
             boardType: DEFAULT_BOARD_TYPE,
             board: input.board,
-            history: pieceMoves,
+            history: pieceMovesHistory,
             piece: pieceBox.piece,
             position: pieceBox.position,
           });
