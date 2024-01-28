@@ -1,5 +1,5 @@
-import { Params } from ".";
-import { BoardPiece, BoardPosition } from "../board";
+import type { Params } from ".";
+import type { BoardPiece, BoardPosition } from "../board";
 import { numberizePiecePosition } from "../helpers";
 
 export function setRookMoves(

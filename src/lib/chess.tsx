@@ -1,7 +1,7 @@
 import { cn } from "@/utils/cn";
 import { ChessBoard, ChessPieces, ChessSettings } from "@/components";
 import { useEffect, useRef, useState } from "react";
-import { ChessGameContext, playerOrDefault } from "@/state";
+import { ChessGameContext, withPlayerColor } from "@/state";
 import { CHESS_ACTOR_PERSIST_KEY } from "@/utils/persisted-state";
 import { useOnlinePlayer } from "./features/online";
 import { Loader } from "@/components/ui/loader";
@@ -83,7 +83,7 @@ function Notifications() {
       c.context.rolledBackHistory,
     ]);
 
-  const turnPlayerColor = playerOrDefault(selectedHistory?.player);
+  const turnPlayerColor = withPlayerColor(selectedHistory?.player);
   const activePlayerColor = activePlayer?.color;
 
   useEffect(() => {

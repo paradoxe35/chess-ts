@@ -5,6 +5,7 @@ import {
   BoardType,
   PieceMovesHistory,
 } from "@/chess";
+import { TCheckmate } from "@/chess/checkmate";
 
 export type GameType = "computer" | "online" | null;
 
@@ -23,7 +24,7 @@ export type Players = {
   [x in PlayerType]: PlayerDetail | null;
 };
 
-export const playerOrDefault = (player?: PieceColor) => player || "white";
+export const withPlayerColor = (player?: PieceColor) => player || "white";
 
 export type PlayersPoints = {
   [X in PieceColor]: BoardPiece[];
@@ -36,7 +37,7 @@ export type T_HistoryItem = {
   piece: BoardPiece;
   board: Board[];
   pointes: PlayersPoints;
-  pieceMoves: PieceMovesHistory;
+  pieceMovesHistory: PieceMovesHistory;
   player: PieceColor;
 };
 
@@ -88,6 +89,7 @@ export type TChessMachine = {
     gameType: GameType;
 
     pieceMove: PieceMove | null;
+    checkmate?: TCheckmate;
 
     histories: GHistory;
     selectedHistory?: T_HistoryItem;
@@ -147,6 +149,10 @@ export type TChessMachine = {
     | {
         type: "chess.playing.chat-message";
         chat: TChat;
+      }
+    | {
+        type: "chess.playing.checkmate";
+        checkmate: TCheckmate;
       }
     | {
         type: "chess.reset";

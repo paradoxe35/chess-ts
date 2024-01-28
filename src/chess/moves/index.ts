@@ -1,4 +1,4 @@
-import { Board, BoardPiece, BoardType, PieceMovesHistory } from "..";
+import type { Board, BoardPiece, BoardType, PieceMovesHistory } from "..";
 import { getBishopMoves } from "./bishop";
 import { getKingMoves } from "./king";
 import { getKnightMoves } from "./knight";

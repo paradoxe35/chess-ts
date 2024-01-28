@@ -1,4 +1,4 @@
-import { Params } from ".";
+import type { Params } from ".";
 import { numberizePiecePosition } from "../helpers";
 
 export function getKingMoves(params: Params): string[] {

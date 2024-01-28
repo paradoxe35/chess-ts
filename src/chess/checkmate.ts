@@ -8,6 +8,7 @@ import {
 } from ".";
 
 import { getOppositeColor } from "@/utils/helpers";
+import { getKingMoves } from "./moves/king";
 
 export type TCheckmateParams = {
   board: ChessBoard;
@@ -20,6 +21,7 @@ export type TCheckmate = {
   checkmate: boolean;
   on: PieceColor;
   playerKingPosition: BoardPosition;
+  excludedMoves: string[];
 };
 
 /**
@@ -29,18 +31,34 @@ export type TCheckmate = {
  * @param data
  * @returns
  */
-export function hasCheckmate(data: TCheckmateParams): TCheckmate {
-  const adversePieceColor = getOppositeColor(data.checkOn);
+export function hasCheckmate(params: TCheckmateParams): TCheckmate {
+  const adversePieceColor = getOppositeColor(params.checkOn);
   const { adverseMoves, playerKingPosition } = getAllAdversePieceMoves(
-    data,
-    data.checkOn,
+    params,
+    params.checkOn,
     adversePieceColor
   );
+
+  const kingPiece = playerKingPosition?.piece;
+  let excludedMoves: string[] = [];
+
+  if (kingPiece && playerKingPosition) {
+    const kingMoves = getKingMoves({
+      board: params.board,
+      boardType: params.boardType,
+      history: params.pieceMovesHistory,
+      piece: kingPiece,
+      position: playerKingPosition.position,
+    });
+
+    excludedMoves = kingMoves.filter((move) => adverseMoves.includes(move));
+  }
 
   return {
     checkmate: adverseMoves.includes(playerKingPosition?.position as string),
     playerKingPosition: playerKingPosition!,
-    on: data.checkOn,
+    on: params.checkOn,
+    excludedMoves,
   };
 }
 

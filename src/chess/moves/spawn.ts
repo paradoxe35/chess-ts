@@ -1,4 +1,4 @@
-import { type Params } from ".";
+import type { Params } from ".";
 import { numberizePiecePosition } from "../helpers";
 
 export function getSpawnMoves(params: Params) {

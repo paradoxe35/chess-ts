@@ -3,7 +3,7 @@ import {
   ComputerMoveResponse,
   PieceMove,
   TChessMachine,
-  playerOrDefault,
+  withPlayerColor,
 } from "..";
 import { getPieceBoxById, getPieceMoves } from "@/chess";
 import { DEFAULT_BOARD_TYPE } from "@/utils/constants";
@@ -26,7 +26,7 @@ export const computerAIActor = fromCallback<any, Input>(
     }
 
     const playerB = input.players?.B || undefined;
-    const playerColor = playerOrDefault(input.selectedHistory?.player);
+    const playerColor = withPlayerColor(input.selectedHistory?.player);
 
     if (playerB?.color !== playerColor || !playerB.computer) {
       return;

@@ -1,7 +1,7 @@
 import { Circle } from "@/components/ui/circle";
 import { Indicator } from "@/components/ui/indicator";
 import { Loader } from "@/components/ui/loader";
-import { ChessGameContext, playerOrDefault } from "@/state";
+import { ChessGameContext, withPlayerColor } from "@/state";
 import { cn } from "@/utils/cn";
 
 export function Players() {
@@ -13,7 +13,7 @@ export function Players() {
       c.context.gameType,
     ]);
 
-  const player = playerOrDefault(selectedHistory?.player);
+  const player = withPlayerColor(selectedHistory?.player);
 
   if (!players) {
     return <></>;

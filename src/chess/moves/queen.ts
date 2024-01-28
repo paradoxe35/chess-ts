@@ -1,4 +1,4 @@
-import { Params } from ".";
+import type { Params } from ".";
 import { numberizePiecePosition } from "../helpers";
 import { getBishopPositions } from "./bishop";
 import { setRookMoves } from "./rook";

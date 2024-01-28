@@ -1,4 +1,4 @@
-import { Params } from ".";
+import type { Params } from ".";
 import { numberizePiecePosition } from "../helpers";
 
 export function getBishopPositions(pieceColumn: number, pieceRow: number) {

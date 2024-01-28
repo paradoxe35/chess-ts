@@ -7,11 +7,12 @@ import {
   type T_HistoryItem,
   type PlayersPoints,
   type TChessMachine,
-  playerOrDefault,
+  withPlayerColor,
   TChat,
 } from "./types";
 import { uniqueId } from "@/utils/unique-id";
 import { getOppositeColor } from "@/utils/helpers";
+import { requestForCheckmate } from "@/workers/checkmate";
 
 function defaultContext(): TChessMachine["context"] {
   return {
@@ -151,6 +152,13 @@ export const chessGameMachine = createMachine({
             },
           }),
         },
+        "chess.playing.checkmate": {
+          actions: assign({
+            checkmate: ({ event }) => {
+              return event.checkmate;
+            },
+          }),
+        },
       },
       entry: ({ context }) => {
         if (context.playId && !context.joinRequest) {
@@ -171,13 +179,35 @@ export const chessGameMachine = createMachine({
             }),
           },
 
+          entry: ({ context, self }) => {
+            const checkmate = context.checkmate;
+            const selectedHistory = context.selectedHistory;
+
+            if (
+              selectedHistory &&
+              (!checkmate || checkmate.on !== selectedHistory.player)
+            ) {
+              requestForCheckmate({
+                board: context.board,
+                boardType: context.boardType,
+                checkOn: selectedHistory.player,
+                pieceMovesHistory: selectedHistory.pieceMovesHistory,
+              }).then((value) => {
+                self.send({
+                  type: "chess.playing.checkmate",
+                  checkmate: value,
+                });
+              });
+            }
+          },
+
           on: {
             "chess.playing.getMoves": {
               target: "move",
               actions: assign({
                 pieceMove: ({ event, context }) => {
                   const history = context.selectedHistory;
-                  const movesHistory = history?.pieceMoves || {};
+                  const movesHistory = history?.pieceMovesHistory || {};
 
                   const moves = getPieceMoves({
                     piece: event.piece,
@@ -196,7 +226,7 @@ export const chessGameMachine = createMachine({
               }),
 
               guard: ({ context, event }) => {
-                const player = playerOrDefault(context.selectedHistory?.player);
+                const player = withPlayerColor(context.selectedHistory?.player);
 
                 if (
                   player !== event.piece.color ||
@@ -206,7 +236,7 @@ export const chessGameMachine = createMachine({
                 }
 
                 const _history = context.selectedHistory;
-                const movesHistory = _history?.pieceMoves || {};
+                const movesHistory = _history?.pieceMovesHistory || {};
 
                 const moves = getPieceMoves({
                   piece: event.piece,
@@ -295,9 +325,11 @@ export const chessGameMachine = createMachine({
               gameType: context.gameType,
             }),
           },
+
           on: {
             "chess.playing.setMove": {
               target: "verify",
+
               actions: assign({
                 histories: ({ context, event }) => {
                   const pieceMove = context.pieceMove!;
@@ -345,12 +377,16 @@ export const chessGameMachine = createMachine({
                   }
 
                   // Store pieces moves history
-                  const pieceMoves = { ...(lastItemHistory?.pieceMoves || {}) };
+                  const pieceMovesHistory = {
+                    ...(lastItemHistory?.pieceMovesHistory || {}),
+                  };
 
-                  if (!pieceMoves[pieceMove.piece.id!]) {
-                    pieceMoves[pieceMove.piece.id!] = [event.movePosition];
+                  if (!pieceMovesHistory[pieceMove.piece.id!]) {
+                    pieceMovesHistory[pieceMove.piece.id!] = [
+                      event.movePosition,
+                    ];
                   } else {
-                    pieceMoves[pieceMove.piece.id!] = pieceMoves[
+                    pieceMovesHistory[pieceMove.piece.id!] = pieceMovesHistory[
                       pieceMove.piece.id!
                     ]?.concat(event.movePosition);
                   }
@@ -362,14 +398,17 @@ export const chessGameMachine = createMachine({
                     newPosition: event.movePosition,
                     piece: pieceMove.piece,
                     pointes: newPointes || ({} as PlayersPoints),
-                    pieceMoves,
+                    pieceMovesHistory,
                     player: getOppositeColor(pieceMove.piece.color),
                   };
 
                   // set selected History
                   context.selectedHistory = historyItem;
 
-                  return context.histories.concat(historyItem);
+                  // Array mutation necessary
+                  context.histories.push(historyItem);
+
+                  return context.histories;
                 },
 
                 lastMoves: ({ event, context }) => {
