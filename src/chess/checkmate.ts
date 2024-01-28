@@ -70,28 +70,34 @@ function getAllAdversePieceMoves(
   let playerKingPosition: BoardPosition | undefined;
   const adverseMoves: string[] = [];
 
-  for (const column of params.board) {
-    for (const box of column) {
-      const piece = box.piece;
+  const boardWithoutKing = params.board.map((row) => {
+    return row.map((cell) => {
+      const piece = cell.piece;
+      if (!piece) return cell;
 
-      if (piece) {
-        // current player king piece position
-        if (piece.color === playerColor && piece.type === "king") {
-          playerKingPosition = box;
-        }
+      if (piece.color === playerColor && piece.type === "king") {
+        playerKingPosition = { ...cell };
+        cell.piece = undefined;
+      }
 
-        // Get all piece moves from adverser player
-        if (adversePieceColor === piece.color) {
-          adverseMoves.push(
-            ...getPieceMoves({
-              board: params.board,
-              boardType: params.boardType,
-              history: params.pieceMovesHistory,
-              piece: piece,
-              position: box.position,
-            })
-          );
-        }
+      return cell;
+    });
+  });
+
+  for (const row of boardWithoutKing) {
+    for (const cell of row) {
+      const piece = cell.piece;
+      // Get all piece moves from adverser player
+      if (piece && adversePieceColor === piece.color) {
+        adverseMoves.push(
+          ...getPieceMoves({
+            board: params.board,
+            boardType: params.boardType,
+            history: params.pieceMovesHistory,
+            piece: piece,
+            position: cell.position,
+          })
+        );
       }
     }
   }
